@@ -1,6 +1,7 @@
 {
   "version": 1,
   "name": "Greyscale pixel cat",
+  "flipOnLeft": true,
   "idle": [
     { "file": "idle.svg", "durationMs": 1200 },
     { "file": "breathe.svg", "durationMs": 1000 },

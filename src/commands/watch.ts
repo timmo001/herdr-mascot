@@ -99,6 +99,7 @@ const render = Effect.gen(function* () {
   const herdr = yield* HerdrSdk;
   const config = yield* Preferences;
   const mascot = yield* Mascot;
+  const flipHorizontal = mascot.flipOnLeft && config.position.endsWith("left");
   const target = yield* Ref.make<Target | null>(yield* currentTarget);
   const stopping = yield* Ref.make(false);
   const changed = yield* Queue.sliding<void>(1);
@@ -196,7 +197,14 @@ const render = Effect.gen(function* () {
               const y = Math.round(point.y);
               if (frame !== lastFrame || x !== lastX || y !== lastY) {
                 yield* writer.write(
-                  graphicsFrame(frame, selected, x, y, destination.size),
+                  graphicsFrame(
+                    frame,
+                    selected,
+                    x,
+                    y,
+                    destination.size,
+                    flipHorizontal,
+                  ),
                 );
                 lastFrame = frame;
                 lastX = x;
@@ -259,6 +267,7 @@ const render = Effect.gen(function* () {
                   point.x,
                   point.y,
                   destination.size,
+                  flipHorizontal,
                 ),
               );
               yield* Effect.sleep(33);

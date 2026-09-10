@@ -19,6 +19,7 @@ const Frames = Schema.NonEmptyArray(
 const Pack = Schema.Struct({
   version: Schema.Literal(1),
   name: Schema.NonEmptyString,
+  flipOnLeft: Schema.optionalKey(Schema.Boolean),
   idle: Frames,
   jump: Frames,
 });
@@ -34,6 +35,7 @@ export class Mascot extends Context.Service<
   Mascot,
   {
     readonly name: string;
+    readonly flipOnLeft: boolean;
     readonly size: number;
     readonly idle: readonly [Frame, ...Frame[]];
     readonly jump: readonly [Frame, ...Frame[]];
@@ -86,6 +88,7 @@ export class Mascot extends Context.Service<
       const jump = yield* Effect.forEach(pack.jump, load);
       return Mascot.of({
         name: pack.name,
+        flipOnLeft: pack.flipOnLeft ?? false,
         size: config.sizePixels,
         idle,
         jump,

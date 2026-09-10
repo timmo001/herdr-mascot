@@ -110,6 +110,7 @@ export function graphicsFrame(
   x: number,
   y: number,
   size: number,
+  flipHorizontal: boolean,
 ): PaneGraphicsFrameEncoded {
   const left = Math.round(x);
   const top = Math.round(y);
@@ -140,7 +141,8 @@ export function graphicsFrame(
         ((col * cellWidth + dx - left) * frame.width) / size,
       );
       if (sx < 0 || sx >= frame.width) continue;
-      const source = (sy * frame.width + sx) * 4;
+      const source =
+        (sy * frame.width + (flipHorizontal ? frame.width - 1 - sx : sx)) * 4;
       data.set(
         frame.pixels.subarray(source, source + 4),
         (dy * width + dx) * 4,
