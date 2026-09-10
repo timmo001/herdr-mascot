@@ -68,8 +68,14 @@ export class Mascot extends Context.Service<
               if (renderer.width <= 0 || renderer.width !== renderer.height)
                 throw new Error(`${frame.file} must have a square viewBox`);
               const result = renderer.render();
+              const pixels = result.pixels;
+              for (let alpha = 3; alpha < pixels.length; alpha += 4) {
+                pixels[alpha] = Math.round(
+                  (pixels[alpha] * config.opacity) / 100,
+                );
+              }
               return {
-                pixels: result.pixels,
+                pixels,
                 width: result.width,
                 height: result.height,
               };

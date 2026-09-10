@@ -33,6 +33,9 @@ const Settings = Schema.Struct({
   sizePixels: Schema.optionalKey(
     Schema.Int.check(Schema.isBetween({ minimum: 16, maximum: 256 })),
   ),
+  opacity: Schema.optionalKey(
+    Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 100 })),
+  ),
   position: Schema.optionalKey(
     Schema.Literals([
       ...positions,
@@ -135,6 +138,7 @@ export class Preferences extends Context.Service<
     readonly revision: string;
     readonly animationDelayMs: number;
     readonly sizePixels: number;
+    readonly opacity: number;
     readonly position: NonNullable<typeof Settings.Type.position>;
     readonly mascotFile: string;
   }
@@ -149,6 +153,7 @@ export class Preferences extends Context.Service<
         revision,
         animationDelayMs: settings.animationDelayMs ?? 0,
         sizePixels: settings.sizePixels ?? 64,
+        opacity: settings.opacity ?? 100,
         position: settings.position ?? "bottom-right",
         mascotFile: settings.mascot
           ? path.resolve(config.configDir, settings.mascot)

@@ -74,6 +74,7 @@ Create `config.json` in the directory printed by `herdr plugin config-dir`:
 ```json
 {
   "sizePixels": 64,
+  "opacity": 100,
   "position": "bottom-right",
   "animationDelayMs": 0
 }
@@ -82,6 +83,7 @@ Create `config.json` in the directory printed by `herdr plugin config-dir`:
 | Setting            | Default           | Meaning                                                                                                                                                                                            |
 | ------------------ | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sizePixels`       | `64`              | Width and height in pixels, from 16 to 256. Small panes reduce it to fit.                                                                                                                          |
+| `opacity`          | `100`             | Opacity percentage, from 0 (invisible) to 100 (fully opaque). Use 90 for slight transparency.                                                                                                      |
 | `animationDelayMs` | `0`               | Delay before each entry or exit hop, from 0 to 5,000 milliseconds. Zero starts immediately.                                                                                                        |
 | `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right`, `top-left`, `center-bottom`, `center-top`, `random`, `bottom-random`, `top-random`, `random-corners`, `bottom-random-corners` or `top-random-corners`. |
 | `mascot`           | Bundled pixel cat | Path to a replacement pack's `mascot.json`, absolute or relative to the config directory.                                                                                                          |
