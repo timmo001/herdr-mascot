@@ -88,6 +88,11 @@ const render = Effect.gen(function* () {
   const config = yield* Preferences;
   const mascot = yield* Mascot;
   const target = yield* Ref.make<Target | null>(yield* currentTarget);
+  const stopping = yield* Ref.make(false);
+  const jumpDuration = mascot.jump.reduce(
+    (total, frame) => total + frame.durationMs,
+    0,
+  );
   const track = Stream.merge(
     herdr.events
       .subscribe([
@@ -107,7 +112,7 @@ const render = Effect.gen(function* () {
 
   const draw = Effect.gen(function* () {
     let previous: Target | null = null;
-    while (true) {
+    while (!(yield* Ref.get(stopping))) {
       const selected = yield* Ref.get(target);
       if (!selected) {
         previous = null;
@@ -122,10 +127,8 @@ const render = Effect.gen(function* () {
       const shouldJump =
         previous?.paneId !== selected.paneId ||
         previous.tabId !== selected.tabId;
-      const jumpDuration = shouldJump
-        ? mascot.jump.reduce((total, frame) => total + frame.durationMs, 0)
-        : 0;
-      yield* herdr.panes.graphics.withLayerStream(
+      const entryDuration: number = shouldJump ? jumpDuration : 0;
+      const exited = yield* herdr.panes.graphics.withLayerStream(
         selected.paneId,
         { layerId, zIndex: 100 },
         (writer) =>
@@ -134,15 +137,18 @@ const render = Effect.gen(function* () {
             let lastFrame: Frame | undefined;
             let lastX = Number.NaN;
             let lastY = Number.NaN;
-            while (sameTarget(selected, yield* Ref.get(target))) {
+            while (
+              !(yield* Ref.get(stopping)) &&
+              sameTarget(selected, yield* Ref.get(target))
+            ) {
               const elapsed = (yield* Clock.currentTimeMillis) - started;
-              const jumping = elapsed < jumpDuration;
+              const jumping = elapsed < entryDuration;
               const point = jumping
-                ? jumpPosition(selected, destination, elapsed / jumpDuration)
+                ? jumpPosition(selected, destination, elapsed / entryDuration)
                 : destination;
               const frame = frameAt(
                 jumping ? mascot.jump : mascot.idle,
-                jumping ? elapsed : elapsed - jumpDuration,
+                jumping ? elapsed : elapsed - entryDuration,
               );
               const x = Math.round(point.x);
               const y = Math.round(point.y);
@@ -156,12 +162,54 @@ const render = Effect.gen(function* () {
               }
               yield* Effect.sleep(jumping ? 33 : 50);
             }
+            const next = yield* Ref.get(target);
+            if (
+              !lastFrame ||
+              (!(yield* Ref.get(stopping)) && next?.paneId === selected.paneId)
+            )
+              return false;
+            const graphics = yield* herdr.panes.graphics.info(selected.paneId);
+            if (!graphics.paneVisible) return true;
+            const origin = { x: lastX, y: lastY, size: destination.size };
+            const exitStarted = yield* Clock.currentTimeMillis;
+            while (true) {
+              const elapsed = (yield* Clock.currentTimeMillis) - exitStarted;
+              const latest = yield* Ref.get(target);
+              if (
+                elapsed >= 250 ||
+                (latest &&
+                  (latest.tabId !== selected.tabId ||
+                    latest.workspaceId !== selected.workspaceId))
+              )
+                break;
+              // Reverse the entry path from the last drawn position.
+              const point = jumpPosition(selected, origin, 1 - elapsed / 250);
+              yield* writer.write(
+                graphicsFrame(
+                  frameAt(mascot.jump, (elapsed / 250) * jumpDuration),
+                  selected,
+                  point.x,
+                  point.y,
+                  destination.size,
+                ),
+              );
+              yield* Effect.sleep(33);
+            }
+            return true;
           }),
       );
-      previous = selected;
+      previous = exited ? null : selected;
     }
   });
-  yield* Effect.all([track, draw], { concurrency: "unbounded" });
+  yield* draw.pipe(
+    Effect.raceFirst(track),
+    Effect.raceFirst(
+      waitUntilStopped.pipe(
+        Effect.andThen(Ref.set(stopping, true)),
+        Effect.andThen(Effect.never),
+      ),
+    ),
+  );
 });
 
 const runWatcher = Effect.gen(function* () {
@@ -207,7 +255,6 @@ const runWatcher = Effect.gen(function* () {
   return yield* render.pipe(
     Effect.retry({ times: 5, schedule: Schedule.spaced(1_000) }),
     Effect.as(false),
-    Effect.raceFirst(waitUntilStopped),
     Effect.raceFirst(waitForUpdate.pipe(Effect.as(true))),
     Effect.raceFirst(Deferred.await(compromised)),
   );

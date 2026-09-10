@@ -58,7 +58,7 @@ description = "toggle mascot"
 Press your Herdr prefix, then `t`. After updating an existing local link, run
 `herdr plugin link "$PWD"` again to register the new action.
 
-`stop` asks the renderer to exit and waits for its lease to be released. Its
+`stop` asks the renderer to hop out and waits for its lease to be released. Its
 scoped graphics stream removes only the mascot's layer. Showing the mascot
 again, or starting a new server, clears the stopped state.
 
@@ -90,9 +90,13 @@ config. A replacement pack must be valid when the new renderer starts.
 
 ### Focus changes
 
-- The mascot always hops in from the right when it appears or you switch panes,
-  tabs or workspaces, landing at the configured corner.
-- Fast switches interrupt the current hop and follow the latest focused pane.
+- The mascot hops out to the right before entering the latest focused pane
+  from the right, landing at the configured corner. The exit takes 250ms and
+  also plays when you hide the mascot or toggle it off.
+- Herdr hides inactive tabs and workspaces immediately, so the outgoing hop is
+  only visible while the old pane remains on screen.
+- Fast switches interrupt the entry hop, exit from its current position and
+  follow the latest focused pane without queuing intermediate switches.
 - Resizing adjusts the cat's position and size without queuing another hop.
 
 Drawing stays inside the active pane. The cat does not draw across dividers or
@@ -187,7 +191,7 @@ After linking and showing the plugin:
    within the active pane and fits a small pane.
 4. Select text and open a Herdr menu. Confirm normal input still works.
 5. Change the size, corner or pack in `config.json` and confirm it reloads.
-6. Hide the mascot and confirm the image clears. Show it again and disable the
-   plugin to check cleanup.
+6. Hide or toggle off the mascot and confirm it hops out before the image clears.
+   Show it again and disable the plugin to check cleanup.
 
 Interactive behaviour is checked by the owner, rather than automated UX tests.
