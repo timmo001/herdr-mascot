@@ -69,15 +69,17 @@ Create `config.json` in the directory printed by `herdr plugin config-dir`:
 ```json
 {
   "sizePixels": 64,
-  "position": "bottom-right"
+  "position": "bottom-right",
+  "animationDelayMs": 0
 }
 ```
 
-| Setting      | Default           | Meaning                                                                                   |
-| ------------ | ----------------- | ----------------------------------------------------------------------------------------- |
-| `sizePixels` | `64`              | Width and height in pixels, from 16 to 256. Small panes reduce it to fit.                 |
-| `position`   | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right` or `top-left`.                                 |
-| `mascot`     | Bundled pixel cat | Path to a replacement pack's `mascot.json`, absolute or relative to the config directory. |
+| Setting            | Default           | Meaning                                                                                     |
+| ------------------ | ----------------- | ------------------------------------------------------------------------------------------- |
+| `sizePixels`       | `64`              | Width and height in pixels, from 16 to 256. Small panes reduce it to fit.                   |
+| `animationDelayMs` | `0`               | Delay before each entry or exit hop, from 0 to 5,000 milliseconds. Zero starts immediately. |
+| `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right` or `top-left`.                                   |
+| `mascot`           | Bundled pixel cat | Path to a replacement pack's `mascot.json`, absolute or relative to the config directory.   |
 
 There is one mascot, attached to the active pane. Positioning leaves room for
 pane borders and the scrollbar. Workspace-wide and session-wide drawing are not
@@ -93,6 +95,8 @@ config. A replacement pack must be valid when the new renderer starts.
 - Each exit randomly hops right or down, with an equal chance of either, before
   entering the latest focused pane from the right at the configured corner.
   The exit takes 250ms and also plays when you hide the mascot or toggle it off.
+- Focus and stop notifications wake the renderer immediately. `animationDelayMs`
+  adds an optional pause before each hop; the animation durations stay the same.
 - Herdr hides inactive tabs and workspaces immediately, so the outgoing hop is
   only visible while the old pane remains on screen.
 - Fast switches interrupt the entry hop, exit from its current position and

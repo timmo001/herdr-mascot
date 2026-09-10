@@ -5,6 +5,7 @@ import {
   Effect,
   FileSystem,
   Path,
+  Queue,
   Random,
   Ref,
   Schedule,
@@ -77,12 +78,21 @@ const waitUntilStopped = Effect.gen(function* () {
   const config = yield* RuntimeConfig;
   const path = yield* Path.Path;
   const fs = yield* FileSystem.FileSystem;
-  while (
-    !(yield* fs.exists(path.join(config.state, "stopped"))) &&
-    (yield* enabled)
-  )
-    yield* Effect.sleep(500);
-  return false;
+  yield* Effect.gen(function* () {
+    while (
+      !(yield* fs.exists(path.join(config.state, "stopped"))) &&
+      (yield* enabled)
+    )
+      yield* Effect.sleep(500);
+  }).pipe(
+    Effect.raceFirst(
+      fs.watch(config.state).pipe(
+        Stream.mapEffect(() => fs.exists(path.join(config.state, "stopped"))),
+        Stream.filter((stopped) => stopped),
+        Stream.runHead,
+      ),
+    ),
+  );
 });
 
 const render = Effect.gen(function* () {
@@ -91,6 +101,7 @@ const render = Effect.gen(function* () {
   const mascot = yield* Mascot;
   const target = yield* Ref.make<Target | null>(yield* currentTarget);
   const stopping = yield* Ref.make(false);
+  const changed = yield* Queue.sliding<void>(1);
   const jumpDuration = mascot.jump.reduce(
     (total, frame) => total + frame.durationMs,
     0,
@@ -107,8 +118,13 @@ const render = Effect.gen(function* () {
       .pipe(Stream.map(() => undefined)),
     Stream.tick(1_000),
   ).pipe(
-    Stream.runForEach(() =>
-      currentTarget.pipe(Effect.flatMap((value) => Ref.set(target, value))),
+    Stream.runForEach(
+      Effect.fn("Mascot.trackTarget")(function* () {
+        const value = yield* currentTarget;
+        if (sameTarget(value, yield* Ref.get(target))) return;
+        yield* Ref.set(target, value);
+        yield* Queue.offer(changed, undefined);
+      }),
     ),
   );
 
@@ -118,7 +134,7 @@ const render = Effect.gen(function* () {
       const selected = yield* Ref.get(target);
       if (!selected) {
         previous = null;
-        yield* Effect.sleep(100);
+        yield* Queue.take(changed);
         continue;
       }
       const destination = restingPosition(
@@ -130,6 +146,14 @@ const render = Effect.gen(function* () {
         previous?.paneId !== selected.paneId ||
         previous.tabId !== selected.tabId;
       const entryDuration: number = shouldJump ? jumpDuration : 0;
+      if (shouldJump && config.animationDelayMs > 0) {
+        yield* Effect.sleep(config.animationDelayMs);
+        if (
+          (yield* Ref.get(stopping)) ||
+          !sameTarget(selected, yield* Ref.get(target))
+        )
+          continue;
+      }
       const exited = yield* herdr.panes.graphics.withLayerStream(
         selected.paneId,
         { layerId, zIndex: 100 },
@@ -162,7 +186,12 @@ const render = Effect.gen(function* () {
                 lastX = x;
                 lastY = y;
               }
-              yield* Effect.sleep(jumping ? 33 : 50);
+              yield* Queue.take(changed).pipe(
+                Effect.timeoutOrElse({
+                  duration: jumping ? 33 : 50,
+                  orElse: () => Effect.void,
+                }),
+              );
             }
             const next = yield* Ref.get(target);
             if (
@@ -170,6 +199,14 @@ const render = Effect.gen(function* () {
               (!(yield* Ref.get(stopping)) && next?.paneId === selected.paneId)
             )
               return false;
+            if (config.animationDelayMs > 0) {
+              yield* Effect.sleep(config.animationDelayMs);
+              if (
+                !(yield* Ref.get(stopping)) &&
+                sameTarget(selected, yield* Ref.get(target))
+              )
+                return false;
+            }
             const graphics = yield* herdr.panes.graphics.info(selected.paneId);
             if (!graphics.paneVisible) return true;
             const origin = { x: lastX, y: lastY, size: destination.size };
@@ -213,6 +250,7 @@ const render = Effect.gen(function* () {
     Effect.raceFirst(
       waitUntilStopped.pipe(
         Effect.andThen(Ref.set(stopping, true)),
+        Effect.andThen(Queue.offer(changed, undefined)),
         Effect.andThen(Effect.never),
       ),
     ),

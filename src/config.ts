@@ -13,6 +13,9 @@ export class ConfigError extends Schema.TaggedError<ConfigError>()(
 ) {}
 
 const Settings = Schema.Struct({
+  animationDelayMs: Schema.optionalKey(
+    Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 5_000 })),
+  ),
   sizePixels: Schema.optionalKey(
     Schema.Int.check(Schema.isBetween({ minimum: 16, maximum: 256 })),
   ),
@@ -110,6 +113,7 @@ export class Preferences extends Context.Service<
   Preferences,
   {
     readonly revision: string;
+    readonly animationDelayMs: number;
     readonly sizePixels: number;
     readonly position: Position;
     readonly mascotFile: string;
@@ -123,6 +127,7 @@ export class Preferences extends Context.Service<
       const { settings, revision } = yield* loadSettings(config.settingsFile);
       return Preferences.of({
         revision,
+        animationDelayMs: settings.animationDelayMs ?? 0,
         sizePixels: settings.sizePixels ?? 64,
         position: settings.position ?? "bottom-right",
         mascotFile: settings.mascot
