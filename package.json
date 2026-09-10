@@ -1,0 +1,44 @@
+{
+  "name": "herdr-mascot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An animated mascot for the active Herdr pane",
+  "license": "Apache-2.0",
+  "type": "module",
+  "packageManager": "bun@1.4.2",
+  "scripts": {
+    "build": "bun build src/index.ts --target=bun --external @resvg/resvg-js --outdir dist",
+    "lint": "oxlint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "effect-tsgo patch"
+  },
+  "dependencies": {
+    "@effect/platform-node": "4.0.0-rc.112",
+    "@herdr/sdk": "github:dmmulroy/herdr-ts-sdk#77abbf81ac35407bc5138a8f4fe19f0833af4402",
+    "@resvg/resvg-js": "2.6.2",
+    "effect": "4.0.0-rc.112",
+    "proper-lockfile": "4.1.2"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "0.44.0",
+    "@oxlint/plugins": "1.82.0",
+    "@timmo001/oxlint-rules": "0.3.0",
+    "@types/bun": "1.4.2",
+    "@types/proper-lockfile": "4.1.4",
+    "oxlint": "1.82.0",
+    "prettier": "3.9.6",
+    "typescript": "7.0.2"
+  },
+  "overrides": {
+    "effect": "$effect",
+    "@effect/platform-node-shared": "$@effect/platform-node"
+  },
+  "trustedDependencies": [
+    "@effect/tsgo"
+  ],
+  "patchedDependencies": {
+    "@herdr/sdk@github:dmmulroy/herdr-ts-sdk#77abbf8": "patches/@herdr%2Fsdk@github%3Admmulroy%2Fherdr-ts-sdk#77abbf8.patch"
+  }
+}

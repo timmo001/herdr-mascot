@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Greyscale cat, resting</title>
+  <g stroke="#ededed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M43 53c17 9 20-10 12-15" fill="none" stroke-width="7"/>
+    <path d="M43 53c17 9 20-10 12-15" fill="none" stroke="#747474" stroke-width="4"/>
+    <path d="M18 55c-1-8 3-21 13-22 12 0 16 15 14 22l-4 5H22z" fill="#858585"/>
+    <path d="M18 25 17 8l13 9 10-1 10-9-1 21c1 10-7 15-16 15-10 0-17-7-15-18z" fill="#a3a3a3"/>
+  </g>
+  <path d="m21 14 1 10 5-5zm24 0-6 6 6 3z" fill="#525252"/>
+  <path d="M27 42c-4 6-3 13-1 17h11c2-5 2-12-2-17" fill="#c9c9c9"/>
+  <path d="M27 31q6-5 12 0v6H27z" fill="#dedede"/>
+  <g fill="#333333"><ellipse cx="25" cy="27" rx="2" ry="3"/><ellipse cx="41" cy="27" rx="2" ry="3"/><path d="m30 31 6 0-3 3z"/></g>
+  <g fill="none" stroke="#494949" stroke-width="1.4" stroke-linecap="round">
+    <path d="M33 34v2m-3 0q3 3 6 0M19 32l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1"/>
+    <path d="M25 49v9m14-9v9"/>
+  </g>
+  <path d="M21 59h8m7 0h8" stroke="#ededed" stroke-width="3" stroke-linecap="round"/>
+</svg>

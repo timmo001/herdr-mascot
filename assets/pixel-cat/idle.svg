@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Greyscale pixel cat, resting</title>
+  <path fill="#686868" d="M11 12h2V9h2v4h-1v1h-3z"/>
+  <path fill="#686868" d="M11 13h3v-3h1v3h-1v1h-3z"/>
+  <path fill="#686868" d="M5 9h5v1h1v3h1v2H3v-2h1v-3h1z"/>
+  <path fill="#686868" d="M5 10h5v3h1v1H4v-1h1z"/>
+  <path fill="#bcbcbc" d="M6 10h3v4H6z"/>
+  <path fill="#353535" d="M5 13h1v1H5zm4 0h1v1H9z"/>
+  <path fill="#969696" d="M2 1h2v1h1v1h4V2h1V1h2v7h-1v1h-1v1H4V9H3V8H2z"/>
+  <path fill="#969696" d="M3 2h1v1h1v1h4V3h1V2h1v6h-1v1H4V8H3z"/>
+  <path fill="#525252" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
+  <path fill="#bcbcbc" d="M6 7h2v1h1v1H5V8h1z"/>
+  <path fill="#353535" d="M4 6h2v2H4zm4 0h2v2H8zM6 8h2v1H6z"/>
+  <path fill="#ededed" d="M4 6h1v1H4zm4 0h1v1H8z"/>
+  <path fill="#686868" d="M1 7h2v1H1zm10 0h2v1h-2z"/>
+</svg>

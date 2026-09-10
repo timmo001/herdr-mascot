@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Greyscale pixel cat",
+  "idle": [
+    { "file": "idle.svg", "durationMs": 1200 },
+    { "file": "breathe.svg", "durationMs": 1000 },
+    { "file": "idle.svg", "durationMs": 1200 },
+    { "file": "blink.svg", "durationMs": 140 },
+    { "file": "idle.svg", "durationMs": 900 }
+  ],
+  "jump": [
+    { "file": "crouch.svg", "durationMs": 90 },
+    { "file": "jump.svg", "durationMs": 330 },
+    { "file": "crouch.svg", "durationMs": 100 }
+  ]
+}

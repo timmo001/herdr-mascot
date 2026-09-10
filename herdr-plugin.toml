@@ -1,0 +1,27 @@
+id = "timmo.mascot"
+name = "Herdr Mascot"
+version = "0.1.0"
+min_herdr_version = "0.9.0"
+description = "A greyscale cat that follows the active pane"
+platforms = ["linux", "macos"]
+
+[[build]]
+command = ["mise", "exec", "--", "bun", "install", "--frozen-lockfile"]
+
+[[build]]
+command = ["mise", "run", "build"]
+
+[[startup]]
+command = ["mise", "exec", "--", "bun", "dist/index.js", "start"]
+
+[[actions]]
+id = "start"
+title = "Show mascot"
+contexts = ["global", "workspace", "pane"]
+command = ["mise", "exec", "--", "bun", "dist/index.js", "start"]
+
+[[actions]]
+id = "stop"
+title = "Hide mascot"
+contexts = ["global", "workspace", "pane"]
+command = ["mise", "exec", "--", "bun", "dist/index.js", "stop"]

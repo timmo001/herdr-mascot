@@ -1,0 +1,210 @@
+import { HerdrSdk } from "@herdr/sdk";
+import {
+  Clock,
+  Deferred,
+  Effect,
+  FileSystem,
+  Path,
+  Ref,
+  Schedule,
+  Schema,
+  Stream,
+} from "effect";
+import { check, lock } from "proper-lockfile";
+import {
+  frameAt,
+  graphicsFrame,
+  jumpPosition,
+  restingPosition,
+  sameTarget,
+} from "../animation";
+import { Preferences, RuntimeConfig, layerId } from "../config";
+import { currentTarget, enabled, type Target } from "../services/herdr";
+import { Mascot, type Frame } from "../services/mascot";
+import { Process, ProcessError } from "../services/process";
+import { waitForUpdate } from "../services/reload";
+
+export const start = Effect.gen(function* () {
+  const config = yield* RuntimeConfig;
+  const path = yield* Path.Path;
+  const fs = yield* FileSystem.FileSystem;
+  if (!(yield* enabled)) return;
+  yield* fs.remove(path.join(config.state, "stopped"), { force: true });
+  const held = yield* Effect.tryPromise(() =>
+    check(path.join(config.state, "watcher"), {
+      realpath: false,
+      stale: 15_000,
+    }),
+  );
+  if (!held) yield* (yield* Process).detach;
+});
+
+export const stop = Effect.gen(function* () {
+  const config = yield* RuntimeConfig;
+  const path = yield* Path.Path;
+  const fs = yield* FileSystem.FileSystem;
+  yield* fs.writeFileString(path.join(config.state, "stopped"), "", {
+    mode: 0o600,
+  });
+  yield* Effect.gen(function* () {
+    while (
+      yield* Effect.tryPromise(() =>
+        check(path.join(config.state, "watcher"), {
+          realpath: false,
+          stale: 15_000,
+        }),
+      )
+    )
+      yield* Effect.sleep(50);
+  }).pipe(Effect.timeout(20_000));
+});
+
+const waitUntilStopped = Effect.gen(function* () {
+  const config = yield* RuntimeConfig;
+  const path = yield* Path.Path;
+  const fs = yield* FileSystem.FileSystem;
+  while (
+    !(yield* fs.exists(path.join(config.state, "stopped"))) &&
+    (yield* enabled)
+  )
+    yield* Effect.sleep(500);
+  return false;
+});
+
+const render = Effect.gen(function* () {
+  const herdr = yield* HerdrSdk;
+  const config = yield* Preferences;
+  const mascot = yield* Mascot;
+  const target = yield* Ref.make<Target | null>(yield* currentTarget);
+  const track = Stream.merge(
+    herdr.events
+      .subscribe([
+        { type: "pane.focused" },
+        { type: "workspace.focused" },
+        { type: "tab.focused" },
+        { type: "layout.updated" },
+        { type: "pane.closed" },
+      ])
+      .pipe(Stream.map(() => undefined)),
+    Stream.tick(1_000),
+  ).pipe(
+    Stream.runForEach(() =>
+      currentTarget.pipe(Effect.flatMap((value) => Ref.set(target, value))),
+    ),
+  );
+
+  const draw = Effect.gen(function* () {
+    let previous: Target | null = null;
+    while (true) {
+      const selected = yield* Ref.get(target);
+      if (!selected) {
+        previous = null;
+        yield* Effect.sleep(100);
+        continue;
+      }
+      const destination = restingPosition(
+        selected,
+        mascot.size,
+        config.position,
+      );
+      const shouldJump =
+        previous?.paneId !== selected.paneId ||
+        previous.tabId !== selected.tabId;
+      const jumpDuration = shouldJump
+        ? mascot.jump.reduce((total, frame) => total + frame.durationMs, 0)
+        : 0;
+      yield* herdr.panes.graphics.withLayerStream(
+        selected.paneId,
+        { layerId, zIndex: 100 },
+        (writer) =>
+          Effect.gen(function* () {
+            const started = yield* Clock.currentTimeMillis;
+            let lastFrame: Frame | undefined;
+            let lastX = Number.NaN;
+            let lastY = Number.NaN;
+            while (sameTarget(selected, yield* Ref.get(target))) {
+              const elapsed = (yield* Clock.currentTimeMillis) - started;
+              const jumping = elapsed < jumpDuration;
+              const point = jumping
+                ? jumpPosition(selected, destination, elapsed / jumpDuration)
+                : destination;
+              const frame = frameAt(
+                jumping ? mascot.jump : mascot.idle,
+                jumping ? elapsed : elapsed - jumpDuration,
+              );
+              const x = Math.round(point.x);
+              const y = Math.round(point.y);
+              if (frame !== lastFrame || x !== lastX || y !== lastY) {
+                yield* writer.write(
+                  graphicsFrame(frame, selected, x, y, destination.size),
+                );
+                lastFrame = frame;
+                lastX = x;
+                lastY = y;
+              }
+              yield* Effect.sleep(jumping ? 33 : 50);
+            }
+          }),
+      );
+      previous = selected;
+    }
+  });
+  yield* Effect.all([track, draw], { concurrency: "unbounded" });
+});
+
+const runWatcher = Effect.gen(function* () {
+  const config = yield* RuntimeConfig;
+  const path = yield* Path.Path;
+  const compromised = yield* Deferred.make<never, ProcessError>();
+  const lease = yield* Effect.acquireRelease(
+    Effect.tryPromise(() =>
+      lock(path.join(config.state, "watcher"), {
+        realpath: false,
+        stale: 15_000,
+        update: 5_000,
+        onCompromised: (cause) =>
+          Deferred.doneUnsafe(
+            compromised,
+            Effect.fail(
+              new ProcessError({ command: "watch", message: String(cause) }),
+            ),
+          ),
+      }),
+    ).pipe(
+      Effect.catch((error) =>
+        Schema.is(Schema.Struct({ code: Schema.Literal("ELOCKED") }))(
+          error.cause,
+        )
+          ? Effect.succeed(null)
+          : Effect.fail(
+              new ProcessError({ command: "watch", message: String(error) }),
+            ),
+      ),
+    ),
+    (release) =>
+      release
+        ? Effect.tryPromise(() => release()).pipe(
+            Effect.catch((cause) =>
+              Effect.logError("Could not release mascot lease", cause),
+            ),
+          )
+        : Effect.void,
+  );
+  if (!lease) return false;
+  yield* Effect.logInfo("Herdr Mascot started");
+  return yield* render.pipe(
+    Effect.retry({ times: 5, schedule: Schedule.spaced(1_000) }),
+    Effect.as(false),
+    Effect.raceFirst(waitUntilStopped),
+    Effect.raceFirst(waitForUpdate.pipe(Effect.as(true))),
+    Effect.raceFirst(Deferred.await(compromised)),
+  );
+}).pipe(Effect.scoped);
+
+export const watch = Effect.gen(function* () {
+  const restart = yield* runWatcher;
+  if (restart && (yield* enabled)) {
+    yield* Effect.logInfo("Herdr Mascot changed; starting a new renderer");
+    yield* (yield* Process).detach;
+  }
+});
