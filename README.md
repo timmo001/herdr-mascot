@@ -90,9 +90,9 @@ config. A replacement pack must be valid when the new renderer starts.
 
 ### Focus changes
 
-- The mascot hops out to the right before entering the latest focused pane
-  from the right, landing at the configured corner. The exit takes 250ms and
-  also plays when you hide the mascot or toggle it off.
+- Each exit randomly hops right or down, with an equal chance of either, before
+  entering the latest focused pane from the right at the configured corner.
+  The exit takes 250ms and also plays when you hide the mascot or toggle it off.
 - Herdr hides inactive tabs and workspaces immediately, so the outgoing hop is
   only visible while the old pane remains on screen.
 - Fast switches interrupt the entry hop, exit from its current position and

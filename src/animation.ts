@@ -51,6 +51,25 @@ export function jumpPosition(
   };
 }
 
+export function exitPosition(
+  target: Target,
+  origin: { readonly x: number; readonly y: number; readonly size: number },
+  progress: number,
+  direction: "right" | "down",
+) {
+  if (direction === "right") return jumpPosition(target, origin, 1 - progress);
+  const t = Math.max(0, Math.min(1, progress));
+  const travel = t * t * (3 - 2 * t);
+  const lift = Math.min(origin.size * 0.45, Math.max(0, origin.y));
+  return {
+    x: origin.x,
+    y:
+      origin.y +
+      (target.rows * target.cellHeight - origin.y) * travel -
+      lift * 4 * t * (1 - t),
+  };
+}
+
 export function sameTarget(left: Target | null, right: Target | null) {
   return (
     left === right ||

@@ -5,6 +5,7 @@ import {
   Effect,
   FileSystem,
   Path,
+  Random,
   Ref,
   Schedule,
   Schema,
@@ -12,6 +13,7 @@ import {
 } from "effect";
 import { check, lock } from "proper-lockfile";
 import {
+  exitPosition,
   frameAt,
   graphicsFrame,
   jumpPosition,
@@ -171,6 +173,7 @@ const render = Effect.gen(function* () {
             const graphics = yield* herdr.panes.graphics.info(selected.paneId);
             if (!graphics.paneVisible) return true;
             const origin = { x: lastX, y: lastY, size: destination.size };
+            const direction = (yield* Random.nextBoolean) ? "right" : "down";
             const exitStarted = yield* Clock.currentTimeMillis;
             while (true) {
               const elapsed = (yield* Clock.currentTimeMillis) - exitStarted;
@@ -182,8 +185,12 @@ const render = Effect.gen(function* () {
                     latest.workspaceId !== selected.workspaceId))
               )
                 break;
-              // Reverse the entry path from the last drawn position.
-              const point = jumpPosition(selected, origin, 1 - elapsed / 250);
+              const point = exitPosition(
+                selected,
+                origin,
+                elapsed / 250,
+                direction,
+              );
               yield* writer.write(
                 graphicsFrame(
                   frameAt(mascot.jump, (elapsed / 250) * jumpDuration),
