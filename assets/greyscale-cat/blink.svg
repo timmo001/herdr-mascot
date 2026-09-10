@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
   <title>Greyscale cat, blinking</title>
-  <g stroke="#ededed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M43 53c17 9 20-10 12-15" fill="none" stroke-width="7"/>
+  <g stroke-linecap="round">
     <path d="M43 53c17 9 20-10 12-15" fill="none" stroke="#747474" stroke-width="4"/>
     <path d="M18 55c-1-8 3-21 13-22 12 0 16 15 14 22l-4 5H22z" fill="#858585"/>
     <path d="M18 25 17 8l13 9 10-1 10-9-1 21c1 10-7 15-16 15-10 0-17-7-15-18z" fill="#a3a3a3"/>
@@ -14,5 +13,4 @@
     <path d="M22 27q3 3 6 0m10 0q3 3 6 0M33 34v2m-3 0q3 3 6 0M19 32l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1"/>
     <path d="M25 49v9m14-9v9"/>
   </g>
-  <path d="M21 59h8m7 0h8" stroke="#ededed" stroke-width="3" stroke-linecap="round"/>
 </svg>

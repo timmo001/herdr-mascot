@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
   <title>Greyscale cat, crouching</title>
-  <g stroke="#ededed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M43 55c15 7 20-4 14-11" fill="none" stroke-width="7"/>
+  <g stroke-linecap="round">
     <path d="M43 55c15 7 20-4 14-11" fill="none" stroke="#747474" stroke-width="4"/>
     <path d="M16 55c0-9 7-17 17-17s17 10 15 18l-5 4H21z" fill="#858585"/>
     <path d="M18 33 15 16l15 9 10-1 12-9-3 20c1 9-7 14-16 14-10 0-17-7-15-16z" fill="#a3a3a3"/>
@@ -13,5 +12,4 @@
   <g fill="none" stroke="#494949" stroke-width="1.4" stroke-linecap="round">
     <path d="M33 42v2m-3 0q3 3 6 0M19 40l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1M25 53v5m14-5v5"/>
   </g>
-  <path d="M20 59h9m7 0h9" stroke="#ededed" stroke-width="3" stroke-linecap="round"/>
 </svg>
