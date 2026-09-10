@@ -78,7 +78,7 @@ Create `config.json` in the directory printed by `herdr plugin config-dir`:
 | ------------------ | ----------------- | ------------------------------------------------------------------------------------------- |
 | `sizePixels`       | `64`              | Width and height in pixels, from 16 to 256. Small panes reduce it to fit.                   |
 | `animationDelayMs` | `0`               | Delay before each entry or exit hop, from 0 to 5,000 milliseconds. Zero starts immediately. |
-| `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right` or `top-left`.                                   |
+| `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right`, `top-left`, `center-bottom` or `center-top`.    |
 | `mascot`           | Bundled pixel cat | Path to a replacement pack's `mascot.json`, absolute or relative to the config directory.   |
 
 There is one mascot, attached to the active pane. Positioning leaves room for
@@ -92,11 +92,16 @@ config. A replacement pack must be valid when the new renderer starts.
 
 ### Focus changes
 
-- Each exit randomly hops right or down, with an equal chance of either, before
-  entering the latest focused pane from the right at the configured corner.
-  The exit takes 250ms and also plays when you hide the mascot or toggle it off.
+- Entries and exits independently choose the corner's horizontal or vertical
+  edge with a 50/50 chance: left/up for
+  top-left, right/up for top-right, left/down for bottom-left and right/down for
+  bottom-right. Both directions have an equal chance, including on toggle-off.
+- `center-bottom` and `center-top` sit halfway across the pane and use only the
+  bottom or top edge respectively for both entry and exit.
+- Each hop varies in height and speed. Entries take 80-120% of the pack's jump
+  duration; exits take 200-300ms. Random choices stay fixed throughout each hop.
 - Focus and stop notifications wake the renderer immediately. `animationDelayMs`
-  adds an optional pause before each hop; the animation durations stay the same.
+  adds an optional pause before each hop without changing its speed.
 - Herdr hides inactive tabs and workspaces immediately, so the outgoing hop is
   only visible while the old pane remains on screen.
 - Fast switches interrupt the entry hop, exit from its current position and
@@ -152,8 +157,8 @@ my-cat/
 - Files resolve relative to the manifest.
 - Use square, self-contained SVGs with transparent backgrounds. Keep the same
   viewBox and alignment across frames.
-- `idle` loops. `jump` plays once per focus change, with the plugin moving the
-  image along a hop over the total duration of that sequence.
+- `idle` loops. `jump` plays once per entry or exit, with frame timing scaled to
+  the hop's randomly chosen duration.
 - Use frame sequences for animation. SVG scripts, CSS animation and SMIL are not
   the animation mechanism.
 - Hide and show the mascot after editing the pack's SVGs or manifest.
@@ -185,17 +190,44 @@ bundle so its platform-specific native module loads from `node_modules`.
 
 ### Manual check
 
+To preview all six positions in the active Herdr session:
+
+```sh
+mise run test-options
+```
+
+This builds and refreshes the local plugin link, then invokes the runtime
+`test-options` command. Once registered, you can also run it directly:
+
+```sh
+herdr plugin action invoke timmo.mascot.test-options
+```
+
+It shows an entry and exit at each position, with three seconds on screen and a short gap
+between positions. The cycle runs in the background for roughly 25 seconds.
+Corners keep their random 50/50 directions; rerun to see different hops.
+
+The command temporarily sets `animationDelayMs` to zero, then restores the original
+config and shown/hidden state on completion or failure. Keep this session focused
+while watching. Progress and any errors appear in the plugin logs:
+
+```sh
+herdr plugin log list --plugin timmo.mascot --limit 1
+```
+
 After linking and showing the plugin:
 
 1. Confirm the cat appears at the configured size and corner with a transparent
    background, blinking and breathing while the terminal remains usable.
 2. Switch between differently placed panes, then between tabs or workspaces.
-   Check that every hop enters from the right.
+   Check that entries use either adjacent edge of the configured corner.
+   Centre positions should enter and exit vertically through their matching edge.
 3. Switch rapidly, resize and zoom. Confirm there is only one cat, it stays
    within the active pane and fits a small pane.
 4. Select text and open a Herdr menu. Confirm normal input still works.
 5. Change the size, corner or pack in `config.json` and confirm it reloads.
 6. Hide or toggle off the mascot and confirm it hops out before the image clears.
-   Show it again and disable the plugin to check cleanup.
+   Try each corner and check that exits use its two adjacent edges, with varied
+   height and speed. Show it again and disable the plugin to check cleanup.
 
 Interactive behaviour is checked by the owner, rather than automated UX tests.

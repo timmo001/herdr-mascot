@@ -31,3 +31,9 @@ id = "stop"
 title = "Hide mascot"
 contexts = ["global", "workspace", "pane"]
 command = ["mise", "exec", "--", "bun", "dist/index.js", "stop"]
+
+[[actions]]
+id = "test-options"
+title = "Preview all mascot positions"
+contexts = ["global", "workspace", "pane"]
+command = ["mise", "exec", "--", "bun", "dist/index.js", "test-options"]
