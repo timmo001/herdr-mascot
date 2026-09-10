@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
-  <title>Greyscale pixel cat, crouching</title>
+  <title>Cat (pixel), crouching</title>
   <path fill="#686868" d="M11 13h2v-2h2v3h-4z"/>
   <path fill="#686868" d="M11 13h3v-1h1v2h-4z"/>
   <path fill="#686868" d="M4 11h7v2h1v2H3v-2h1z"/>
@@ -9,7 +9,7 @@
   <g transform="translate(0 2)">
     <path fill="#969696" d="M2 1h2v1h1v1h4V2h1V1h2v7h-1v1h-1v1H4V9H3V8H2z"/>
     <path fill="#969696" d="M3 2h1v1h1v1h4V3h1V2h1v6h-1v1H4V8H3z"/>
-    <path fill="#525252" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
+    <path fill="#ad8b91" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
     <path fill="#bcbcbc" d="M6 7h2v1h1v1H5V8h1z"/>
     <path fill="#353535" d="M4 7h2v1H4zm4 0h2v1H8zM6 8h2v1H6z"/>
     <path fill="#686868" d="M1 7h2v1H1zm10 0h2v1h-2z"/>

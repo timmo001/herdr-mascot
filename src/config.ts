@@ -152,7 +152,7 @@ export class Preferences extends Context.Service<
         position: settings.position ?? "bottom-right",
         mascotFile: settings.mascot
           ? path.resolve(config.configDir, settings.mascot)
-          : path.join(config.root, "assets/pixel-cat/mascot.json"),
+          : path.join(config.root, "assets/cat-pixel/mascot.json"),
       });
     }),
   );

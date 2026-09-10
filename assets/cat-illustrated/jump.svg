@@ -1,12 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <title>Greyscale cat, jumping</title>
+  <title>Cat (illustrated), jumping</title>
   <g stroke-linecap="round">
     <path d="M41 43c15 6 20-5 17-14" fill="none" stroke="#747474" stroke-width="4"/>
-    <path d="m24 44-6 12 6 4 7-12 5 0 6 12 6-3-5-15c-1-9-5-15-12-15-7 1-9 9-7 17z" fill="#858585"/>
-    <path d="m22 34-9 6 4 5 11-7m15-4 8 7-4 4-10-7" fill="#a3a3a3"/>
+    <path d="m29 43-6 11m15-11 6 11" fill="none" stroke="#858585" stroke-width="9"/>
+    <path d="M24 44c-2-8 0-16 7-17 7 0 11 6 12 15l-3 6H28z" fill="#858585"/>
+    <path d="m25 35-9 7m25-7 8 7" fill="none" stroke="#a3a3a3" stroke-width="7"/>
     <path d="M18 21 17 4l13 9 10-1 10-9-1 21c1 10-7 15-16 15-10 0-17-7-15-18z" fill="#a3a3a3"/>
   </g>
-  <path d="m21 10 1 10 5-5zm24 0-6 6 6 3z" fill="#525252"/>
+  <path d="m21 10 1 10 5-5zm24 0-6 6 6 3z" fill="#ad8b91"/>
   <path d="M28 38q5-3 9 0v8h-9z" fill="#c9c9c9"/>
   <path d="M27 27q6-5 12 0v6H27z" fill="#dedede"/>
   <g fill="#333333"><ellipse cx="25" cy="23" rx="2" ry="3"/><ellipse cx="41" cy="23" rx="2" ry="3"/><path d="m30 27 6 0-3 3z"/></g>
