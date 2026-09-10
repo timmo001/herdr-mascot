@@ -21,7 +21,16 @@ import {
   restingPosition,
   sameTarget,
 } from "../animation";
-import { Preferences, RuntimeConfig, layerId } from "../config";
+import {
+  Preferences,
+  RuntimeConfig,
+  bottomPositions,
+  layerId,
+  loadSettings,
+  positions,
+  topPositions,
+  type Position,
+} from "../config";
 import { currentTarget, enabled, type Target } from "../services/herdr";
 import { Mascot, type Frame } from "../services/mascot";
 import { Process, ProcessError } from "../services/process";
@@ -39,7 +48,13 @@ export const start = Effect.gen(function* () {
       stale: 15_000,
     }),
   );
-  if (!held) yield* (yield* Process).detach;
+  if (held) {
+    const { settings } = yield* loadSettings(config.settingsFile);
+    if (!settings.position?.endsWith("random")) return;
+    yield* stop;
+    yield* fs.remove(path.join(config.state, "stopped"), { force: true });
+  }
+  yield* (yield* Process).detach;
 });
 
 export const stop = Effect.gen(function* () {
@@ -99,7 +114,6 @@ const render = Effect.gen(function* () {
   const herdr = yield* HerdrSdk;
   const config = yield* Preferences;
   const mascot = yield* Mascot;
-  const flipHorizontal = mascot.flipOnLeft && config.position.endsWith("left");
   const target = yield* Ref.make<Target | null>(yield* currentTarget);
   const stopping = yield* Ref.make(false);
   const changed = yield* Queue.sliding<void>(1);
@@ -131,6 +145,7 @@ const render = Effect.gen(function* () {
 
   const draw = Effect.gen(function* () {
     let previous: Target | null = null;
+    let position: Position = "bottom-right";
     while (!(yield* Ref.get(stopping))) {
       const selected = yield* Ref.get(target);
       if (!selected) {
@@ -138,20 +153,33 @@ const render = Effect.gen(function* () {
         yield* Queue.take(changed);
         continue;
       }
-      const destination = restingPosition(
-        selected,
-        mascot.size,
-        config.position,
-      );
       const shouldJump =
         previous?.paneId !== selected.paneId ||
-        previous.tabId !== selected.tabId;
+        previous.tabId !== selected.tabId ||
+        previous.workspaceId !== selected.workspaceId;
+      if (shouldJump) {
+        switch (config.position) {
+          case "random":
+            position = yield* Random.choice(positions);
+            break;
+          case "bottom-random":
+            position = yield* Random.choice(bottomPositions);
+            break;
+          case "top-random":
+            position = yield* Random.choice(topPositions);
+            break;
+          default:
+            position = config.position;
+        }
+      }
+      const destination = restingPosition(selected, mascot.size, position);
+      const flipHorizontal = mascot.flipOnLeft && position.endsWith("left");
       const entryDuration: number = shouldJump
         ? jumpDuration * (yield* Random.nextBetween(0.8, 1.2))
         : 0;
       const entryLift = yield* Random.nextBetween(0.35, 0.75);
       const entryDirection =
-        !config.position.startsWith("center-") && (yield* Random.nextBoolean)
+        !position.startsWith("center-") && (yield* Random.nextBoolean)
           ? "horizontal"
           : "vertical";
       if (shouldJump && config.animationDelayMs > 0) {
@@ -182,7 +210,7 @@ const render = Effect.gen(function* () {
                     selected,
                     destination,
                     elapsed / entryDuration,
-                    config.position,
+                    position,
                     entryDirection,
                     entryLift,
                   )
@@ -235,8 +263,7 @@ const render = Effect.gen(function* () {
             if (!graphics.paneVisible) return true;
             const origin = { x: lastX, y: lastY, size: destination.size };
             const direction =
-              !config.position.startsWith("center-") &&
-              (yield* Random.nextBoolean)
+              !position.startsWith("center-") && (yield* Random.nextBoolean)
                 ? "horizontal"
                 : "vertical";
             const exitDuration = yield* Random.nextBetween(200, 300);
@@ -256,7 +283,7 @@ const render = Effect.gen(function* () {
                 selected,
                 origin,
                 elapsed / exitDuration,
-                config.position,
+                position,
                 direction,
                 exitLift,
               );

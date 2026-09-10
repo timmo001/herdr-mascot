@@ -4,6 +4,18 @@ import { Context, Effect, FileSystem, Layer, Path, Schema } from "effect";
 export const pluginId = "timmo.mascot";
 export const layerId = "timmo-mascot";
 
+export const bottomPositions = [
+  "bottom-right",
+  "bottom-left",
+  "center-bottom",
+] as const;
+
+export const topPositions = ["top-right", "top-left", "center-top"] as const;
+
+export const positions = [...bottomPositions, ...topPositions] as const;
+
+export type Position = (typeof positions)[number];
+
 export class ConfigError extends Schema.TaggedError<ConfigError>()(
   "ConfigError",
   {
@@ -20,19 +32,10 @@ const Settings = Schema.Struct({
     Schema.Int.check(Schema.isBetween({ minimum: 16, maximum: 256 })),
   ),
   position: Schema.optionalKey(
-    Schema.Literals([
-      "bottom-right",
-      "bottom-left",
-      "top-right",
-      "top-left",
-      "center-bottom",
-      "center-top",
-    ]),
+    Schema.Literals([...positions, "random", "bottom-random", "top-random"]),
   ),
   mascot: Schema.optionalKey(Schema.NonEmptyString),
 });
-
-export type Position = NonNullable<typeof Settings.Type.position>;
 
 const Environment = Schema.Struct({
   HERDR_SOCKET_PATH: Schema.NonEmptyString,
@@ -122,7 +125,7 @@ export class Preferences extends Context.Service<
     readonly revision: string;
     readonly animationDelayMs: number;
     readonly sizePixels: number;
-    readonly position: Position;
+    readonly position: NonNullable<typeof Settings.Type.position>;
     readonly mascotFile: string;
   }
 >()("herdr-mascot/Preferences") {

@@ -74,12 +74,12 @@ Create `config.json` in the directory printed by `herdr plugin config-dir`:
 }
 ```
 
-| Setting            | Default           | Meaning                                                                                     |
-| ------------------ | ----------------- | ------------------------------------------------------------------------------------------- |
-| `sizePixels`       | `64`              | Width and height in pixels, from 16 to 256. Small panes reduce it to fit.                   |
-| `animationDelayMs` | `0`               | Delay before each entry or exit hop, from 0 to 5,000 milliseconds. Zero starts immediately. |
-| `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right`, `top-left`, `center-bottom` or `center-top`.    |
-| `mascot`           | Bundled pixel cat | Path to a replacement pack's `mascot.json`, absolute or relative to the config directory.   |
+| Setting            | Default           | Meaning                                                                                                                           |
+| ------------------ | ----------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `sizePixels`       | `64`              | Width and height in pixels, from 16 to 256. Small panes reduce it to fit.                                                         |
+| `animationDelayMs` | `0`               | Delay before each entry or exit hop, from 0 to 5,000 milliseconds. Zero starts immediately.                                       |
+| `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right`, `top-left`, `center-bottom`, `center-top`, `random`, `bottom-random` or `top-random`. |
+| `mascot`           | Bundled pixel cat | Path to a replacement pack's `mascot.json`, absolute or relative to the config directory.                                         |
 
 There is one mascot, attached to the active pane. Positioning leaves room for
 pane borders and the scrollbar. Workspace-wide and session-wide drawing are not
@@ -92,6 +92,13 @@ config. A replacement pack must be valid when the new renderer starts.
 
 ### Focus changes
 
+- With `"position": "random"`, each entry chooses one of the six positions with
+  equal probability. `bottom-random` chooses from `bottom-left`, `center-bottom`
+  and `bottom-right`; `top-random` chooses from `top-left`, `center-top` and
+  `top-right`. Switching panes, tabs or workspaces picks again, as does
+  invoking `start`, even while the mascot is shown. Repeated choices are possible.
+  The cat exits from its current position before entering at the new one, using
+  the same hop animations and left-side mirroring. Resizing keeps the chosen position.
 - Entries and exits independently choose the corner's horizontal or vertical
   edge with a 50/50 chance: left/up for
   top-left, right/up for top-right, left/down for bottom-left and right/down for
