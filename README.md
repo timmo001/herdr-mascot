@@ -88,6 +88,38 @@ Create `config.json` in the directory printed by `herdr plugin config-dir`:
 | `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right`, `top-left`, `center-bottom`, `center-top`, `random`, `bottom-random`, `top-random`, `random-corners`, `bottom-random-corners` or `top-random-corners`. |
 | `mascot`           | Bundled pixel cat | Path to a replacement pack's `mascot.json`, absolute or relative to the config directory.                                                                                                          |
 
+`directoryMascots` defaults to an empty list. Use it to choose packs by directory:
+
+```json
+{
+  "directoryMascots": [
+    {
+      "path": "~/projects/example",
+      "mascot": "mascots/my-cat/mascot.json"
+    }
+  ]
+}
+```
+
+Directory paths must be absolute or start with `~/`. A rule matches that directory
+and its descendants, but not similarly named siblings such as `example-backup`.
+The most specific matching directory wins. Duplicate normalised paths are invalid.
+Panes outside those directories, or without working-directory metadata, use the
+top-level `mascot`; omitting it uses the bundled pixel cat.
+
+Selection uses the foreground process's working directory, falling back to the
+pane's directory when unavailable. The one-second poll detects directory changes
+within the same pane. A different pack exits and enters using the normal hops;
+moving within the same rule does not restart the animation. Matching uses the
+reported path, without resolving symlinks or Git metadata. Worktrees outside a
+configured directory need another rule.
+
+Pack paths resolve relative to the config file's source directory, following its
+symlink when stowed. Manifests must be inside that directory or the plugin's
+bundled `assets/` directory. Absolute paths are accepted only inside those roots.
+All configured packs are loaded once per renderer, so switching panes does not
+read images from the pane's repository or reload artwork.
+
 There is one mascot, attached to the active pane. Positioning leaves room for
 pane borders and the scrollbar. Workspace-wide and session-wide drawing are not
 configuration modes.
@@ -154,7 +186,7 @@ The script in `scripts/mascot-preview.ts` reads each pack's manifest and writes
 Set `mascot` to the chosen pack's absolute `mascot.json` path, for example
 `/path/to/herdr-mascot/assets/robot-illustrated/mascot.json`.
 
-To make another mascot, copy a pack somewhere you maintain and point
+To make another mascot, copy a pack under your config directory and point
 `mascot` at its manifest:
 
 ```json
@@ -185,14 +217,25 @@ my-cat/
 
 - Both animation lists need 1 to 32 frames.
 - Each frame lasts 30 to 10,000 milliseconds.
-- Files resolve relative to the manifest.
+- Files resolve relative to the manifest and must stay inside its directory,
+  including after resolving symlinks. Manifests must be `.json` and frames `.svg`;
+  each must be a regular file no larger than 1 MiB.
 - Use square, self-contained SVGs with transparent backgrounds. Keep the same
   viewBox and alignment across frames.
 - `idle` loops. `jump` plays once per entry or exit, with frame timing scaled to
   the hop's randomly chosen duration.
 - Use frame sequences for animation. SVG scripts, CSS animation and SMIL are not
   the animation mechanism.
+- Image references must be embedded PNG data URIs. Other references must be local
+  fragments such as `#gradient`. XML document types, processing instructions,
+  scripts, event handlers, foreign objects and base URLs are rejected before
+  rasterisation. External images are neither read nor fetched.
 - Hide and show the mascot after editing the pack's SVGs or manifest.
+
+Use packs from sources you trust: the path and reference checks restrict asset
+access, but do not sandbox the native image decoder. Square SVG wrappers can embed
+PNG frames without stretching them; this preserves raster artwork rather than
+converting it to vector paths.
 
 Set `"flipOnLeft": true` in a pack's `mascot.json` to mirror its artwork
 horizontally at `top-left` and `bottom-left`, including entry and exit frames.
@@ -210,6 +253,8 @@ bun dist/index.js --help
 ```
 
 `watch` runs the renderer in the foreground with Herdr's plugin environment.
+`mise run check` includes the directory-selection and asset-boundary regression
+checks in `scripts/mascot.test.ts`.
 The normal `start` action detaches it and sends output to the session's
 `watch.log` under `HERDR_PLUGIN_STATE_DIR`. Plugin action and startup failures
 also appear in Herdr's plugin command logs.

@@ -93,6 +93,7 @@ export function sameTarget(left: Target | null, right: Target | null) {
     (!!left &&
       !!right &&
       left.paneId === right.paneId &&
+      left.mascotFile === right.mascotFile &&
       left.tabId === right.tabId &&
       left.workspaceId === right.workspaceId &&
       left.x === right.x &&

@@ -1,6 +1,11 @@
 import { HerdrSdk, herdrSdkLayerFromOptions } from "@herdr/sdk";
 import { Duration, Effect, Layer, Option } from "effect";
-import { RuntimeConfig, pluginId } from "../config";
+import {
+  Preferences,
+  RuntimeConfig,
+  mascotForDirectory,
+  pluginId,
+} from "../config";
 
 export const herdrLayer = Layer.unwrap(
   Effect.gen(function* () {
@@ -19,6 +24,7 @@ export const enabled = Effect.gen(function* () {
 
 export const currentTarget = Effect.gen(function* () {
   const herdr = yield* HerdrSdk;
+  const preferences = yield* Preferences;
   const snapshot = yield* herdr.session.snapshot();
   const paneId = Option.getOrUndefined(snapshot.focusedPaneId);
   if (!paneId) return null;
@@ -38,8 +44,14 @@ export const currentTarget = Effect.gen(function* () {
   const columns = Math.max(0, Math.floor(pane.rect.width) - 3);
   const rows = Math.max(0, Math.floor(pane.rect.height) - 2);
   if (columns < 1 || rows < 1) return null;
+  const focusedPane = snapshot.panes.find((item) => item.id === paneId);
+  const cwd = focusedPane
+    ? (Option.getOrUndefined(focusedPane.foregroundCwd) ??
+      Option.getOrUndefined(focusedPane.cwd))
+    : undefined;
   return {
     paneId,
+    mascotFile: mascotForDirectory(cwd, preferences),
     workspaceId: layout.workspaceId,
     tabId: layout.tabId,
     x: pane.rect.x * graphics.cellWidthPx,

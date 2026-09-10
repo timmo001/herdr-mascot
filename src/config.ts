@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
+import { homedir } from "node:os";
 import { Context, Effect, FileSystem, Layer, Path, Schema } from "effect";
+import { containsPath } from "./paths";
 
 export const pluginId = "timmo.mascot";
 export const layerId = "timmo-mascot";
@@ -26,6 +28,13 @@ export class ConfigError extends Schema.TaggedError<ConfigError>()(
   },
 ) {}
 
+const FilePath = Schema.NonEmptyString.check(Schema.isPattern(/^[^\0]+$/));
+
+const DirectoryMascot = Schema.Struct({
+  path: FilePath,
+  mascot: FilePath,
+});
+
 const Settings = Schema.Struct({
   animationDelayMs: Schema.optionalKey(
     Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 5_000 })),
@@ -47,7 +56,8 @@ const Settings = Schema.Struct({
       "top-random-corners",
     ]),
   ),
-  mascot: Schema.optionalKey(Schema.NonEmptyString),
+  mascot: Schema.optionalKey(FilePath),
+  directoryMascots: Schema.optionalKey(Schema.Array(DirectoryMascot)),
 });
 
 const Environment = Schema.Struct({
@@ -61,6 +71,7 @@ export const loadSettings = Effect.fn("Config.loadSettings")(function* (
   file: string,
 ) {
   const fs = yield* FileSystem.FileSystem;
+  const path = yield* Path.Path;
   const contents = (yield* fs.exists(file))
     ? yield* fs.readFileString(file)
     : "{}";
@@ -76,8 +87,26 @@ export const loadSettings = Effect.fn("Config.loadSettings")(function* (
         }),
     ),
   );
+  const directoryMascots: Array<{ path: string; mascot: string }> = [];
+  for (const rule of settings.directoryMascots ?? []) {
+    if (!path.isAbsolute(rule.path) && !rule.path.startsWith("~/"))
+      return yield* new ConfigError({
+        message: "Directory mascot paths must be absolute or start with ~/.",
+      });
+    const directory = rule.path.startsWith("~/")
+      ? path.resolve(homedir(), rule.path.slice(2))
+      : path.resolve(rule.path);
+    if (directoryMascots.some((item) => item.path === directory))
+      return yield* new ConfigError({
+        message: `Duplicate directory mascot path: ${directory}`,
+      });
+    directoryMascots.push({ path: directory, mascot: rule.mascot });
+  }
   return {
     settings,
+    directoryMascots: directoryMascots.sort(
+      (left, right) => right.path.length - left.path.length,
+    ),
     revision: createHash("sha256").update(contents).digest("hex"),
   };
 });
@@ -141,6 +170,11 @@ export class Preferences extends Context.Service<
     readonly opacity: number;
     readonly position: NonNullable<typeof Settings.Type.position>;
     readonly mascotFile: string;
+    readonly directoryMascots: ReadonlyArray<{
+      readonly path: string;
+      readonly mascotFile: string;
+    }>;
+    readonly assetRoots: ReadonlyArray<string>;
   }
 >()("herdr-mascot/Preferences") {
   static readonly layer = Layer.effect(
@@ -148,7 +182,15 @@ export class Preferences extends Context.Service<
     Effect.gen(function* () {
       const config = yield* RuntimeConfig;
       const path = yield* Path.Path;
-      const { settings, revision } = yield* loadSettings(config.settingsFile);
+      const fs = yield* FileSystem.FileSystem;
+      const { settings, directoryMascots, revision } = yield* loadSettings(
+        config.settingsFile,
+      );
+      // Stow links files individually, so the config's source owns its packs.
+      const configDir = (yield* fs.exists(config.settingsFile))
+        ? path.dirname(yield* fs.realPath(config.settingsFile))
+        : yield* fs.realPath(config.configDir);
+      const assets = yield* fs.realPath(path.join(config.root, "assets"));
       return Preferences.of({
         revision,
         animationDelayMs: settings.animationDelayMs ?? 0,
@@ -156,9 +198,27 @@ export class Preferences extends Context.Service<
         opacity: settings.opacity ?? 100,
         position: settings.position ?? "bottom-right",
         mascotFile: settings.mascot
-          ? path.resolve(config.configDir, settings.mascot)
-          : path.join(config.root, "assets/cat-pixel/mascot.json"),
+          ? path.resolve(configDir, settings.mascot)
+          : path.join(assets, "cat-pixel/mascot.json"),
+        directoryMascots: directoryMascots.map((rule) => ({
+          path: rule.path,
+          mascotFile: path.resolve(configDir, rule.mascot),
+        })),
+        assetRoots: [configDir, assets],
       });
     }),
+  );
+}
+
+export function mascotForDirectory(
+  cwd: string | undefined,
+  preferences: Preferences["Service"],
+) {
+  return (
+    (cwd === undefined
+      ? undefined
+      : preferences.directoryMascots.find((rule) =>
+          containsPath(rule.path, cwd),
+        )?.mascotFile) ?? preferences.mascotFile
   );
 }

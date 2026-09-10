@@ -26,7 +26,11 @@ run = "bun run format:check"
 
 [tasks.check]
 description = "Lint, type-check and verify formatting"
-depends = ["lint", "typecheck", "format:check"]
+depends = ["lint", "typecheck", "format:check", "test"]
+
+[tasks.test]
+description = "Check directory selection and mascot asset boundaries"
+run = "bun test scripts/mascot.test.ts"
 
 [tasks.build]
 description = "Build the Bun module into dist"

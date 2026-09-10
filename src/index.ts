@@ -34,7 +34,7 @@ Command.make("herdr-mascot").pipe(
       toggle.pipe(Effect.provide(application)),
     ).pipe(Command.withDescription("Show or hide the mascot in this session")),
     Command.make("test-options", {}, () =>
-      testOptions.pipe(Effect.provide(application)),
+      testOptions.pipe(Effect.provide(preferences)),
     ).pipe(Command.withDescription("Preview all mascot positions")),
     Command.make("watch", {}, () => watch.pipe(Effect.provide(renderer))).pipe(
       Command.withDescription("Run the mascot in the foreground"),

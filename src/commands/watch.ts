@@ -116,14 +116,10 @@ const waitUntilStopped = Effect.gen(function* () {
 const render = Effect.gen(function* () {
   const herdr = yield* HerdrSdk;
   const config = yield* Preferences;
-  const mascot = yield* Mascot;
+  const mascots = yield* Mascot;
   const target = yield* Ref.make<Target | null>(yield* currentTarget);
   const stopping = yield* Ref.make(false);
   const changed = yield* Queue.sliding<void>(1);
-  const jumpDuration = mascot.jump.reduce(
-    (total, frame) => total + frame.durationMs,
-    0,
-  );
   const track = Stream.merge(
     herdr.events
       .subscribe([
@@ -158,8 +154,14 @@ const render = Effect.gen(function* () {
       }
       const shouldJump =
         previous?.paneId !== selected.paneId ||
+        previous.mascotFile !== selected.mascotFile ||
         previous.tabId !== selected.tabId ||
         previous.workspaceId !== selected.workspaceId;
+      const mascot = yield* mascots.get(selected.mascotFile);
+      const jumpDuration = mascot.jump.reduce(
+        (total, frame) => total + frame.durationMs,
+        0,
+      );
       if (shouldJump) {
         switch (config.position) {
           case "random":
@@ -260,7 +262,9 @@ const render = Effect.gen(function* () {
             const next = yield* Ref.get(target);
             if (
               !lastFrame ||
-              (!(yield* Ref.get(stopping)) && next?.paneId === selected.paneId)
+              (!(yield* Ref.get(stopping)) &&
+                next?.paneId === selected.paneId &&
+                next.mascotFile === selected.mascotFile)
             )
               return false;
             if (config.animationDelayMs > 0) {
