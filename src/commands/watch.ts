@@ -145,7 +145,14 @@ const render = Effect.gen(function* () {
       const shouldJump =
         previous?.paneId !== selected.paneId ||
         previous.tabId !== selected.tabId;
-      const entryDuration: number = shouldJump ? jumpDuration : 0;
+      const entryDuration: number = shouldJump
+        ? jumpDuration * (yield* Random.nextBetween(0.8, 1.2))
+        : 0;
+      const entryLift = yield* Random.nextBetween(0.35, 0.75);
+      const entryDirection =
+        !config.position.startsWith("center-") && (yield* Random.nextBoolean)
+          ? "horizontal"
+          : "vertical";
       if (shouldJump && config.animationDelayMs > 0) {
         yield* Effect.sleep(config.animationDelayMs);
         if (
@@ -170,11 +177,20 @@ const render = Effect.gen(function* () {
               const elapsed = (yield* Clock.currentTimeMillis) - started;
               const jumping = elapsed < entryDuration;
               const point = jumping
-                ? jumpPosition(selected, destination, elapsed / entryDuration)
+                ? jumpPosition(
+                    selected,
+                    destination,
+                    elapsed / entryDuration,
+                    config.position,
+                    entryDirection,
+                    entryLift,
+                  )
                 : destination;
               const frame = frameAt(
                 jumping ? mascot.jump : mascot.idle,
-                jumping ? elapsed : elapsed - entryDuration,
+                jumping
+                  ? (elapsed / entryDuration) * jumpDuration
+                  : elapsed - entryDuration,
               );
               const x = Math.round(point.x);
               const y = Math.round(point.y);
@@ -210,13 +226,19 @@ const render = Effect.gen(function* () {
             const graphics = yield* herdr.panes.graphics.info(selected.paneId);
             if (!graphics.paneVisible) return true;
             const origin = { x: lastX, y: lastY, size: destination.size };
-            const direction = (yield* Random.nextBoolean) ? "right" : "down";
+            const direction =
+              !config.position.startsWith("center-") &&
+              (yield* Random.nextBoolean)
+                ? "horizontal"
+                : "vertical";
+            const exitDuration = yield* Random.nextBetween(200, 300);
+            const exitLift = yield* Random.nextBetween(0.35, 0.75);
             const exitStarted = yield* Clock.currentTimeMillis;
             while (true) {
               const elapsed = (yield* Clock.currentTimeMillis) - exitStarted;
               const latest = yield* Ref.get(target);
               if (
-                elapsed >= 250 ||
+                elapsed >= exitDuration ||
                 (latest &&
                   (latest.tabId !== selected.tabId ||
                     latest.workspaceId !== selected.workspaceId))
@@ -225,12 +247,14 @@ const render = Effect.gen(function* () {
               const point = exitPosition(
                 selected,
                 origin,
-                elapsed / 250,
+                elapsed / exitDuration,
+                config.position,
                 direction,
+                exitLift,
               );
               yield* writer.write(
                 graphicsFrame(
-                  frameAt(mascot.jump, (elapsed / 250) * jumpDuration),
+                  frameAt(mascot.jump, (elapsed / exitDuration) * jumpDuration),
                   selected,
                   point.x,
                   point.y,

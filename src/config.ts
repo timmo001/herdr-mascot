@@ -20,7 +20,14 @@ const Settings = Schema.Struct({
     Schema.Int.check(Schema.isBetween({ minimum: 16, maximum: 256 })),
   ),
   position: Schema.optionalKey(
-    Schema.Literals(["bottom-right", "bottom-left", "top-right", "top-left"]),
+    Schema.Literals([
+      "bottom-right",
+      "bottom-left",
+      "top-right",
+      "top-left",
+      "center-bottom",
+      "center-top",
+    ]),
   ),
   mascot: Schema.optionalKey(Schema.NonEmptyString),
 });

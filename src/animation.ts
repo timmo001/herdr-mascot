@@ -23,8 +23,12 @@ export function restingPosition(
   const fitted = Math.min(size, width, height);
   return {
     size: fitted,
-    x: position.endsWith("right") ? width - fitted : 0,
-    y: position.startsWith("bottom") ? height - fitted : 0,
+    x: position.startsWith("center-")
+      ? (width - fitted) / 2
+      : position.endsWith("right")
+        ? width - fitted
+        : 0,
+    y: position.includes("bottom") ? height - fitted : 0,
   };
 }
 
@@ -36,37 +40,50 @@ export function jumpPosition(
     readonly size: number;
   },
   progress: number,
+  position: Position,
+  direction: "horizontal" | "vertical",
+  liftScale: number,
 ) {
-  const t = Math.max(0, Math.min(1, progress));
-  const travel = t * t * (3 - 2 * t);
-  const lift = Math.min(
-    destination.size * 0.45,
-    target.rows * target.cellHeight - destination.size,
+  return exitPosition(
+    target,
+    destination,
+    1 - progress,
+    position,
+    direction,
+    liftScale,
   );
-  const direction = destination.y > 0 ? -1 : 1;
-  const startX = target.columns * target.cellWidth;
-  return {
-    x: startX + (destination.x - startX) * travel,
-    y: destination.y + direction * lift * 4 * t * (1 - t),
-  };
 }
 
 export function exitPosition(
   target: Target,
   origin: { readonly x: number; readonly y: number; readonly size: number },
   progress: number,
-  direction: "right" | "down",
+  position: Position,
+  direction: "horizontal" | "vertical",
+  liftScale: number,
 ) {
-  if (direction === "right") return jumpPosition(target, origin, 1 - progress);
   const t = Math.max(0, Math.min(1, progress));
   const travel = t * t * (3 - 2 * t);
-  const lift = Math.min(origin.size * 0.45, Math.max(0, origin.y));
+  const height = target.rows * target.cellHeight;
+  const bottom = position.includes("bottom");
+  const endX =
+    direction === "horizontal"
+      ? position.endsWith("right")
+        ? target.columns * target.cellWidth
+        : -origin.size
+      : origin.x;
+  const endY =
+    direction === "vertical" ? (bottom ? height : -origin.size) : origin.y;
+  const lift = Math.min(
+    origin.size * liftScale,
+    Math.max(0, bottom ? origin.y : height - origin.y - origin.size),
+  );
   return {
-    x: origin.x,
+    x: origin.x + (endX - origin.x) * travel,
     y:
       origin.y +
-      (target.rows * target.cellHeight - origin.y) * travel -
-      lift * 4 * t * (1 - t),
+      (endY - origin.y) * travel +
+      (bottom ? -1 : 1) * lift * 4 * t * (1 - t),
   };
 }
 
