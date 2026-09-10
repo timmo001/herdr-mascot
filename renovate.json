@@ -19,11 +19,6 @@
       "description": "Use the shorter release delay for Effect dependencies.",
       "matchPackageNames": ["effect", "@effect/platform-node", "@effect/tsgo"],
       "minimumReleaseAge": "2 hours"
-    },
-    {
-      "description": "Hold Effect runtime versions until the pinned Herdr SDK supports the rc.113 Config API.",
-      "matchPackageNames": ["effect", "@effect/platform-node"],
-      "allowedVersions": "4.0.0-rc.112"
     }
   ]
 }
