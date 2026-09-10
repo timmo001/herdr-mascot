@@ -167,7 +167,7 @@ The bundled artwork is greyscale; replacement packs can use colour.
 
 Set `"flipOnLeft": true` in a pack's `mascot.json` to mirror its artwork
 horizontally at `top-left` and `bottom-left`, including entry and exit frames.
-This is enabled for the bundled pixel cat and defaults to `false` for other packs.
+This is enabled for both bundled cats and defaults to `false` for other packs.
 Centre and right positions use the original orientation.
 
 ## Development
