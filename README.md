@@ -39,6 +39,25 @@ herdr plugin action invoke timmo.mascot.start
 herdr plugin config-dir timmo.mascot
 ```
 
+To show or hide the mascot with one action:
+
+```sh
+herdr plugin action invoke timmo.mascot.toggle
+```
+
+Bind it in Herdr's `config.toml`, then run `herdr server reload-config`:
+
+```toml
+[[keys.command]]
+key = "prefix+t"
+type = "plugin_action"
+command = "timmo.mascot.toggle"
+description = "toggle mascot"
+```
+
+Press your Herdr prefix, then `t`. After updating an existing local link, run
+`herdr plugin link "$PWD"` again to register the new action.
+
 `stop` asks the renderer to exit and waits for its lease to be released. Its
 scoped graphics stream removes only the mascot's layer. Showing the mascot
 again, or starting a new server, clears the stopped state.

@@ -2,7 +2,7 @@ import { NodeRuntime, NodeServices } from "@effect/platform-node";
 import { Effect, Layer, Logger } from "effect";
 import { Command } from "effect/unstable/cli";
 import { version } from "../package.json";
-import { start, stop, watch } from "./commands/watch";
+import { start, stop, toggle, watch } from "./commands/watch";
 import { Preferences, RuntimeConfig, pluginId } from "./config";
 import { reportError } from "./errors";
 import { Mascot } from "./services/mascot";
@@ -29,6 +29,9 @@ Command.make("herdr-mascot").pipe(
         "Hide the mascot and release its graphics layers",
       ),
     ),
+    Command.make("toggle", {}, () =>
+      toggle.pipe(Effect.provide(application)),
+    ).pipe(Command.withDescription("Show or hide the mascot in this session")),
     Command.make("watch", {}, () => watch.pipe(Effect.provide(renderer))).pipe(
       Command.withDescription("Run the mascot in the foreground"),
     ),

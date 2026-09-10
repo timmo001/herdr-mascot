@@ -21,6 +21,12 @@ contexts = ["global", "workspace", "pane"]
 command = ["mise", "exec", "--", "bun", "dist/index.js", "start"]
 
 [[actions]]
+id = "toggle"
+title = "Toggle mascot"
+contexts = ["global", "workspace", "pane"]
+command = ["mise", "exec", "--", "bun", "dist/index.js", "toggle"]
+
+[[actions]]
 id = "stop"
 title = "Hide mascot"
 contexts = ["global", "workspace", "pane"]

@@ -59,6 +59,18 @@ export const stop = Effect.gen(function* () {
   }).pipe(Effect.timeout(20_000));
 });
 
+export const toggle = Effect.gen(function* () {
+  const config = yield* RuntimeConfig;
+  const path = yield* Path.Path;
+  const held = yield* Effect.tryPromise(() =>
+    check(path.join(config.state, "watcher"), {
+      realpath: false,
+      stale: 15_000,
+    }),
+  );
+  yield* held ? stop : start;
+});
+
 const waitUntilStopped = Effect.gen(function* () {
   const config = yield* RuntimeConfig;
   const path = yield* Path.Path;
