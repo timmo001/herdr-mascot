@@ -7,8 +7,8 @@
 - Use lowercase filenames, with kebab-case for multiword names.
 - `src/commands/` owns CLI workflows, `src/services/` owns external clients,
   asset loading and subprocesses, and `src/animation.ts` owns motion and pixels.
-- `assets/pixel-cat/` contains the default greyscale pixel-art mascot pack.
-- `assets/greyscale-cat/` keeps the original smooth cat as an optional pack.
+- `assets/` contains cat, dog and robot packs in `pixel` and `illustrated` styles.
+- Name pack directories `<character>-<style>`; `assets/cat-pixel/` is the default.
 - Use the installed `@herdr/sdk` for Herdr requests and scoped graphics streams.
 - `dist/` is generated Bun-targeted module output and stays untracked.
 - The package is private; distribution is through the GitHub repository.

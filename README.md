@@ -1,11 +1,16 @@
 # Herdr Mascot
 
-An original greyscale pixel-art cat that follows your active Herdr pane. It breathes,
-blinks and hops when you switch panes, tabs or workspaces.
+An animated mascot that follows your active Herdr pane. Choose a cat, dog or robot
+in pixel-art or illustrated style. Each has idle animations and hops when you
+switch panes, tabs or workspaces.
 
 The mascot uses a named graphics layer over the existing terminal. It takes no
 keyboard focus and opens no extra panes. SVG frames are rasterised once when the
 renderer starts, then sent through `@herdr/sdk` as RGBA images.
+
+The plugin code and bundled artwork were generated with AI. Contributions are
+welcome, especially from artists who'd like to refine the existing mascots or
+create new ones.
 
 ## Requirements
 
@@ -100,7 +105,7 @@ config. A replacement pack must be valid when the new renderer starts.
   `top-random-corners` uses only `top-left` and `top-right`.
   Switching panes, tabs or workspaces picks again, as does
   invoking `start`, even while the mascot is shown. Repeated choices are possible.
-  The cat exits from its current position before entering at the new one, using
+  The mascot exits from its current position before entering at the new one, using
   the same hop animations and left-side mirroring. Resizing keeps the chosen position.
 - Entries and exits independently choose the corner's horizontal or vertical
   edge with a 50/50 chance: left/up for
@@ -116,24 +121,31 @@ config. A replacement pack must be valid when the new renderer starts.
   only visible while the old pane remains on screen.
 - Fast switches interrupt the entry hop, exit from its current position and
   follow the latest focused pane without queuing intermediate switches.
-- Resizing adjusts the cat's position and size without queuing another hop.
+- Resizing adjusts the mascot's position and size without queuing another hop.
 
-Drawing stays inside the active pane. The cat does not draw across dividers or
+Drawing stays inside the active pane. The mascot does not draw across dividers or
 the sidebar, and a hop entering from an edge is clipped there.
 
 ## Mascot packs
 
-The default pack lives in [`assets/pixel-cat/`](assets/pixel-cat/).
-Its five SVGs were drawn for this project and share the project's Apache-2.0
-licence. They are ordinary standalone assets you can reuse or replace.
+Pack directories use `<character>-<style>`. `pixel` is blocky pixel art;
+`illustrated` uses curved shapes. Both styles are standalone SVG frames.
 
-The artwork uses a 16×16 grid with crisp edges. The default 64px size gives each
-source pixel a 4×4 block; multiples of 16 give evenly sized blocks.
-The original smooth cat is still available in
-[`assets/greyscale-cat/`](assets/greyscale-cat/). Set `mascot` to that pack's
-absolute `mascot.json` path to use it.
+| Character | Pixel pack                                 | Illustrated pack                                 | Design and idle animations                                             |
+| --------- | ------------------------------------------ | ------------------------------------------------ | ---------------------------------------------------------------------- |
+| Cat       | [`cat-pixel`](assets/cat-pixel/) (default) | [`cat-illustrated`](assets/cat-illustrated/)     | Grey cat with muted-pink inner ears, breathing and blinking.           |
+| Dog       | [`dog-pixel`](assets/dog-pixel/)           | [`dog-illustrated`](assets/dog-illustrated/)     | Brown floppy-eared dog with a teal collar, wagging and blinking.       |
+| Robot     | [`robot-pixel`](assets/robot-pixel/)       | [`robot-illustrated`](assets/robot-illustrated/) | Blue-grey square-headed robot with a simple face, waving and blinking. |
 
-To make another mascot, copy that directory somewhere you maintain and point
+Each pack has five original frames, including crouching and jumping poses, and
+shares the project's Apache-2.0 licence. Pixel packs use a 16×16 grid with crisp
+edges. The default 64px size gives each source pixel a 4×4 block; multiples of 16
+give evenly sized blocks. Illustrated packs use a 64×64 viewBox.
+
+Set `mascot` to the chosen pack's absolute `mascot.json` path, for example
+`/path/to/herdr-mascot/assets/robot-illustrated/mascot.json`.
+
+To make another mascot, copy a pack somewhere you maintain and point
 `mascot` at its manifest:
 
 ```json
@@ -173,11 +185,9 @@ my-cat/
   the animation mechanism.
 - Hide and show the mascot after editing the pack's SVGs or manifest.
 
-The bundled artwork is greyscale; replacement packs can use colour.
-
 Set `"flipOnLeft": true` in a pack's `mascot.json` to mirror its artwork
 horizontally at `top-left` and `bottom-left`, including entry and exit frames.
-This is enabled for both bundled cats and defaults to `false` for other packs.
+This is enabled for all bundled packs and defaults to `false` for other packs.
 Centre and right positions use the original orientation.
 
 ## Development
@@ -232,12 +242,12 @@ herdr plugin log list --plugin timmo.mascot --limit 1
 
 After linking and showing the plugin:
 
-1. Confirm the cat appears at the configured size and corner with a transparent
-   background, blinking and breathing while the terminal remains usable.
+1. Confirm the mascot appears at the configured size and corner with a transparent
+   background, playing its idle animations while the terminal remains usable.
 2. Switch between differently placed panes, then between tabs or workspaces.
    Check that entries use either adjacent edge of the configured corner.
    Centre positions should enter and exit vertically through their matching edge.
-3. Switch rapidly, resize and zoom. Confirm there is only one cat, it stays
+3. Switch rapidly, resize and zoom. Confirm there is only one mascot, it stays
    within the active pane and fits a small pane.
 4. Select text and open a Herdr menu. Confirm normal input still works.
 5. Change the size, corner or pack in `config.json` and confirm it reloads.
