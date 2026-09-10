@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Dog (illustrated), wagging</title>
+  <path d="M43 52q12 5 17-4" fill="none" stroke="#98633f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M17 55c0-12 4-21 14-21s16 10 16 21l-5 5H22z" fill="#bc8755"/>
+  <path d="M26 41q6-5 12 0l1 18H25z" fill="#f2d9af"/>
+  <g fill="#f2d9af"><ellipse cx="23" cy="57" rx="7" ry="3"/><ellipse cx="41" cy="57" rx="7" ry="3"/></g>
+  <rect x="18" y="34" width="28" height="6" rx="3" fill="#447f88"/>
+  <circle cx="32" cy="41" r="3" fill="#e7b95f"/>
+  <path d="M15 22q0-14 16-14t17 14v7q0 9-17 9t-16-9z" fill="#cb9865"/>
+  <path d="M17 12C9 10 5 18 6 30c1 8 8 8 11 1l4-15q0-4-4-4zm29 0c8-2 12 6 11 18-1 8-8 8-11 1l-4-15q0-4 4-4z" fill="#795139"/>
+  <path d="M28 9h7l-1 14h-5z" fill="#e4bb87"/>
+  <ellipse cx="31" cy="30" rx="11" ry="8" fill="#f2d9af"/>
+  <g fill="#302b2a"><ellipse cx="23" cy="23" rx="2" ry="2.8"/><ellipse cx="40" cy="23" rx="2" ry="2.8"/><path d="M27 27q4-2 8 0 1 3-4 5-5-2-4-5z"/></g>
+  <path d="M30 34h5v2a2.5 2.5 0 0 1-5 0z" fill="#d9827c"/>
+  <path d="M31 31v2q-3 3-5 0m5 0q3 3 5 0" fill="none" stroke="#795139" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

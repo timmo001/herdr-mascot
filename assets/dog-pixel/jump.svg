@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Dog (pixel), jumping</title>
+  <path fill="#98633f" d="M10 10h3V7h2v4h-1v1h-4z"/>
+  <path fill="#bc8755" d="M5 8h5v1h2v1h1v2h-2v-1h-1v2h1v2H8v-3H6v3H3v-2h1v-2H3v1H1v-2h1V9h3z"/>
+  <path fill="#f2d9af" d="M6 9h2v3H6zM3 14h3v1H3zm5 0h3v1H8zM1 11h2v1H1zm10 0h2v1h-2z"/>
+  <path fill="#447f88" d="M4 8h7v1H4z"/>
+  <path fill="#e7b95f" d="M7 9h1v1H7z"/>
+  <g transform="translate(0 -1)">
+    <path fill="#cb9865" d="M4 2h6v1h2v5h-1v1H3V8H2V4h1V3h1z"/>
+    <path fill="#795139" d="M2 3h2v1H1v2H0V4h1V3zm8 0h2v1h2v2h-2V5h-2z"/>
+    <path fill="#e4bb87" d="M6 2h2v4H6z"/>
+    <path fill="#f2d9af" d="M5 6h4v1h1v2H4V7h1z"/>
+    <path fill="#302b2a" d="M4 5h1v1H4zm5 0h1v1H9zM6 6h2v1H6zM7 7h1v1H7z"/>
+    <path fill="#d9827c" d="M7 8h1v1H7z"/>
+  </g>
+</svg>

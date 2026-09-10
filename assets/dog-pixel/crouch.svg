@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Dog (pixel), crouching</title>
+  <path fill="#98633f" d="M11 13h2v-1h2v2h-4z"/>
+  <path fill="#bc8755" d="M4 11h7v2h1v2H3v-2h1z"/>
+  <path fill="#f2d9af" d="M6 12h3v2H6zM3 14h3v1H3zm6 0h3v1H9z"/>
+  <path fill="#447f88" d="M4 11h7v1H4z"/>
+  <path fill="#e7b95f" d="M7 12h1v1H7z"/>
+  <g transform="translate(0 2)">
+    <path fill="#cb9865" d="M4 2h6v1h2v5h-1v1H3V8H2V4h1V3h1z"/>
+    <path fill="#795139" d="M2 3h2v4H3v2H1V4h1zm8 0h2v1h1v5h-2V7h-1z"/>
+    <path fill="#e4bb87" d="M6 2h2v4H6z"/>
+    <path fill="#f2d9af" d="M5 6h4v1h1v2H4V7h1z"/>
+    <path fill="#302b2a" d="M3 5h2v1H3zm6 0h2v1H9zM6 6h2v1H6zM7 7h1v1H7z"/>
+    <path fill="#d9827c" d="M7 8h1v1H7z"/>
+  </g>
+</svg>

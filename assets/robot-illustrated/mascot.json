@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Robot (illustrated)",
+  "flipOnLeft": true,
+  "idle": [
+    { "file": "idle.svg", "durationMs": 1200 },
+    { "file": "wave.svg", "durationMs": 700 },
+    { "file": "idle.svg", "durationMs": 1200 },
+    { "file": "blink.svg", "durationMs": 140 },
+    { "file": "idle.svg", "durationMs": 900 }
+  ],
+  "jump": [
+    { "file": "crouch.svg", "durationMs": 90 },
+    { "file": "jump.svg", "durationMs": 330 },
+    { "file": "crouch.svg", "durationMs": 100 }
+  ]
+}
