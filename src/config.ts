@@ -4,13 +4,15 @@ import { Context, Effect, FileSystem, Layer, Path, Schema } from "effect";
 export const pluginId = "timmo.mascot";
 export const layerId = "timmo-mascot";
 
-export const bottomPositions = [
-  "bottom-right",
-  "bottom-left",
-  "center-bottom",
-] as const;
+export const bottomCorners = ["bottom-right", "bottom-left"] as const;
 
-export const topPositions = ["top-right", "top-left", "center-top"] as const;
+export const topCorners = ["top-right", "top-left"] as const;
+
+export const corners = [...bottomCorners, ...topCorners] as const;
+
+export const bottomPositions = [...bottomCorners, "center-bottom"] as const;
+
+export const topPositions = [...topCorners, "center-top"] as const;
 
 export const positions = [...bottomPositions, ...topPositions] as const;
 
@@ -32,7 +34,15 @@ const Settings = Schema.Struct({
     Schema.Int.check(Schema.isBetween({ minimum: 16, maximum: 256 })),
   ),
   position: Schema.optionalKey(
-    Schema.Literals([...positions, "random", "bottom-random", "top-random"]),
+    Schema.Literals([
+      ...positions,
+      "random",
+      "bottom-random",
+      "top-random",
+      "random-corners",
+      "bottom-random-corners",
+      "top-random-corners",
+    ]),
   ),
   mascot: Schema.optionalKey(Schema.NonEmptyString),
 });

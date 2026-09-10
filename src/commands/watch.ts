@@ -24,10 +24,13 @@ import {
 import {
   Preferences,
   RuntimeConfig,
+  bottomCorners,
   bottomPositions,
+  corners,
   layerId,
   loadSettings,
   positions,
+  topCorners,
   topPositions,
   type Position,
 } from "../config";
@@ -50,7 +53,7 @@ export const start = Effect.gen(function* () {
   );
   if (held) {
     const { settings } = yield* loadSettings(config.settingsFile);
-    if (!settings.position?.endsWith("random")) return;
+    if (!settings.position?.includes("random")) return;
     yield* stop;
     yield* fs.remove(path.join(config.state, "stopped"), { force: true });
   }
@@ -167,6 +170,15 @@ const render = Effect.gen(function* () {
             break;
           case "top-random":
             position = yield* Random.choice(topPositions);
+            break;
+          case "random-corners":
+            position = yield* Random.choice(corners);
+            break;
+          case "bottom-random-corners":
+            position = yield* Random.choice(bottomCorners);
+            break;
+          case "top-random-corners":
+            position = yield* Random.choice(topCorners);
             break;
           default:
             position = config.position;
