@@ -16,7 +16,7 @@ const Frames = Schema.NonEmptyArray(
   }),
 ).check(Schema.isMaxLength(32));
 
-const Pack = Schema.Struct({
+export const Pack = Schema.Struct({
   version: Schema.Literal(1),
   name: Schema.NonEmptyString,
   flipOnLeft: Schema.optionalKey(Schema.Boolean),

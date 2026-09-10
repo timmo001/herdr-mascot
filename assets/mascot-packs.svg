@@ -1,0 +1,481 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1015" height="1080" viewBox="0 0 1015 1080"><rect width="1015" height="1080" fill="#20252e"/><text x="16" y="24" fill="#e6edf3" font-size="16" font-family="sans-serif">Cat (illustrated)</text><svg x="215" y="12" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Cat (illustrated), resting</title>
+  <g stroke-linecap="round">
+    <path d="M43 53c17 9 20-10 12-15" fill="none" stroke="#747474" stroke-width="4"/>
+    <path d="M18 55c-1-8 3-21 13-22 12 0 16 15 14 22l-4 5H22z" fill="#858585"/>
+    <path d="M18 25 17 8l13 9 10-1 10-9-1 21c1 10-7 15-16 15-10 0-17-7-15-18z" fill="#a3a3a3"/>
+  </g>
+  <path d="m21 14 1 10 5-5zm24 0-6 6 6 3z" fill="#ad8b91"/>
+  <path d="M27 42c-4 6-3 13-1 17h11c2-5 2-12-2-17" fill="#c9c9c9"/>
+  <g fill="#858585"><ellipse cx="24" cy="57" rx="6" ry="4"/><ellipse cx="41" cy="57" rx="6" ry="4"/></g>
+  <path d="M27 31q6-5 12 0v6H27z" fill="#dedede"/>
+  <g fill="#333333"><ellipse cx="25" cy="27" rx="2" ry="3"/><ellipse cx="41" cy="27" rx="2" ry="3"/><path d="m30 31 6 0-3 3z"/></g>
+  <g fill="none" stroke="#494949" stroke-width="1.4" stroke-linecap="round">
+    <path d="M33 34v2m-3 0q3 3 6 0M19 32l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1"/>
+    <path d="M25 49v9m14-9v9"/>
+  </g>
+</svg>
+</svg><text x="215" y="164" fill="#abb8c4" font-size="13" font-family="sans-serif">idle.svg</text><svg x="375" y="12" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Cat (illustrated), breathing</title>
+  <g stroke-linecap="round">
+    <path d="M43 53c17 8 18-12 15-19" fill="none" stroke="#747474" stroke-width="4"/>
+    <path d="M17 55c-1-9 4-23 14-23 12 0 17 16 15 23l-5 5H22z" fill="#858585"/>
+    <path d="M18 24 17 7l13 9 10-1 10-9-1 21c1 10-7 15-16 15-10 0-17-7-15-18z" fill="#a3a3a3"/>
+  </g>
+  <path d="m21 13 1 10 5-5zm24 0-6 6 6 3z" fill="#ad8b91"/>
+  <path d="M27 41c-4 7-3 14-1 18h11c2-5 2-13-2-18" fill="#c9c9c9"/>
+  <g fill="#858585"><ellipse cx="24" cy="57" rx="6" ry="4"/><ellipse cx="41" cy="57" rx="6" ry="4"/></g>
+  <path d="M27 30q6-5 12 0v6H27z" fill="#dedede"/>
+  <g fill="#333333"><ellipse cx="25" cy="26" rx="2" ry="3"/><ellipse cx="41" cy="26" rx="2" ry="3"/><path d="m30 30 6 0-3 3z"/></g>
+  <g fill="none" stroke="#494949" stroke-width="1.4" stroke-linecap="round">
+    <path d="M33 33v2m-3 0q3 3 6 0M19 31l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1"/>
+    <path d="M25 49v9m14-9v9"/>
+  </g>
+</svg>
+</svg><text x="375" y="164" fill="#abb8c4" font-size="13" font-family="sans-serif">breathe.svg</text><svg x="535" y="12" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Cat (illustrated), blinking</title>
+  <g stroke-linecap="round">
+    <path d="M43 53c17 9 20-10 12-15" fill="none" stroke="#747474" stroke-width="4"/>
+    <path d="M18 55c-1-8 3-21 13-22 12 0 16 15 14 22l-4 5H22z" fill="#858585"/>
+    <path d="M18 25 17 8l13 9 10-1 10-9-1 21c1 10-7 15-16 15-10 0-17-7-15-18z" fill="#a3a3a3"/>
+  </g>
+  <path d="m21 14 1 10 5-5zm24 0-6 6 6 3z" fill="#ad8b91"/>
+  <path d="M27 42c-4 6-3 13-1 17h11c2-5 2-12-2-17" fill="#c9c9c9"/>
+  <g fill="#858585"><ellipse cx="24" cy="57" rx="6" ry="4"/><ellipse cx="41" cy="57" rx="6" ry="4"/></g>
+  <path d="M27 31q6-5 12 0v6H27z" fill="#dedede"/>
+  <path d="m30 31 6 0-3 3z" fill="#333333"/>
+  <g fill="none" stroke="#494949" stroke-width="1.4" stroke-linecap="round">
+    <path d="M22 27q3 3 6 0m10 0q3 3 6 0M33 34v2m-3 0q3 3 6 0M19 32l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1"/>
+    <path d="M25 49v9m14-9v9"/>
+  </g>
+</svg>
+</svg><text x="535" y="164" fill="#abb8c4" font-size="13" font-family="sans-serif">blink.svg</text><svg x="695" y="12" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Cat (illustrated), crouching</title>
+  <g stroke-linecap="round">
+    <path d="M43 55c15 7 20-4 14-11" fill="none" stroke="#747474" stroke-width="4"/>
+    <path d="M16 55c0-9 7-17 17-17s17 10 15 18l-5 4H21z" fill="#858585"/>
+    <path d="M18 33 15 16l15 9 10-1 12-9-3 20c1 9-7 14-16 14-10 0-17-7-15-16z" fill="#a3a3a3"/>
+  </g>
+  <path d="m20 23 2 10 5-5zm27-1-8 7 6 3z" fill="#ad8b91"/>
+  <path d="M27 48q6-4 11 0v11H26z" fill="#c9c9c9"/>
+  <g fill="#858585"><ellipse cx="23" cy="57" rx="7" ry="4"/><ellipse cx="42" cy="57" rx="7" ry="4"/></g>
+  <path d="M27 39q6-5 12 0v6H27z" fill="#dedede"/>
+  <g fill="#333333"><ellipse cx="25" cy="35" rx="2" ry="2"/><ellipse cx="41" cy="35" rx="2" ry="2"/><path d="m30 39 6 0-3 3z"/></g>
+  <g fill="none" stroke="#494949" stroke-width="1.4" stroke-linecap="round">
+    <path d="M33 42v2m-3 0q3 3 6 0M19 40l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1M25 53v5m14-5v5"/>
+  </g>
+</svg>
+</svg><text x="695" y="164" fill="#abb8c4" font-size="13" font-family="sans-serif">crouch.svg</text><svg x="855" y="12" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Cat (illustrated), jumping</title>
+  <g stroke-linecap="round">
+    <path d="M41 43c15 6 20-5 17-14" fill="none" stroke="#747474" stroke-width="4"/>
+    <path d="m29 43-6 11m15-11 6 11" fill="none" stroke="#858585" stroke-width="9"/>
+    <path d="M24 44c-2-8 0-16 7-17 7 0 11 6 12 15l-3 6H28z" fill="#858585"/>
+    <path d="m25 35-9 7m25-7 8 7" fill="none" stroke="#a3a3a3" stroke-width="7"/>
+    <path d="M18 21 17 4l13 9 10-1 10-9-1 21c1 10-7 15-16 15-10 0-17-7-15-18z" fill="#a3a3a3"/>
+  </g>
+  <path d="m21 10 1 10 5-5zm24 0-6 6 6 3z" fill="#ad8b91"/>
+  <path d="M28 38q5-3 9 0v8h-9z" fill="#c9c9c9"/>
+  <path d="M27 27q6-5 12 0v6H27z" fill="#dedede"/>
+  <g fill="#333333"><ellipse cx="25" cy="23" rx="2" ry="3"/><ellipse cx="41" cy="23" rx="2" ry="3"/><path d="m30 27 6 0-3 3z"/></g>
+  <g fill="none" stroke="#494949" stroke-width="1.4" stroke-linecap="round">
+    <path d="M33 30v2m-3 0q3 3 6 0M19 28l-7-2m8 6-7 1m33-5 7-2m-8 6 7 1"/>
+  </g>
+</svg>
+</svg><text x="855" y="164" fill="#abb8c4" font-size="13" font-family="sans-serif">jump.svg</text><text x="16" y="204" fill="#e6edf3" font-size="16" font-family="sans-serif">Cat (pixel)</text><svg x="215" y="192" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Cat (pixel), resting</title>
+  <path fill="#686868" d="M11 12h2V9h2v4h-1v1h-3z"/>
+  <path fill="#686868" d="M11 13h3v-3h1v3h-1v1h-3z"/>
+  <path fill="#686868" d="M5 9h5v1h1v3h1v2H3v-2h1v-3h1z"/>
+  <path fill="#686868" d="M5 10h5v3h1v1H4v-1h1z"/>
+  <path fill="#bcbcbc" d="M6 10h3v4H6z"/>
+  <path fill="#353535" d="M5 13h1v1H5zm4 0h1v1H9z"/>
+  <path fill="#969696" d="M2 1h2v1h1v1h4V2h1V1h2v7h-1v1h-1v1H4V9H3V8H2z"/>
+  <path fill="#969696" d="M3 2h1v1h1v1h4V3h1V2h1v6h-1v1H4V8H3z"/>
+  <path fill="#ad8b91" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
+  <path fill="#bcbcbc" d="M6 7h2v1h1v1H5V8h1z"/>
+  <path fill="#353535" d="M4 6h2v2H4zm4 0h2v2H8zM6 8h2v1H6z"/>
+  <path fill="#ededed" d="M4 6h1v1H4zm4 0h1v1H8z"/>
+  <path fill="#686868" d="M1 7h2v1H1zm10 0h2v1h-2z"/>
+</svg>
+</svg><text x="215" y="344" fill="#abb8c4" font-size="13" font-family="sans-serif">idle.svg</text><svg x="375" y="192" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Cat (pixel), breathing</title>
+  <path fill="#686868" d="M11 12h2V8h2v5h-1v1h-3z"/>
+  <path fill="#686868" d="M11 13h3V9h1v4h-1v1h-3z"/>
+  <path fill="#686868" d="M5 8h5v1h1v4h1v2H3v-2h1V9h1z"/>
+  <path fill="#686868" d="M5 9h5v4h1v1H4v-1h1z"/>
+  <path fill="#bcbcbc" d="M6 9h3v5H6z"/>
+  <path fill="#353535" d="M5 13h1v1H5zm4 0h1v1H9z"/>
+  <g transform="translate(0 -1)">
+    <path fill="#969696" d="M2 1h2v1h1v1h4V2h1V1h2v7h-1v1h-1v1H4V9H3V8H2z"/>
+    <path fill="#969696" d="M3 2h1v1h1v1h4V3h1V2h1v6h-1v1H4V8H3z"/>
+    <path fill="#ad8b91" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
+    <path fill="#bcbcbc" d="M6 7h2v1h1v1H5V8h1z"/>
+    <path fill="#353535" d="M4 6h2v2H4zm4 0h2v2H8zM6 8h2v1H6z"/>
+    <path fill="#ededed" d="M4 6h1v1H4zm4 0h1v1H8z"/>
+    <path fill="#686868" d="M1 7h2v1H1zm10 0h2v1h-2z"/>
+  </g>
+</svg>
+</svg><text x="375" y="344" fill="#abb8c4" font-size="13" font-family="sans-serif">breathe.svg</text><svg x="535" y="192" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Cat (pixel), blinking</title>
+  <path fill="#686868" d="M11 12h2V9h2v4h-1v1h-3z"/>
+  <path fill="#686868" d="M11 13h3v-3h1v3h-1v1h-3z"/>
+  <path fill="#686868" d="M5 9h5v1h1v3h1v2H3v-2h1v-3h1z"/>
+  <path fill="#686868" d="M5 10h5v3h1v1H4v-1h1z"/>
+  <path fill="#bcbcbc" d="M6 10h3v4H6z"/>
+  <path fill="#353535" d="M5 13h1v1H5zm4 0h1v1H9z"/>
+  <path fill="#969696" d="M2 1h2v1h1v1h4V2h1V1h2v7h-1v1h-1v1H4V9H3V8H2z"/>
+  <path fill="#969696" d="M3 2h1v1h1v1h4V3h1V2h1v6h-1v1H4V8H3z"/>
+  <path fill="#ad8b91" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
+  <path fill="#bcbcbc" d="M6 7h2v1h1v1H5V8h1z"/>
+  <path fill="#353535" d="M4 7h2v1H4zm4 0h2v1H8zM6 8h2v1H6z"/>
+  <path fill="#686868" d="M1 7h2v1H1zm10 0h2v1h-2z"/>
+</svg>
+</svg><text x="535" y="344" fill="#abb8c4" font-size="13" font-family="sans-serif">blink.svg</text><svg x="695" y="192" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Cat (pixel), crouching</title>
+  <path fill="#686868" d="M11 13h2v-2h2v3h-4z"/>
+  <path fill="#686868" d="M11 13h3v-1h1v2h-4z"/>
+  <path fill="#686868" d="M4 11h7v2h1v2H3v-2h1z"/>
+  <path fill="#686868" d="M4 12h7v2H4z"/>
+  <path fill="#bcbcbc" d="M6 12h3v2H6z"/>
+  <path fill="#353535" d="M5 13h1v1H5zm4 0h1v1H9z"/>
+  <g transform="translate(0 2)">
+    <path fill="#969696" d="M2 1h2v1h1v1h4V2h1V1h2v7h-1v1h-1v1H4V9H3V8H2z"/>
+    <path fill="#969696" d="M3 2h1v1h1v1h4V3h1V2h1v6h-1v1H4V8H3z"/>
+    <path fill="#ad8b91" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
+    <path fill="#bcbcbc" d="M6 7h2v1h1v1H5V8h1z"/>
+    <path fill="#353535" d="M4 7h2v1H4zm4 0h2v1H8zM6 8h2v1H6z"/>
+    <path fill="#686868" d="M1 7h2v1H1zm10 0h2v1h-2z"/>
+  </g>
+</svg>
+</svg><text x="695" y="344" fill="#abb8c4" font-size="13" font-family="sans-serif">crouch.svg</text><svg x="855" y="192" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Cat (pixel), jumping</title>
+  <path fill="#686868" d="M10 10h3V7h2v4h-1v1h-4z"/>
+  <path fill="#686868" d="M10 11h4V8h1v3h-1v1h-4z"/>
+  <path fill="#686868" d="M5 8h5v1h2v1h1v2h-2v-1h-1v2h1v2H8v-3H6v3H3v-2h1v-2H3v1H1v-2h1V9h3z"/>
+  <path fill="#686868" d="M5 9h5v2H9v2h1v1H9v-3H5v3H4v-1h1zm-2 1h2v1H3zm7 0h2v1h-2z"/>
+  <path fill="#bcbcbc" d="M6 9h2v3H6z"/>
+  <g transform="translate(0 -1)">
+    <path fill="#969696" d="M2 1h2v1h1v1h4V2h1V1h2v7h-1v1h-1v1H4V9H3V8H2z"/>
+    <path fill="#969696" d="M3 2h1v1h1v1h4V3h1V2h1v6h-1v1H4V8H3z"/>
+    <path fill="#ad8b91" d="M3 3h1v1h1v1H3zm7 0h1v2H9V4h1z"/>
+    <path fill="#bcbcbc" d="M6 7h2v1h1v1H5V8h1z"/>
+    <path fill="#353535" d="M4 6h2v2H4zm4 0h2v2H8zM6 8h2v1H6z"/>
+    <path fill="#ededed" d="M4 6h1v1H4zm4 0h1v1H8z"/>
+    <path fill="#686868" d="M1 7h2v1H1zm10 0h2v1h-2z"/>
+  </g>
+</svg>
+</svg><text x="855" y="344" fill="#abb8c4" font-size="13" font-family="sans-serif">jump.svg</text><text x="16" y="384" fill="#e6edf3" font-size="16" font-family="sans-serif">Dog (illustrated)</text><svg x="215" y="372" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Dog (illustrated), resting</title>
+  <path d="M43 52q16 6 15-17" fill="none" stroke="#98633f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M17 55c0-12 4-21 14-21s16 10 16 21l-5 5H22z" fill="#bc8755"/>
+  <path d="M26 41q6-5 12 0l1 18H25z" fill="#f2d9af"/>
+  <g fill="#f2d9af"><ellipse cx="23" cy="57" rx="7" ry="3"/><ellipse cx="41" cy="57" rx="7" ry="3"/></g>
+  <rect x="18" y="34" width="28" height="6" rx="3" fill="#447f88"/>
+  <circle cx="32" cy="41" r="3" fill="#e7b95f"/>
+  <path d="M15 22q0-14 16-14t17 14v7q0 9-17 9t-16-9z" fill="#cb9865"/>
+  <path d="M17 12C9 10 5 18 6 30c1 8 8 8 11 1l4-15q0-4-4-4zm29 0c8-2 12 6 11 18-1 8-8 8-11 1l-4-15q0-4 4-4z" fill="#795139"/>
+  <path d="M28 9h7l-1 14h-5z" fill="#e4bb87"/>
+  <ellipse cx="31" cy="30" rx="11" ry="8" fill="#f2d9af"/>
+  <g fill="#302b2a"><ellipse cx="23" cy="23" rx="2" ry="2.8"/><ellipse cx="40" cy="23" rx="2" ry="2.8"/><path d="M27 27q4-2 8 0 1 3-4 5-5-2-4-5z"/></g>
+  <path d="M30 34h5v2a2.5 2.5 0 0 1-5 0z" fill="#d9827c"/>
+  <path d="M31 31v2q-3 3-5 0m5 0q3 3 5 0" fill="none" stroke="#795139" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+</svg><text x="215" y="524" fill="#abb8c4" font-size="13" font-family="sans-serif">idle.svg</text><svg x="375" y="372" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Dog (illustrated), wagging</title>
+  <path d="M43 52q12 5 17-4" fill="none" stroke="#98633f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M17 55c0-12 4-21 14-21s16 10 16 21l-5 5H22z" fill="#bc8755"/>
+  <path d="M26 41q6-5 12 0l1 18H25z" fill="#f2d9af"/>
+  <g fill="#f2d9af"><ellipse cx="23" cy="57" rx="7" ry="3"/><ellipse cx="41" cy="57" rx="7" ry="3"/></g>
+  <rect x="18" y="34" width="28" height="6" rx="3" fill="#447f88"/>
+  <circle cx="32" cy="41" r="3" fill="#e7b95f"/>
+  <path d="M15 22q0-14 16-14t17 14v7q0 9-17 9t-16-9z" fill="#cb9865"/>
+  <path d="M17 12C9 10 5 18 6 30c1 8 8 8 11 1l4-15q0-4-4-4zm29 0c8-2 12 6 11 18-1 8-8 8-11 1l-4-15q0-4 4-4z" fill="#795139"/>
+  <path d="M28 9h7l-1 14h-5z" fill="#e4bb87"/>
+  <ellipse cx="31" cy="30" rx="11" ry="8" fill="#f2d9af"/>
+  <g fill="#302b2a"><ellipse cx="23" cy="23" rx="2" ry="2.8"/><ellipse cx="40" cy="23" rx="2" ry="2.8"/><path d="M27 27q4-2 8 0 1 3-4 5-5-2-4-5z"/></g>
+  <path d="M30 34h5v2a2.5 2.5 0 0 1-5 0z" fill="#d9827c"/>
+  <path d="M31 31v2q-3 3-5 0m5 0q3 3 5 0" fill="none" stroke="#795139" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+</svg><text x="375" y="524" fill="#abb8c4" font-size="13" font-family="sans-serif">wag.svg</text><svg x="535" y="372" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Dog (illustrated), blinking</title>
+  <path d="M43 52q16 6 15-17" fill="none" stroke="#98633f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M17 55c0-12 4-21 14-21s16 10 16 21l-5 5H22z" fill="#bc8755"/>
+  <path d="M26 41q6-5 12 0l1 18H25z" fill="#f2d9af"/>
+  <g fill="#f2d9af"><ellipse cx="23" cy="57" rx="7" ry="3"/><ellipse cx="41" cy="57" rx="7" ry="3"/></g>
+  <rect x="18" y="34" width="28" height="6" rx="3" fill="#447f88"/>
+  <circle cx="32" cy="41" r="3" fill="#e7b95f"/>
+  <path d="M15 22q0-14 16-14t17 14v7q0 9-17 9t-16-9z" fill="#cb9865"/>
+  <path d="M17 12C9 10 5 18 6 30c1 8 8 8 11 1l4-15q0-4-4-4zm29 0c8-2 12 6 11 18-1 8-8 8-11 1l-4-15q0-4 4-4z" fill="#795139"/>
+  <path d="M28 9h7l-1 14h-5z" fill="#e4bb87"/>
+  <ellipse cx="31" cy="30" rx="11" ry="8" fill="#f2d9af"/>
+  <path d="M27 27q4-2 8 0 1 3-4 5-5-2-4-5z" fill="#302b2a"/>
+  <path d="M20 23q3 3 6 0m11 0q3 3 6 0" fill="none" stroke="#302b2a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M30 34h5v2a2.5 2.5 0 0 1-5 0z" fill="#d9827c"/>
+  <path d="M31 31v2q-3 3-5 0m5 0q3 3 5 0" fill="none" stroke="#795139" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+</svg><text x="535" y="524" fill="#abb8c4" font-size="13" font-family="sans-serif">blink.svg</text><svg x="695" y="372" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Dog (illustrated), crouching</title>
+  <path d="M43 54q12 5 17-3" fill="none" stroke="#98633f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M15 55q1-15 17-15t17 15l-5 5H20z" fill="#bc8755"/>
+  <path d="M26 48q6-4 12 0v11H26z" fill="#f2d9af"/>
+  <g fill="#f2d9af"><ellipse cx="22" cy="57" rx="7" ry="3"/><ellipse cx="42" cy="57" rx="7" ry="3"/></g>
+  <g transform="translate(0 8)">
+    <rect x="18" y="34" width="28" height="6" rx="3" fill="#447f88"/>
+    <circle cx="32" cy="41" r="3" fill="#e7b95f"/>
+    <path d="M15 22q0-14 16-14t17 14v7q0 9-17 9t-16-9z" fill="#cb9865"/>
+    <path d="M17 12C9 10 5 18 6 30c1 8 8 8 11 1l4-15q0-4-4-4zm29 0c8-2 12 6 11 18-1 8-8 8-11 1l-4-15q0-4 4-4z" fill="#795139"/>
+    <path d="M28 9h7l-1 14h-5z" fill="#e4bb87"/>
+    <ellipse cx="31" cy="30" rx="11" ry="8" fill="#f2d9af"/>
+    <path d="M27 27q4-2 8 0 1 3-4 5-5-2-4-5z" fill="#302b2a"/>
+    <path d="M20 23q3 3 6 0m11 0q3 3 6 0" fill="none" stroke="#302b2a" stroke-width="2" stroke-linecap="round"/>
+    <path d="M30 34h5v2a2.5 2.5 0 0 1-5 0z" fill="#d9827c"/>
+    <path d="M31 31v2q-3 3-5 0m5 0q3 3 5 0" fill="none" stroke="#795139" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>
+</svg><text x="695" y="524" fill="#abb8c4" font-size="13" font-family="sans-serif">crouch.svg</text><svg x="855" y="372" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Dog (illustrated), jumping</title>
+  <path d="M43 44q16 4 16-17" fill="none" stroke="#98633f" stroke-width="6" stroke-linecap="round"/>
+  <path d="m28 43-7 11m16-11 7 11" fill="none" stroke="#bc8755" stroke-width="8" stroke-linecap="round"/>
+  <path d="M23 32h18l2 14q-11 5-22 0z" fill="#bc8755"/>
+  <path d="m24 35-12 6 3 7 13-8m13-5 11 6-3 7-12-8" fill="#cb9865"/>
+  <path d="M27 38q5-4 10 0v8H27z" fill="#f2d9af"/>
+  <g fill="#f2d9af"><ellipse cx="21" cy="55" rx="5" ry="3.5" transform="rotate(25 21 55)"/><ellipse cx="44" cy="55" rx="5" ry="3.5" transform="rotate(-25 44 55)"/><circle cx="14" cy="45" r="3"/><circle cx="50" cy="45" r="3"/></g>
+  <g transform="translate(0 -4)">
+    <rect x="18" y="34" width="28" height="6" rx="3" fill="#447f88"/>
+    <circle cx="32" cy="41" r="3" fill="#e7b95f"/>
+    <path d="M15 22q0-14 16-14t17 14v7q0 9-17 9t-16-9z" fill="#cb9865"/>
+    <path d="M17 12C9 8 3 11 2 18c0 5 7 6 12 1l7-3q0-4-4-4zm29 0c8-4 14-1 15 6 0 5-7 6-12 1l-7-3q0-4 4-4z" fill="#795139"/>
+    <path d="M28 9h7l-1 14h-5z" fill="#e4bb87"/>
+    <ellipse cx="31" cy="30" rx="11" ry="8" fill="#f2d9af"/>
+    <g fill="#302b2a"><ellipse cx="23" cy="23" rx="2" ry="2.8"/><ellipse cx="40" cy="23" rx="2" ry="2.8"/><path d="M27 27q4-2 8 0 1 3-4 5-5-2-4-5z"/></g>
+    <path d="M30 34h5v2a2.5 2.5 0 0 1-5 0z" fill="#d9827c"/>
+    <path d="M31 31v2q-3 3-5 0m5 0q3 3 5 0" fill="none" stroke="#795139" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>
+</svg><text x="855" y="524" fill="#abb8c4" font-size="13" font-family="sans-serif">jump.svg</text><text x="16" y="564" fill="#e6edf3" font-size="16" font-family="sans-serif">Dog (pixel)</text><svg x="215" y="552" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Dog (pixel), resting</title>
+  <path fill="#98633f" d="M11 12h2V9h1V8h1v5h-1v1h-3z"/>
+  <path fill="#bc8755" d="M5 9h5v1h1v3h1v2H3v-2h1v-3h1z"/>
+  <path fill="#f2d9af" d="M6 10h3v4H6zM3 14h3v1H3zm6 0h3v1H9z"/>
+  <path fill="#447f88" d="M4 9h7v1H4z"/>
+  <path fill="#e7b95f" d="M7 10h1v1H7z"/>
+  <path fill="#cb9865" d="M4 2h6v1h2v5h-1v1H3V8H2V4h1V3h1z"/>
+  <path fill="#795139" d="M2 3h2v4H3v2H1V4h1zm8 0h2v1h1v5h-2V7h-1z"/>
+  <path fill="#e4bb87" d="M6 2h2v4H6z"/>
+  <path fill="#f2d9af" d="M5 6h4v1h1v2H4V7h1z"/>
+  <path fill="#302b2a" d="M4 5h1v1H4zm5 0h1v1H9zM6 6h2v1H6zM7 7h1v1H7z"/>
+  <path fill="#d9827c" d="M7 8h1v1H7z"/>
+</svg>
+</svg><text x="215" y="704" fill="#abb8c4" font-size="13" font-family="sans-serif">idle.svg</text><svg x="375" y="552" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Dog (pixel), wagging</title>
+  <path fill="#98633f" d="M11 12h2v-1h2v2h-1v1h-3z"/>
+  <path fill="#bc8755" d="M5 9h5v1h1v3h1v2H3v-2h1v-3h1z"/>
+  <path fill="#f2d9af" d="M6 10h3v4H6zM3 14h3v1H3zm6 0h3v1H9z"/>
+  <path fill="#447f88" d="M4 9h7v1H4z"/>
+  <path fill="#e7b95f" d="M7 10h1v1H7z"/>
+  <path fill="#cb9865" d="M4 2h6v1h2v5h-1v1H3V8H2V4h1V3h1z"/>
+  <path fill="#795139" d="M2 3h2v4H3v2H1V4h1zm8 0h2v1h1v5h-2V7h-1z"/>
+  <path fill="#e4bb87" d="M6 2h2v4H6z"/>
+  <path fill="#f2d9af" d="M5 6h4v1h1v2H4V7h1z"/>
+  <path fill="#302b2a" d="M4 5h1v1H4zm5 0h1v1H9zM6 6h2v1H6zM7 7h1v1H7z"/>
+  <path fill="#d9827c" d="M7 8h1v1H7z"/>
+</svg>
+</svg><text x="375" y="704" fill="#abb8c4" font-size="13" font-family="sans-serif">wag.svg</text><svg x="535" y="552" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Dog (pixel), blinking</title>
+  <path fill="#98633f" d="M11 12h2V9h1V8h1v5h-1v1h-3z"/>
+  <path fill="#bc8755" d="M5 9h5v1h1v3h1v2H3v-2h1v-3h1z"/>
+  <path fill="#f2d9af" d="M6 10h3v4H6zM3 14h3v1H3zm6 0h3v1H9z"/>
+  <path fill="#447f88" d="M4 9h7v1H4z"/>
+  <path fill="#e7b95f" d="M7 10h1v1H7z"/>
+  <path fill="#cb9865" d="M4 2h6v1h2v5h-1v1H3V8H2V4h1V3h1z"/>
+  <path fill="#795139" d="M2 3h2v4H3v2H1V4h1zm8 0h2v1h1v5h-2V7h-1z"/>
+  <path fill="#e4bb87" d="M6 2h2v4H6z"/>
+  <path fill="#f2d9af" d="M5 6h4v1h1v2H4V7h1z"/>
+  <path fill="#302b2a" d="M3 5h2v1H3zm6 0h2v1H9zM6 6h2v1H6zM7 7h1v1H7z"/>
+  <path fill="#d9827c" d="M7 8h1v1H7z"/>
+</svg>
+</svg><text x="535" y="704" fill="#abb8c4" font-size="13" font-family="sans-serif">blink.svg</text><svg x="695" y="552" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Dog (pixel), crouching</title>
+  <path fill="#98633f" d="M11 13h2v-1h2v2h-4z"/>
+  <path fill="#bc8755" d="M4 11h7v2h1v2H3v-2h1z"/>
+  <path fill="#f2d9af" d="M6 12h3v2H6zM3 14h3v1H3zm6 0h3v1H9z"/>
+  <path fill="#447f88" d="M4 11h7v1H4z"/>
+  <path fill="#e7b95f" d="M7 12h1v1H7z"/>
+  <g transform="translate(0 2)">
+    <path fill="#cb9865" d="M4 2h6v1h2v5h-1v1H3V8H2V4h1V3h1z"/>
+    <path fill="#795139" d="M2 3h2v4H3v2H1V4h1zm8 0h2v1h1v5h-2V7h-1z"/>
+    <path fill="#e4bb87" d="M6 2h2v4H6z"/>
+    <path fill="#f2d9af" d="M5 6h4v1h1v2H4V7h1z"/>
+    <path fill="#302b2a" d="M3 5h2v1H3zm6 0h2v1H9zM6 6h2v1H6zM7 7h1v1H7z"/>
+    <path fill="#d9827c" d="M7 8h1v1H7z"/>
+  </g>
+</svg>
+</svg><text x="695" y="704" fill="#abb8c4" font-size="13" font-family="sans-serif">crouch.svg</text><svg x="855" y="552" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Dog (pixel), jumping</title>
+  <path fill="#98633f" d="M10 10h3V7h2v4h-1v1h-4z"/>
+  <path fill="#bc8755" d="M5 8h5v1h2v1h1v2h-2v-1h-1v2h1v2H8v-3H6v3H3v-2h1v-2H3v1H1v-2h1V9h3z"/>
+  <path fill="#f2d9af" d="M6 9h2v3H6zM3 14h3v1H3zm5 0h3v1H8zM1 11h2v1H1zm10 0h2v1h-2z"/>
+  <path fill="#447f88" d="M4 8h7v1H4z"/>
+  <path fill="#e7b95f" d="M7 9h1v1H7z"/>
+  <g transform="translate(0 -1)">
+    <path fill="#cb9865" d="M4 2h6v1h2v5h-1v1H3V8H2V4h1V3h1z"/>
+    <path fill="#795139" d="M2 3h2v1H1v2H0V4h1V3zm8 0h2v1h2v2h-2V5h-2z"/>
+    <path fill="#e4bb87" d="M6 2h2v4H6z"/>
+    <path fill="#f2d9af" d="M5 6h4v1h1v2H4V7h1z"/>
+    <path fill="#302b2a" d="M4 5h1v1H4zm5 0h1v1H9zM6 6h2v1H6zM7 7h1v1H7z"/>
+    <path fill="#d9827c" d="M7 8h1v1H7z"/>
+  </g>
+</svg>
+</svg><text x="855" y="704" fill="#abb8c4" font-size="13" font-family="sans-serif">jump.svg</text><text x="16" y="744" fill="#e6edf3" font-size="16" font-family="sans-serif">Robot (illustrated)</text><svg x="215" y="732" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Robot (illustrated), resting</title>
+  <g fill="none" stroke="#536e85" stroke-width="5" stroke-linecap="round"><path d="m22 40-7 4v5m27-9 7 4v5M26 49v7m12-7v7"/></g>
+  <g fill="#90a9be"><path d="M21 54h8v6H18q-3-6 3-6zm14 0h8q6 0 3 6H35z"/><circle cx="14" cy="49" r="4"/><circle cx="50" cy="49" r="4"/><circle cx="18" cy="47" r="2"/><circle cx="46" cy="47" r="2"/></g>
+  <path d="M23 35h18l3 15q-12 4-24 0z" fill="#7894ad"/>
+  <path d="M24 36h16" fill="none" stroke="#bfcedb" stroke-width="2"/>
+  <path d="M29 50h6" fill="none" stroke="#405b73" stroke-width="1.5"/>
+  <g fill="#536e85"><rect x="29" y="31" width="6" height="5"/><rect x="11" y="15" width="42" height="10" rx="2"/></g>
+  <rect x="16" y="5" width="32" height="28" rx="3" fill="#90a9be"/>
+  <path d="M44 6h1q3 0 3 3v21q0 3-3 3H19q-3 0-3-3h28z" fill="#7894ad"/>
+  <path d="M20 7h21" fill="none" stroke="#bfcedb" stroke-width="2" stroke-linecap="round"/>
+  <g fill="#26394b"><circle cx="25" cy="19" r="3.5"/><circle cx="39" cy="19" r="3.5"/></g>
+  <g fill="#e0e9ef"><circle cx="24" cy="18" r="1"/><circle cx="38" cy="18" r="1"/></g>
+  <path d="M22 12q3-2 6 0m8 0q3-2 6 0" fill="none" stroke="#536e85" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M27 25q5 5 10 0" fill="none" stroke="#26394b" stroke-width="1.5" stroke-linecap="round"/>
+  <g fill="#bfcedb"><circle cx="19" cy="9" r="1"/><circle cx="44" cy="28" r="1"/></g>
+</svg>
+</svg><text x="215" y="884" fill="#abb8c4" font-size="13" font-family="sans-serif">idle.svg</text><svg x="375" y="732" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Robot (illustrated), waving</title>
+  <g fill="none" stroke="#536e85" stroke-width="5" stroke-linecap="round"><path d="m22 40-7 4v5m27-9 9 1 2-8M26 49v7m12-7v7"/></g>
+  <g fill="#90a9be"><path d="M21 54h8v6H18q-3-6 3-6zm14 0h8q6 0 3 6H35z"/><circle cx="14" cy="49" r="4"/><circle cx="53" cy="29" r="4"/><circle cx="18" cy="47" r="2"/><circle cx="49" cy="31" r="2"/></g>
+  <path d="M23 35h18l3 15q-12 4-24 0z" fill="#7894ad"/>
+  <path d="M24 36h16" fill="none" stroke="#bfcedb" stroke-width="2"/>
+  <path d="M29 50h6" fill="none" stroke="#405b73" stroke-width="1.5"/>
+  <g fill="#536e85"><rect x="29" y="31" width="6" height="5"/><rect x="11" y="15" width="42" height="10" rx="2"/></g>
+  <rect x="16" y="5" width="32" height="28" rx="3" fill="#90a9be"/>
+  <path d="M44 6h1q3 0 3 3v21q0 3-3 3H19q-3 0-3-3h28z" fill="#7894ad"/>
+  <path d="M20 7h21" fill="none" stroke="#bfcedb" stroke-width="2" stroke-linecap="round"/>
+  <g fill="#26394b"><circle cx="25" cy="19" r="3.5"/><circle cx="39" cy="19" r="3.5"/></g>
+  <g fill="#e0e9ef"><circle cx="24" cy="18" r="1"/><circle cx="38" cy="18" r="1"/></g>
+  <path d="M22 12q3-2 6 0m8 0q3-2 6 0" fill="none" stroke="#536e85" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M27 25q5 5 10 0" fill="none" stroke="#26394b" stroke-width="1.5" stroke-linecap="round"/>
+  <g fill="#bfcedb"><circle cx="19" cy="9" r="1"/><circle cx="44" cy="28" r="1"/></g>
+</svg>
+</svg><text x="375" y="884" fill="#abb8c4" font-size="13" font-family="sans-serif">wave.svg</text><svg x="535" y="732" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Robot (illustrated), blinking</title>
+  <g fill="none" stroke="#536e85" stroke-width="5" stroke-linecap="round"><path d="m22 40-7 4v5m27-9 7 4v5M26 49v7m12-7v7"/></g>
+  <g fill="#90a9be"><path d="M21 54h8v6H18q-3-6 3-6zm14 0h8q6 0 3 6H35z"/><circle cx="14" cy="49" r="4"/><circle cx="50" cy="49" r="4"/><circle cx="18" cy="47" r="2"/><circle cx="46" cy="47" r="2"/></g>
+  <path d="M23 35h18l3 15q-12 4-24 0z" fill="#7894ad"/>
+  <path d="M24 36h16" fill="none" stroke="#bfcedb" stroke-width="2"/>
+  <path d="M29 50h6" fill="none" stroke="#405b73" stroke-width="1.5"/>
+  <g fill="#536e85"><rect x="29" y="31" width="6" height="5"/><rect x="11" y="15" width="42" height="10" rx="2"/></g>
+  <rect x="16" y="5" width="32" height="28" rx="3" fill="#90a9be"/>
+  <path d="M44 6h1q3 0 3 3v21q0 3-3 3H19q-3 0-3-3h28z" fill="#7894ad"/>
+  <path d="M20 7h21" fill="none" stroke="#bfcedb" stroke-width="2" stroke-linecap="round"/>
+  <path d="M22 20q3 3 6 0m8 0q3 3 6 0" fill="none" stroke="#26394b" stroke-width="2" stroke-linecap="round"/>
+  <path d="M22 12q3-2 6 0m8 0q3-2 6 0" fill="none" stroke="#536e85" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M27 25q5 5 10 0" fill="none" stroke="#26394b" stroke-width="1.5" stroke-linecap="round"/>
+  <g fill="#bfcedb"><circle cx="19" cy="9" r="1"/><circle cx="44" cy="28" r="1"/></g>
+</svg>
+</svg><text x="535" y="884" fill="#abb8c4" font-size="13" font-family="sans-serif">blink.svg</text><svg x="695" y="732" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Robot (illustrated), crouching</title>
+  <g fill="none" stroke="#536e85" stroke-width="5" stroke-linecap="round"><path d="m22 46-7 4v4m27-8 7 4v4M26 52v4m12-4v4"/></g>
+  <g fill="#90a9be"><path d="M21 54h8v6H18q-3-6 3-6zm14 0h8q6 0 3 6H35z"/><circle cx="14" cy="54" r="4"/><circle cx="50" cy="54" r="4"/><circle cx="18" cy="52" r="2"/><circle cx="46" cy="52" r="2"/></g>
+  <path d="M23 43h18l3 10q-12 4-24 0z" fill="#7894ad"/>
+  <path d="M24 44h16" fill="none" stroke="#bfcedb" stroke-width="2"/>
+  <g transform="translate(0 8)">
+    <g fill="#536e85"><rect x="29" y="31" width="6" height="5"/><rect x="11" y="15" width="42" height="10" rx="2"/></g>
+    <rect x="16" y="5" width="32" height="28" rx="3" fill="#90a9be"/>
+    <path d="M44 6h1q3 0 3 3v21q0 3-3 3H19q-3 0-3-3h28z" fill="#7894ad"/>
+    <path d="M20 7h21" fill="none" stroke="#bfcedb" stroke-width="2" stroke-linecap="round"/>
+    <path d="M22 20q3 3 6 0m8 0q3 3 6 0" fill="none" stroke="#26394b" stroke-width="2" stroke-linecap="round"/>
+    <path d="M22 12q3-2 6 0m8 0q3-2 6 0" fill="none" stroke="#536e85" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M27 25q5 5 10 0" fill="none" stroke="#26394b" stroke-width="1.5" stroke-linecap="round"/>
+    <g fill="#bfcedb"><circle cx="19" cy="9" r="1"/><circle cx="44" cy="28" r="1"/></g>
+  </g>
+</svg>
+</svg><text x="695" y="884" fill="#abb8c4" font-size="13" font-family="sans-serif">crouch.svg</text><svg x="855" y="732" width="128" height="128" viewBox="0 0 64 64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>Robot (illustrated), jumping</title>
+  <g fill="none" stroke="#536e85" stroke-width="5" stroke-linecap="round"><path d="m22 37-9 4-4-7m33 3 9 4 4-7M27 47l-6 10m16-10 6 10"/></g>
+  <g fill="#90a9be"><ellipse cx="20" cy="57" rx="6" ry="3" transform="rotate(20 20 57)"/><ellipse cx="44" cy="57" rx="6" ry="3" transform="rotate(-20 44 57)"/><circle cx="8" cy="31" r="4"/><circle cx="56" cy="31" r="4"/><circle cx="12" cy="33" r="2"/><circle cx="52" cy="33" r="2"/></g>
+  <path d="M23 32h18l3 15q-12 4-24 0z" fill="#7894ad"/>
+  <path d="M24 33h16" fill="none" stroke="#bfcedb" stroke-width="2"/>
+  <path d="M29 47h6" fill="none" stroke="#405b73" stroke-width="1.5"/>
+  <g transform="translate(0 -3)">
+    <g fill="#536e85"><rect x="29" y="31" width="6" height="5"/><rect x="11" y="15" width="42" height="10" rx="2"/></g>
+    <rect x="16" y="5" width="32" height="28" rx="3" fill="#90a9be"/>
+    <path d="M44 6h1q3 0 3 3v21q0 3-3 3H19q-3 0-3-3h28z" fill="#7894ad"/>
+    <path d="M20 7h21" fill="none" stroke="#bfcedb" stroke-width="2" stroke-linecap="round"/>
+    <g fill="#26394b"><circle cx="25" cy="19" r="3.5"/><circle cx="39" cy="19" r="3.5"/></g>
+    <g fill="#e0e9ef"><circle cx="24" cy="18" r="1"/><circle cx="38" cy="18" r="1"/></g>
+    <path d="M22 12q3-2 6 0m8 0q3-2 6 0" fill="none" stroke="#536e85" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M27 25q5 5 10 0" fill="none" stroke="#26394b" stroke-width="1.5" stroke-linecap="round"/>
+    <g fill="#bfcedb"><circle cx="19" cy="9" r="1"/><circle cx="44" cy="28" r="1"/></g>
+  </g>
+</svg>
+</svg><text x="855" y="884" fill="#abb8c4" font-size="13" font-family="sans-serif">jump.svg</text><text x="16" y="924" fill="#e6edf3" font-size="16" font-family="sans-serif">Robot (pixel)</text><svg x="215" y="912" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Robot (pixel), resting</title>
+  <path fill="#536e85" d="M3 4h1v3H3zm9 0h1v3h-1zM7 9h2v1H7zM3 10h2v3H3zm8 0h2v3h-2zM5 13h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#90a9be" d="M4 1h8v8H4zM2 12h2v2H2zm10 0h2v2h-2zM4 14h3v1H4zm5 0h3v1H9z"/>
+  <path fill="#7894ad" d="M11 2h1v7H4V8h7zM5 10h6v3H5z"/>
+  <path fill="#bfcedb" d="M5 1h6v1H5zM5 10h6v1H5z"/>
+  <path fill="#536e85" d="M5 3h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#26394b" d="M5 4h2v2H5zm4 0h2v2H9z"/>
+  <path fill="#e0e9ef" d="M5 4h1v1H5zm4 0h1v1H9z"/>
+  <path fill="#536e85" d="M6 7h4v1H6z"/>
+</svg>
+</svg><text x="215" y="1064" fill="#abb8c4" font-size="13" font-family="sans-serif">idle.svg</text><svg x="375" y="912" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Robot (pixel), waving</title>
+  <path fill="#536e85" d="M3 4h1v3H3zm9 0h1v3h-1zM7 9h2v1H7zM3 10h2v3H3zm8 0h2V9h1v2h-3zM5 13h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#90a9be" d="M4 1h8v8H4zM2 12h2v2H2zm11-6h2v3h-3V8h1zM4 14h3v1H4zm5 0h3v1H9z"/>
+  <path fill="#7894ad" d="M11 2h1v7H4V8h7zM5 10h6v3H5z"/>
+  <path fill="#bfcedb" d="M5 1h6v1H5zM5 10h6v1H5z"/>
+  <path fill="#536e85" d="M5 3h2v1H5zm4-1h2v1H9z"/>
+  <path fill="#26394b" d="M5 4h2v2H5zm4 0h2v2H9z"/>
+  <path fill="#e0e9ef" d="M5 4h1v1H5zm4 0h1v1H9z"/>
+  <path fill="#536e85" d="M6 7h4v1H6z"/>
+</svg>
+</svg><text x="375" y="1064" fill="#abb8c4" font-size="13" font-family="sans-serif">wave.svg</text><svg x="535" y="912" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Robot (pixel), blinking</title>
+  <path fill="#536e85" d="M3 4h1v3H3zm9 0h1v3h-1zM7 9h2v1H7zM3 10h2v3H3zm8 0h2v3h-2zM5 13h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#90a9be" d="M4 1h8v8H4zM2 12h2v2H2zm10 0h2v2h-2zM4 14h3v1H4zm5 0h3v1H9z"/>
+  <path fill="#7894ad" d="M11 2h1v7H4V8h7zM5 10h6v3H5z"/>
+  <path fill="#bfcedb" d="M5 1h6v1H5zM5 10h6v1H5z"/>
+  <path fill="#536e85" d="M5 3h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#26394b" d="M5 5h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#536e85" d="M6 7h4v1H6z"/>
+</svg>
+</svg><text x="535" y="1064" fill="#abb8c4" font-size="13" font-family="sans-serif">blink.svg</text><svg x="695" y="912" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Robot (pixel), crouching</title>
+  <path fill="#536e85" d="M3 12h2v2H3zm8 0h2v2h-2zM5 13h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#90a9be" d="M2 13h2v2H2zm10 0h2v2h-2zM4 14h3v1H4zm5 0h3v1H9z"/>
+  <path fill="#7894ad" d="M5 12h6v2H5z"/>
+  <path fill="#bfcedb" d="M5 12h6v1H5z"/>
+  <g transform="translate(0 2)">
+    <path fill="#536e85" d="M3 4h1v3H3zm9 0h1v3h-1zM7 9h2v1H7z"/>
+    <path fill="#90a9be" d="M4 1h8v8H4z"/>
+    <path fill="#7894ad" d="M11 2h1v7H4V8h7z"/>
+    <path fill="#bfcedb" d="M5 1h6v1H5z"/>
+    <path fill="#536e85" d="M5 3h2v1H5zm4 0h2v1H9z"/>
+    <path fill="#26394b" d="M5 5h2v1H5zm4 0h2v1H9z"/>
+    <path fill="#536e85" d="M6 7h4v1H6z"/>
+  </g>
+</svg>
+</svg><text x="695" y="1064" fill="#abb8c4" font-size="13" font-family="sans-serif">crouch.svg</text><svg x="855" y="912" width="128" height="128" viewBox="0 0 16 16"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <title>Robot (pixel), jumping</title>
+  <path fill="#536e85" d="M3 9h2v2H3zm8 0h2v2h-2zM5 12h2v2H5zm4 0h2v2H9z"/>
+  <path fill="#90a9be" d="M1 7h2v3H1zm12 0h2v3h-2zM3 14h4v1H3zm6 0h4v1H9z"/>
+  <path fill="#7894ad" d="M5 9h6v3H5z"/>
+  <path fill="#bfcedb" d="M5 9h6v1H5z"/>
+  <g transform="translate(0 -1)">
+    <path fill="#536e85" d="M3 4h1v3H3zm9 0h1v3h-1zM7 9h2v1H7z"/>
+    <path fill="#90a9be" d="M4 1h8v8H4z"/>
+    <path fill="#7894ad" d="M11 2h1v7H4V8h7z"/>
+    <path fill="#bfcedb" d="M5 1h6v1H5z"/>
+    <path fill="#536e85" d="M5 3h2v1H5zm4 0h2v1H9z"/>
+    <path fill="#26394b" d="M5 4h2v2H5zm4 0h2v2H9z"/>
+    <path fill="#e0e9ef" d="M5 4h1v1H5zm4 0h1v1H9z"/>
+    <path fill="#536e85" d="M6 7h4v1H6z"/>
+  </g>
+</svg>
+</svg><text x="855" y="1064" fill="#abb8c4" font-size="13" font-family="sans-serif">jump.svg</text></svg>

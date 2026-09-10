@@ -128,6 +128,8 @@ the sidebar, and a hop entering from an edge is clipped there.
 
 ## Mascot packs
 
+![Cat, dog and robot mascot packs in illustrated and pixel styles, showing their idle, alternate idle, blink, crouch and jump frames](assets/mascot-packs.png)
+
 Pack directories use `<character>-<style>`. `pixel` is blocky pixel art;
 `illustrated` uses curved shapes. Both styles are standalone SVG frames.
 
@@ -141,6 +143,11 @@ Each pack has five original frames, including crouching and jumping poses, and
 shares the project's Apache-2.0 licence. Pixel packs use a 16×16 grid with crisp
 edges. The default 64px size gives each source pixel a 4×4 block; multiples of 16
 give evenly sized blocks. Illustrated packs use a 64×64 viewBox.
+
+After editing the artwork, regenerate the preview with `mise run mascot-preview`.
+The script in `scripts/mascot-preview.ts` reads each pack's manifest and writes
+`assets/mascot-packs.png` and a self-contained vector
+[`assets/mascot-packs.svg`](assets/mascot-packs.svg).
 
 Set `mascot` to the chosen pack's absolute `mascot.json` path, for example
 `/path/to/herdr-mascot/assets/robot-illustrated/mascot.json`.
