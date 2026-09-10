@@ -152,11 +152,9 @@ This project started as a copy of `herdr-workflow-watch`. It keeps its Effect v4
 CLI, Bun/mise tooling, singleton lease, config reload and CI. GitHub polling,
 workflow indicators, pickers and agent launchers have been removed.
 
-The SDK is pinned to `77abbf81ac35407bc5138a8f4fe19f0833af4402`. The inherited
-Bun patch points its package export at upstream TypeScript source, which Bun
-bundles into `dist/index.js`. Effect and the platform packages are aligned to
-`4.0.0-rc.112` through the existing overrides. `@resvg/resvg-js` stays external
-to the bundle so its platform-specific native module loads from `node_modules`.
+The Bun patch points the SDK's package export at upstream TypeScript source,
+which Bun bundles into `dist/index.js`. `@resvg/resvg-js` stays external to the
+bundle so its platform-specific native module loads from `node_modules`.
 
 ### Manual check
 
