@@ -65,13 +65,13 @@ jobs:
         run: mise run format:check
 
   actionlint:
-    uses: timmo001/workflows/.github/workflows/lint-actionlint.yml@7ca73488f2c4d16f40e6fbc8afad83ffab7b96fd # master
+    uses: timmo001/workflows/.github/workflows/lint-actionlint.yml@0396f6681097e20d0d623589c60cec6fb187db50 # master
 
   markdownlint:
-    uses: timmo001/workflows/.github/workflows/lint-markdownlint.yml@7ca73488f2c4d16f40e6fbc8afad83ffab7b96fd # master
+    uses: timmo001/workflows/.github/workflows/lint-markdownlint.yml@0396f6681097e20d0d623589c60cec6fb187db50 # master
 
   yamllint:
-    uses: timmo001/workflows/.github/workflows/lint-yamllint.yml@7ca73488f2c4d16f40e6fbc8afad83ffab7b96fd # master
+    uses: timmo001/workflows/.github/workflows/lint-yamllint.yml@0396f6681097e20d0d623589c60cec6fb187db50 # master
 
   jsonlint:
-    uses: timmo001/workflows/.github/workflows/lint-jsonlint.yml@7ca73488f2c4d16f40e6fbc8afad83ffab7b96fd # master
+    uses: timmo001/workflows/.github/workflows/lint-jsonlint.yml@0396f6681097e20d0d623589c60cec6fb187db50 # master
