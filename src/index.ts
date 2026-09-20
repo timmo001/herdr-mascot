@@ -13,10 +13,13 @@ import { Process } from "./services/process";
 const platform = RuntimeConfig.layer.pipe(
   Layer.provideMerge(NodeServices.layer),
 );
+
 const application = Layer.mergeAll(Process.layer, herdrLayer).pipe(
   Layer.provideMerge(platform),
 );
+
 const preferences = Preferences.layer.pipe(Layer.provideMerge(application));
+
 const renderer = Mascot.layer.pipe(Layer.provideMerge(preferences));
 
 Command.make("herdr-mascot").pipe(

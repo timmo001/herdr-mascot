@@ -43,20 +43,25 @@ export const start = Effect.gen(function* () {
   const config = yield* RuntimeConfig;
   const path = yield* Path.Path;
   const fs = yield* FileSystem.FileSystem;
+
   if (!(yield* enabled)) return;
   yield* fs.remove(path.join(config.state, "stopped"), { force: true });
+
   const held = yield* Effect.tryPromise(() =>
     check(path.join(config.state, "watcher"), {
       realpath: false,
       stale: 15_000,
     }),
   );
+
   if (held) {
     const { settings } = yield* loadSettings(config.settingsFile);
+
     if (!settings.position?.includes("random")) return;
     yield* stop;
     yield* fs.remove(path.join(config.state, "stopped"), { force: true });
   }
+
   yield* (yield* Process).detach;
 });
 
@@ -83,12 +88,14 @@ export const stop = Effect.gen(function* () {
 export const toggle = Effect.gen(function* () {
   const config = yield* RuntimeConfig;
   const path = yield* Path.Path;
+
   const held = yield* Effect.tryPromise(() =>
     check(path.join(config.state, "watcher"), {
       realpath: false,
       stale: 15_000,
     }),
   );
+
   yield* held ? stop : start;
 });
 
@@ -120,6 +127,7 @@ const render = Effect.gen(function* () {
   const target = yield* Ref.make<Target | null>(yield* currentTarget);
   const stopping = yield* Ref.make(false);
   const changed = yield* Queue.sliding<void>(1);
+
   const track = Stream.merge(
     herdr.events
       .subscribe([
@@ -135,6 +143,7 @@ const render = Effect.gen(function* () {
     Stream.runForEach(
       Effect.fn("Mascot.trackTarget")(function* () {
         const value = yield* currentTarget;
+
         if (sameTarget(value, yield* Ref.get(target))) return;
         yield* Ref.set(target, value);
         yield* Queue.offer(changed, undefined);
@@ -145,23 +154,29 @@ const render = Effect.gen(function* () {
   const draw = Effect.gen(function* () {
     let previous: Target | null = null;
     let position: Position = "bottom-right";
+
     while (!(yield* Ref.get(stopping))) {
       const selected = yield* Ref.get(target);
+
       if (!selected) {
         previous = null;
         yield* Queue.take(changed);
         continue;
       }
+
       const shouldJump =
         previous?.paneId !== selected.paneId ||
         previous.mascotFile !== selected.mascotFile ||
         previous.tabId !== selected.tabId ||
         previous.workspaceId !== selected.workspaceId;
+
       const mascot = yield* mascots.get(selected.mascotFile);
+
       const jumpDuration = mascot.jump.reduce(
         (total, frame) => total + frame.durationMs,
         0,
       );
+
       if (shouldJump) {
         switch (config.position) {
           case "random":
@@ -186,24 +201,31 @@ const render = Effect.gen(function* () {
             position = config.position;
         }
       }
+
       const destination = restingPosition(selected, mascot.size, position);
       const flipHorizontal = mascot.flipOnLeft && position.endsWith("left");
+
       const entryDuration: number = shouldJump
         ? jumpDuration * (yield* Random.nextBetween(0.8, 1.2))
         : 0;
+
       const entryLift = yield* Random.nextBetween(0.35, 0.75);
+
       const entryDirection =
         !position.startsWith("center-") && (yield* Random.nextBoolean)
           ? "horizontal"
           : "vertical";
+
       if (shouldJump && config.animationDelayMs > 0) {
         yield* Effect.sleep(config.animationDelayMs);
+
         if (
           (yield* Ref.get(stopping)) ||
           !sameTarget(selected, yield* Ref.get(target))
         )
           continue;
       }
+
       const exited = yield* herdr.panes.graphics.withLayerStream(
         selected.paneId,
         { layerId, zIndex: 100 },
@@ -213,12 +235,14 @@ const render = Effect.gen(function* () {
             let lastFrame: Frame | undefined;
             let lastX = Number.NaN;
             let lastY = Number.NaN;
+
             while (
               !(yield* Ref.get(stopping)) &&
               sameTarget(selected, yield* Ref.get(target))
             ) {
               const elapsed = (yield* Clock.currentTimeMillis) - started;
               const jumping = elapsed < entryDuration;
+
               const point = jumping
                 ? jumpPosition(
                     selected,
@@ -229,14 +253,17 @@ const render = Effect.gen(function* () {
                     entryLift,
                   )
                 : destination;
+
               const frame = frameAt(
                 jumping ? mascot.jump : mascot.idle,
                 jumping
                   ? (elapsed / entryDuration) * jumpDuration
                   : elapsed - entryDuration,
               );
+
               const x = Math.round(point.x);
               const y = Math.round(point.y);
+
               if (frame !== lastFrame || x !== lastX || y !== lastY) {
                 yield* writer.write(
                   graphicsFrame(
@@ -252,6 +279,7 @@ const render = Effect.gen(function* () {
                 lastX = x;
                 lastY = y;
               }
+
               yield* Queue.take(changed).pipe(
                 Effect.timeoutOrElse({
                   duration: jumping ? 33 : 50,
@@ -259,7 +287,9 @@ const render = Effect.gen(function* () {
                 }),
               );
             }
+
             const next = yield* Ref.get(target);
+
             if (
               !lastFrame ||
               (!(yield* Ref.get(stopping)) &&
@@ -267,27 +297,35 @@ const render = Effect.gen(function* () {
                 next.mascotFile === selected.mascotFile)
             )
               return false;
+
             if (config.animationDelayMs > 0) {
               yield* Effect.sleep(config.animationDelayMs);
+
               if (
                 !(yield* Ref.get(stopping)) &&
                 sameTarget(selected, yield* Ref.get(target))
               )
                 return false;
             }
+
             const graphics = yield* herdr.panes.graphics.info(selected.paneId);
+
             if (!graphics.paneVisible) return true;
             const origin = { x: lastX, y: lastY, size: destination.size };
+
             const direction =
               !position.startsWith("center-") && (yield* Random.nextBoolean)
                 ? "horizontal"
                 : "vertical";
+
             const exitDuration = yield* Random.nextBetween(200, 300);
             const exitLift = yield* Random.nextBetween(0.35, 0.75);
             const exitStarted = yield* Clock.currentTimeMillis;
+
             while (true) {
               const elapsed = (yield* Clock.currentTimeMillis) - exitStarted;
               const latest = yield* Ref.get(target);
+
               if (
                 elapsed >= exitDuration ||
                 (latest &&
@@ -295,6 +333,7 @@ const render = Effect.gen(function* () {
                     latest.workspaceId !== selected.workspaceId))
               )
                 break;
+
               const point = exitPosition(
                 selected,
                 origin,
@@ -303,6 +342,7 @@ const render = Effect.gen(function* () {
                 direction,
                 exitLift,
               );
+
               yield* writer.write(
                 graphicsFrame(
                   frameAt(mascot.jump, (elapsed / exitDuration) * jumpDuration),
@@ -315,12 +355,15 @@ const render = Effect.gen(function* () {
               );
               yield* Effect.sleep(33);
             }
+
             return true;
           }),
       );
+
       previous = exited ? null : selected;
     }
   });
+
   yield* draw.pipe(
     Effect.raceFirst(track),
     Effect.raceFirst(
@@ -337,6 +380,7 @@ const runWatcher = Effect.gen(function* () {
   const config = yield* RuntimeConfig;
   const path = yield* Path.Path;
   const compromised = yield* Deferred.make<never, ProcessError>();
+
   const lease = yield* Effect.acquireRelease(
     Effect.tryPromise(() =>
       lock(path.join(config.state, "watcher"), {
@@ -371,8 +415,10 @@ const runWatcher = Effect.gen(function* () {
           )
         : Effect.void,
   );
+
   if (!lease) return false;
   yield* Effect.logInfo("Herdr Mascot started");
+
   return yield* render.pipe(
     Effect.retry({ times: 5, schedule: Schedule.spaced(1_000) }),
     Effect.as(false),
@@ -383,6 +429,7 @@ const runWatcher = Effect.gen(function* () {
 
 export const watch = Effect.gen(function* () {
   const restart = yield* runWatcher;
+
   if (restart && (yield* enabled)) {
     yield* Effect.logInfo("Herdr Mascot changed; starting a new renderer");
     yield* (yield* Process).detach;

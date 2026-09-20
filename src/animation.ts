@@ -6,10 +6,12 @@ import type { Frame } from "./services/mascot";
 export function frameAt(frames: readonly [Frame, ...Frame[]], elapsed: number) {
   const duration = frames.reduce((total, frame) => total + frame.durationMs, 0);
   let time = Math.max(0, elapsed) % duration;
+
   for (const frame of frames) {
     if (time < frame.durationMs) return frame;
     time -= frame.durationMs;
   }
+
   return frames[0];
 }
 
@@ -21,6 +23,7 @@ export function restingPosition(
   const width = target.columns * target.cellWidth;
   const height = target.rows * target.cellHeight;
   const fitted = Math.min(size, width, height);
+
   return {
     size: fitted,
     x: position.startsWith("center-")
@@ -66,18 +69,22 @@ export function exitPosition(
   const travel = t * t * (3 - 2 * t);
   const height = target.rows * target.cellHeight;
   const bottom = position.includes("bottom");
+
   const endX =
     direction === "horizontal"
       ? position.endsWith("right")
         ? target.columns * target.cellWidth
         : -origin.size
       : origin.x;
+
   const endY =
     direction === "vertical" ? (bottom ? height : -origin.size) : origin.y;
+
   const lift = Math.min(
     origin.size * liftScale,
     Math.max(0, bottom ? origin.y : height - origin.y - origin.size),
   );
+
   return {
     x: origin.x + (endX - origin.x) * travel,
     y:
@@ -117,14 +124,17 @@ export function graphicsFrame(
   const top = Math.round(y);
   const cellWidth = target.cellWidth;
   const cellHeight = target.cellHeight;
+
   const col = Math.max(
     0,
     Math.min(target.columns - 1, Math.floor(left / cellWidth)),
   );
+
   const row = Math.max(
     0,
     Math.min(target.rows - 1, Math.floor(top / cellHeight)),
   );
+
   const endCol = Math.min(target.columns, Math.ceil((left + size) / cellWidth));
   const endRow = Math.min(target.rows, Math.ceil((top + size) / cellHeight));
   const gridCols = Math.max(1, endCol - col);
@@ -132,24 +142,31 @@ export function graphicsFrame(
   const width = gridCols * cellWidth;
   const height = gridRows * cellHeight;
   const data = new Uint8Array(width * height * 4);
+
   for (let dy = 0; dy < height; dy++) {
     const sy = Math.floor(
       ((row * cellHeight + dy - top) * frame.height) / size,
     );
+
     if (sy < 0 || sy >= frame.height) continue;
+
     for (let dx = 0; dx < width; dx++) {
       const sx = Math.floor(
         ((col * cellWidth + dx - left) * frame.width) / size,
       );
+
       if (sx < 0 || sx >= frame.width) continue;
+
       const source =
         (sy * frame.width + (flipHorizontal ? frame.width - 1 - sx : sx)) * 4;
+
       data.set(
         frame.pixels.subarray(source, source + 4),
         (dy * width + dx) * 4,
       );
     }
   }
+
   return {
     format: "rgba",
     imageWidth: width,

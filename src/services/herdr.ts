@@ -10,6 +10,7 @@ import {
 export const herdrLayer = Layer.unwrap(
   Effect.gen(function* () {
     const config = yield* RuntimeConfig;
+
     return herdrSdkLayerFromOptions({
       socketPath: config.socket,
       requestTimeout: Duration.seconds(5),
@@ -19,6 +20,7 @@ export const herdrLayer = Layer.unwrap(
 
 export const enabled = Effect.gen(function* () {
   const plugins = yield* (yield* HerdrSdk).plugins.list({ pluginId });
+
   return plugins.some((plugin) => plugin.id === pluginId && plugin.enabled);
 });
 
@@ -27,13 +29,18 @@ export const currentTarget = Effect.gen(function* () {
   const preferences = yield* Preferences;
   const snapshot = yield* herdr.session.snapshot();
   const paneId = Option.getOrUndefined(snapshot.focusedPaneId);
+
   if (!paneId) return null;
+
   const layout = snapshot.layouts.find(
     (item) => item.tabId === Option.getOrUndefined(snapshot.focusedTabId),
   );
+
   const pane = layout?.panes.find((item) => item.paneId === paneId);
+
   if (!layout || !pane) return null;
   const graphics = yield* herdr.panes.graphics.info(paneId);
+
   if (
     !graphics.paneVisible ||
     graphics.cellWidthPx <= 0 ||
@@ -43,12 +50,15 @@ export const currentTarget = Effect.gen(function* () {
   // Remove the two border cells and the right-hand scrollbar lane.
   const columns = Math.max(0, Math.floor(pane.rect.width) - 3);
   const rows = Math.max(0, Math.floor(pane.rect.height) - 2);
+
   if (columns < 1 || rows < 1) return null;
   const focusedPane = snapshot.panes.find((item) => item.id === paneId);
+
   const cwd = focusedPane
     ? (Option.getOrUndefined(focusedPane.foregroundCwd) ??
       Option.getOrUndefined(focusedPane.cwd))
     : undefined;
+
   return {
     paneId,
     mascotFile: mascotForDirectory(cwd, preferences),

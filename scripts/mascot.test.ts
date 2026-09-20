@@ -13,6 +13,7 @@ import { Mascot } from "../src/services/mascot";
 
 const svg =
   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="8" height="8" fill="red"/></svg>';
+
 const manifest = (file: string) =>
   JSON.stringify({
     version: 1,
@@ -38,6 +39,7 @@ const fixture = Effect.gen(function* () {
     path.join(configDir, "config.json"),
     JSON.stringify({ mascot: "pack/mascot.json" }),
   );
+
   const runtime = RuntimeConfig.of({
     socket: path.join(root, "socket"),
     root,
@@ -45,6 +47,7 @@ const fixture = Effect.gen(function* () {
     configDir,
     settingsFile: path.join(configDir, "config.json"),
   });
+
   return { fs, path, root, pack, runtime };
 });
 
@@ -60,6 +63,7 @@ test("directory selection uses boundaries and the most specific rule", () =>
         ],
       }),
     );
+
     const preferences = yield* Preferences.pipe(
       Effect.provide(
         Preferences.layer.pipe(
@@ -67,6 +71,7 @@ test("directory selection uses boundaries and the most specific rule", () =>
         ),
       ),
     );
+
     expect(mascotForDirectory(`${homedir()}/projects`, preferences)).toEndWith(
       "parent/mascot.json",
     );
@@ -82,6 +87,7 @@ test("directory selection uses boundaries and the most specific rule", () =>
     expect(mascotForDirectory(undefined, preferences)).toBe(
       preferences.mascotFile,
     );
+
     for (const rules of [
       [{ path: "relative", mascot: "pack/mascot.json" }],
       [
@@ -114,6 +120,7 @@ test("Stow config links authorise their source packs and preserve cached pixels"
     );
     yield* fs.makeDirectory(live);
     yield* fs.symlink(runtime.settingsFile, path.join(live, "config.json"));
+
     const preferences = Preferences.layer.pipe(
       Layer.provide(
         Layer.succeed(RuntimeConfig, {
@@ -123,6 +130,7 @@ test("Stow config links authorise their source packs and preserve cached pixels"
         }),
       ),
     );
+
     yield* Effect.gen(function* () {
       const service = yield* Mascot;
       const first = yield* service.get(path.join(pack, "mascot.json"));
@@ -148,18 +156,22 @@ test("Stow config links authorise their source packs and preserve cached pixels"
 test("pack loading rejects manifest and frame escapes, including symlinks", () =>
   Effect.gen(function* () {
     const { fs, path, root, pack, runtime } = yield* fixture;
+
     const preferences = Preferences.layer.pipe(
       Layer.provide(Layer.succeed(RuntimeConfig, runtime)),
     );
+
     const load = Mascot.pipe(
       Effect.provide(Mascot.layer.pipe(Layer.provide(preferences))),
       Effect.result,
     );
+
     yield* fs.writeFileString(path.join(root, "outside.svg"), svg);
     yield* fs.symlink(
       path.join(root, "outside.svg"),
       path.join(pack, "escape.svg"),
     );
+
     for (const file of [
       "../../outside.svg",
       path.join(root, "outside.svg"),
@@ -168,6 +180,7 @@ test("pack loading rejects manifest and frame escapes, including symlinks", () =
       yield* fs.writeFileString(path.join(pack, "mascot.json"), manifest(file));
       expect((yield* load)._tag).toBe("Failure");
     }
+
     yield* fs.writeFileString(
       path.join(root, "outside.json"),
       manifest("outside.svg"),
@@ -176,6 +189,7 @@ test("pack loading rejects manifest and frame escapes, including symlinks", () =
       path.join(root, "outside.json"),
       path.join(pack, "escape.json"),
     );
+
     for (const file of ["../outside.json", "pack/escape.json"]) {
       yield* fs.writeFileString(
         runtime.settingsFile,
@@ -192,13 +206,16 @@ test("pack loading rejects manifest and frame escapes, including symlinks", () =
 test("SVG parsing rejects external references and executable markup before rendering", () =>
   Effect.gen(function* () {
     const { fs, path, pack, runtime } = yield* fixture;
+
     const preferences = Preferences.layer.pipe(
       Layer.provide(Layer.succeed(RuntimeConfig, runtime)),
     );
+
     const load = Mascot.pipe(
       Effect.provide(Mascot.layer.pipe(Layer.provide(preferences))),
       Effect.result,
     );
+
     const bodies = [
       '<image href="/tmp/external.png" width="16" height="16"/>',
       '<image href="&#47;tmp/external.png" width="16" height="16"/>',
@@ -210,6 +227,7 @@ test("SVG parsing rejects external references and executable markup before rende
       '<rect onload="alert(1)"/>',
       '<g xml:base="file:///tmp/"/>',
     ];
+
     for (const body of bodies) {
       yield* fs.writeFileString(
         path.join(pack, "idle.svg"),
@@ -217,6 +235,7 @@ test("SVG parsing rejects external references and executable markup before rende
       );
       expect((yield* load)._tag).toBe("Failure");
     }
+
     yield* fs.writeFileString(
       path.join(pack, "idle.svg"),
       `<!DOCTYPE svg [<!ENTITY image SYSTEM "file:///tmp/external.png">]>${svg}`,
