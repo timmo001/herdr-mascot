@@ -17,6 +17,7 @@ export class Process extends Context.Service<
     Effect.gen(function* () {
       const config = yield* RuntimeConfig;
       const path = yield* Path.Path;
+
       // The detached renderer owns its lease and graphics scopes.
       const detach = Effect.gen(function* () {
         const fd = yield* Effect.acquireRelease(
@@ -25,12 +26,14 @@ export class Process extends Context.Service<
           ),
           (file) => Effect.sync(() => closeSync(file)),
         );
+
         yield* Effect.callback<void, ProcessError>((resume) => {
           const child = spawn(
             process.execPath,
             [path.join(config.root, "dist/index.js"), "watch"],
             { cwd: config.root, detached: true, stdio: ["ignore", fd, fd] },
           );
+
           child.once("error", (cause) =>
             resume(
               Effect.fail(
@@ -50,6 +53,7 @@ export class Process extends Context.Service<
             new ProcessError({ command: "watch", message: String(cause) }),
         ),
       );
+
       return Process.of({ detach });
     }),
   );

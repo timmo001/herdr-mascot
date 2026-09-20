@@ -16,9 +16,11 @@ Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
   const assets = path.resolve(import.meta.dir, "../assets");
+
   const directories = (yield* fs.readDirectory(assets))
     .filter((directory) => /-(pixel|illustrated)$/.test(directory))
     .sort();
+
   if (directories.length === 0)
     return yield* new MascotError({
       message: "No bundled mascot packs found.",
@@ -26,20 +28,25 @@ Effect.gen(function* () {
 
   const rows: string[] = [];
   let columns = 0;
+
   for (const [row, directory] of directories.entries()) {
     const pack = yield* Schema.decodeEffect(Schema.fromJsonString(Pack))(
       yield* fs.readFileString(path.join(assets, directory, "mascot.json")),
       { onExcessProperty: "error" },
     );
+
     const files = [
       ...new Set([...pack.idle, ...pack.jump].map((frame) => frame.file)),
     ];
+
     columns = Math.max(columns, files.length);
     const cells: string[] = [];
+
     for (const [column, file] of files.entries()) {
       const svg = yield* fs.readFileString(
         path.resolve(assets, directory, file),
       );
+
       const renderer = yield* Effect.try({
         try: () =>
           new Resvg(svg, {
@@ -51,6 +58,7 @@ Effect.gen(function* () {
             cause,
           }),
       });
+
       if (renderer.width <= 0 || renderer.width !== renderer.height)
         return yield* new MascotError({
           message: `${directory}/${file} must have a square viewBox`,
@@ -62,6 +70,7 @@ Effect.gen(function* () {
         `<text x="${x}" y="${y + 152}" fill="#abb8c4" font-size="13" font-family="sans-serif">${escapeXml(file)}</text>`,
       );
     }
+
     rows.push(
       `<text x="16" y="${row * 180 + 24}" fill="#e6edf3" font-size="16" font-family="sans-serif">${escapeXml(pack.name)}</text>`,
       ...cells,
@@ -72,6 +81,7 @@ Effect.gen(function* () {
   const width = 215 + columns * 160;
   const height = directories.length * 180;
   const sheet = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="#20252e"/>${rows.join("")}</svg>`;
+
   const png = yield* Effect.try({
     try: () => new Resvg(sheet).render().asPng(),
     catch: (cause) =>
@@ -80,6 +90,7 @@ Effect.gen(function* () {
         cause,
       }),
   });
+
   yield* fs.writeFile(path.join(assets, "mascot-packs.png"), png);
   yield* fs.writeFileString(path.join(assets, "mascot-packs.svg"), sheet);
   yield* Console.log(

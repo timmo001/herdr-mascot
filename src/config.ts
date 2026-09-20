@@ -4,6 +4,7 @@ import { Context, Effect, FileSystem, Layer, Path, Schema } from "effect";
 import { containsPath } from "./paths";
 
 export const pluginId = "timmo.mascot";
+
 export const layerId = "timmo-mascot";
 
 export const bottomCorners = ["bottom-right", "bottom-left"] as const;
@@ -72,9 +73,11 @@ export const loadSettings = Effect.fn("Config.loadSettings")(function* (
 ) {
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
+
   const contents = (yield* fs.exists(file))
     ? yield* fs.readFileString(file)
     : "{}";
+
   const settings = yield* Schema.decodeEffect(Schema.fromJsonString(Settings))(
     contents,
     { onExcessProperty: "error" },
@@ -87,21 +90,26 @@ export const loadSettings = Effect.fn("Config.loadSettings")(function* (
         }),
     ),
   );
+
   const directoryMascots: Array<{ path: string; mascot: string }> = [];
+
   for (const rule of settings.directoryMascots ?? []) {
     if (!path.isAbsolute(rule.path) && !rule.path.startsWith("~/"))
       return yield* new ConfigError({
         message: "Directory mascot paths must be absolute or start with ~/.",
       });
+
     const directory = rule.path.startsWith("~/")
       ? path.resolve(homedir(), rule.path.slice(2))
       : path.resolve(rule.path);
+
     if (directoryMascots.some((item) => item.path === directory))
       return yield* new ConfigError({
         message: `Duplicate directory mascot path: ${directory}`,
       });
     directoryMascots.push({ path: directory, mascot: rule.mascot });
   }
+
   return {
     settings,
     directoryMascots: directoryMascots.sort(
@@ -126,6 +134,7 @@ export class RuntimeConfig extends Context.Service<
     Effect.gen(function* () {
       const fs = yield* FileSystem.FileSystem;
       const path = yield* Path.Path;
+
       const env = yield* Schema.decodeUnknownEffect(Environment)(
         process.env,
       ).pipe(
@@ -138,10 +147,12 @@ export class RuntimeConfig extends Context.Service<
             }),
         ),
       );
+
       const settingsFile = path.join(
         env.HERDR_PLUGIN_CONFIG_DIR,
         "config.json",
       );
+
       const state = path.join(
         env.HERDR_PLUGIN_STATE_DIR,
         createHash("sha256")
@@ -149,7 +160,9 @@ export class RuntimeConfig extends Context.Service<
           .digest("hex")
           .slice(0, 20),
       );
+
       yield* fs.makeDirectory(state, { recursive: true, mode: 0o700 });
+
       return RuntimeConfig.of({
         socket: env.HERDR_SOCKET_PATH,
         root: env.HERDR_PLUGIN_ROOT,
@@ -183,14 +196,18 @@ export class Preferences extends Context.Service<
       const config = yield* RuntimeConfig;
       const path = yield* Path.Path;
       const fs = yield* FileSystem.FileSystem;
+
       const { settings, directoryMascots, revision } = yield* loadSettings(
         config.settingsFile,
       );
+
       // Stow links files individually, so the config's source owns its packs.
       const configDir = (yield* fs.exists(config.settingsFile))
         ? path.dirname(yield* fs.realPath(config.settingsFile))
         : yield* fs.realPath(config.configDir);
+
       const assets = yield* fs.realPath(path.join(config.root, "assets"));
+
       return Preferences.of({
         revision,
         animationDelayMs: settings.animationDelayMs ?? 0,

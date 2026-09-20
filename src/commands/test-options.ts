@@ -22,6 +22,7 @@ export const testOptions = Effect.gen(function* () {
   const config = yield* RuntimeConfig;
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
+
   if (!(yield* enabled) || !(yield* currentTarget))
     return yield* new ConfigError({
       message:
@@ -35,17 +36,20 @@ export const testOptions = Effect.gen(function* () {
     (release) => Effect.tryPromise(() => release()).pipe(Effect.orDie),
   );
   const { settings } = yield* loadSettings(config.settingsFile);
+
   const running = Effect.tryPromise(() =>
     check(path.join(config.state, "watcher"), {
       realpath: false,
       stale: 15_000,
     }),
   );
+
   yield* Effect.acquireRelease(
     Effect.gen(function* () {
       const contents = (yield* fs.exists(config.settingsFile))
         ? yield* fs.readFile(config.settingsFile)
         : undefined;
+
       return { contents, wasRunning: yield* running };
     }),
     ({ contents, wasRunning }) =>
@@ -55,6 +59,7 @@ export const testOptions = Effect.gen(function* () {
             if (contents === undefined)
               yield* fs.remove(config.settingsFile, { force: true });
             else yield* fs.writeFile(config.settingsFile, contents);
+
             if (wasRunning) yield* start;
             yield* Effect.logInfo(
               "Restored mascot configuration and visibility",
@@ -66,6 +71,7 @@ export const testOptions = Effect.gen(function* () {
   );
 
   yield* stop;
+
   for (const position of positions) {
     yield* Effect.logInfo(`Testing ${position}`);
     yield* fs.writeFileString(

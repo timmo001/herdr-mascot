@@ -61,16 +61,19 @@ export class Mascot extends Context.Service<
       const config = yield* Preferences;
       const fs = yield* FileSystem.FileSystem;
       const path = yield* Path.Path;
+
       const files = new Set([
         config.mascotFile,
         ...config.directoryMascots.map((rule) => rule.mascotFile),
       ]);
+
       const read = Effect.fn("Mascot.readPackFile")(function* (
         file: string,
         roots: ReadonlyArray<string>,
         extension: string,
       ) {
         const resolved = yield* fs.realPath(file);
+
         if (
           !roots.some((root) => containsPath(root, resolved)) ||
           path.extname(resolved) !== extension
@@ -79,26 +82,33 @@ export class Mascot extends Context.Service<
             message: `Pack file must be a ${extension} inside its allowed directory: ${file}`,
           });
         const info = yield* fs.stat(resolved);
+
         if (info.type !== "File" || info.size > 1_048_576)
           return yield* new MascotError({
             message: `Pack files must be regular files no larger than 1 MiB: ${file}`,
           });
+
         return { file: resolved, contents: yield* fs.readFileString(resolved) };
       });
+
       const loadPack = Effect.fn("Mascot.loadPack")(
         function* (mascotFile: string) {
           const manifest = yield* read(mascotFile, config.assetRoots, ".json");
+
           const pack = yield* Schema.decodeEffect(Schema.fromJsonString(Pack))(
             manifest.contents,
             { onExcessProperty: "error" },
           );
+
           const directory = path.dirname(manifest.file);
           const cache = new Map<string, Omit<Frame, "durationMs">>();
+
           const load = Effect.fn("Mascot.loadFrame")(function* (
             frame: (typeof Frames.Type)[number],
           ) {
             const file = path.resolve(directory, frame.file);
             let image = cache.get(file);
+
             if (!image) {
               const { contents: svg } = yield* read(file, [directory], ".svg");
               image = yield* Effect.try({
@@ -116,6 +126,7 @@ export class Mascot extends Context.Service<
                   parser.on("opentag", (tag) => {
                     if (tag.local === "script" || tag.local === "foreignObject")
                       throw new Error("Only static SVG artwork is allowed");
+
                     for (const attribute of Object.values(tag.attributes)) {
                       if (
                         attribute.local.startsWith("on") ||
@@ -126,14 +137,18 @@ export class Mascot extends Context.Service<
                         throw new Error(
                           "SVG event handlers and base URLs are not allowed",
                         );
+
                       if (attribute.local !== "href") continue;
+
                       const embeddedPng =
                         /^data:image\/png;base64,[A-Za-z0-9+/]+={0,2}$/.test(
                           attribute.value,
                         );
+
                       const fragment =
                         tag.local !== "image" &&
                         /^#[^\s]+$/.test(attribute.value);
+
                       if (!embeddedPng && !fragment)
                         throw new Error(
                           "SVG references must be local fragments or embedded PNG images",
@@ -141,19 +156,23 @@ export class Mascot extends Context.Service<
                     }
                   });
                   parser.write(svg).close();
+
                   const renderer = new Resvg(svg, {
                     fitTo: { mode: "width", value: config.sizePixels },
                     font: { loadSystemFonts: false },
                   });
+
                   if (renderer.width <= 0 || renderer.width !== renderer.height)
                     throw new Error(`${frame.file} must have a square viewBox`);
                   const result = renderer.render();
                   const pixels = result.pixels;
+
                   for (let alpha = 3; alpha < pixels.length; alpha += 4) {
                     pixels[alpha] = Math.round(
                       (pixels[alpha] * config.opacity) / 100,
                     );
                   }
+
                   return {
                     pixels,
                     width: result.width,
@@ -168,10 +187,13 @@ export class Mascot extends Context.Service<
               });
               cache.set(file, image);
             }
+
             return { ...image, durationMs: frame.durationMs };
           });
+
           const idle = yield* Effect.forEach(pack.idle, load);
           const jump = yield* Effect.forEach(pack.jump, load);
+
           return {
             name: pack.name,
             flipOnLeft: pack.flipOnLeft ?? false,
@@ -189,17 +211,21 @@ export class Mascot extends Context.Service<
             }),
         ),
       );
+
       const cache = yield* Cache.make({
         capacity: files.size,
         lookup: loadPack,
       });
+
       yield* Effect.forEach(files, (file) => Cache.get(cache, file));
+
       return Mascot.of({
         get: Effect.fn("Mascot.get")(function* (file) {
           if (!files.has(file))
             return yield* new MascotError({
               message: "Mascot is not configured",
             });
+
           return yield* Cache.get(cache, file);
         }),
       });
