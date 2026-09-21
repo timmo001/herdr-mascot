@@ -15,7 +15,7 @@
       "devDependencies": {
         "@effect/tsgo": "0.45.0",
         "@oxlint/plugins": "1.83.0",
-        "@timmo001/oxlint-rules": "0.3.4",
+        "@timmo001/oxlint-rules": "0.3.5",
         "@types/bun": "1.4.2",
         "@types/proper-lockfile": "4.1.4",
         "oxlint": "1.83.0",
@@ -145,7 +145,7 @@
 
     "@resvg/resvg-js-win32-x64-msvc": ["@resvg/resvg-js-win32-x64-msvc@2.6.2", "", { "os": "win32", "cpu": "x64" }, "sha512-ZXtYhtUr5SSaBrUDq7DiyjOFJqBVL/dOBN7N/qmi/pO0IgiWW/f/ue3nbvu9joWE5aAKDoIzy/CxsY0suwGosQ=="],
 
-    "@timmo001/oxlint-rules": ["@timmo001/oxlint-rules@0.3.4", "", { "peerDependencies": { "@oxlint/plugins": "1.83.0", "oxlint": "1.83.0" }, "bin": { "oxlint-rules": "dist/cli.js" } }, "sha512-m+zHYrtsJB+THRxYv0CR3EfOsFpa1g5CJraNDhHqBY0VXYkXoqQSkwbNG+iiW6GL9QOaVAKUvHrsTwud/TSOXg=="],
+    "@timmo001/oxlint-rules": ["@timmo001/oxlint-rules@0.3.5", "", { "peerDependencies": { "@oxlint/plugins": "1.83.0", "oxlint": "1.83.0" }, "bin": { "oxlint-rules": "dist/cli.js" } }, "sha512-eaJ9Cn5/9kaiMG80tB2i4dleRhsv691oU0/fkqvPwn08pF0c03traYeoGeIeTR32fFBrSloABVX7/IHtW9AqzQ=="],
 
     "@types/bun": ["@types/bun@1.4.2", "", { "dependencies": { "bun-types": "1.4.2" } }, "sha512-GimotNn7+ZV0uVArItBbriZsR1oNf0+WTzPkdcFrzShI7k2norL0uzEaJT8T33dWr7O/c9ZDuAFQrctKCi72oQ=="],
 
