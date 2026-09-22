@@ -8,7 +8,7 @@
   "packageManager": "bun@1.4.2",
   "scripts": {
     "build": "bun build src/index.ts --target=bun --external @resvg/resvg-js --outdir dist",
-    "lint": "oxlint .",
+    "lint": "oxlint --type-aware --type-check .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -29,6 +29,7 @@
     "@types/bun": "1.4.2",
     "@types/proper-lockfile": "4.1.4",
     "oxlint": "1.83.0",
+    "oxlint-tsgolint": "7.0.2002",
     "prettier": "3.9.8",
     "typescript": "7.0.2"
   },
