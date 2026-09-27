@@ -1,4 +1,4 @@
-import { HerdrSdk, herdrSdkLayerFromOptions } from "@herdr/sdk";
+import { HerdrSdk, herdrSdkLayerFromOptions } from "@timmo001/effect-herdr";
 import { Duration, Effect, Layer, Option } from "effect";
 import {
   Preferences,

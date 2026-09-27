@@ -6,7 +6,7 @@ switch panes, tabs or workspaces.
 
 The mascot uses a named graphics layer over the existing terminal. It takes no
 keyboard focus and opens no extra panes. SVG frames are rasterised once when the
-renderer starts, then sent through `@herdr/sdk` as RGBA images.
+renderer starts, then sent through `@timmo001/effect-herdr` as RGBA images.
 
 The plugin code and bundled artwork were generated with AI. Contributions are
 welcome, especially from artists who'd like to refine the existing mascots or

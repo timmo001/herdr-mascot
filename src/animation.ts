@@ -1,4 +1,4 @@
-import type { PaneGraphicsFrameEncoded } from "@herdr/sdk";
+import type { PaneGraphicsFrameEncoded } from "@timmo001/effect-herdr";
 import type { Position } from "./config";
 import type { Target } from "./services/herdr";
 import type { Frame } from "./services/mascot";

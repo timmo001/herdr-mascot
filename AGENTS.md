@@ -9,7 +9,7 @@
   asset loading and subprocesses, and `src/animation.ts` owns motion and pixels.
 - `assets/` contains cat, dog and robot packs in `pixel` and `illustrated` styles.
 - Name pack directories `<character>-<style>`; `assets/cat-pixel/` is the default.
-- Use the installed `@herdr/sdk` for Herdr requests and scoped graphics streams.
+- Use the installed `@timmo001/effect-herdr` for Herdr requests and scoped graphics streams.
 - `dist/` is generated Bun-targeted module output and stays untracked.
 - The package is private; distribution is through the GitHub repository.
 
