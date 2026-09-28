@@ -1,6 +1,6 @@
 import { NodeRuntime, NodeServices } from "@effect/platform-node";
 import { Effect, Layer, Logger } from "effect";
-import { Command } from "effect/unstable/cli";
+import { Command } from "effect/cli";
 import { version } from "../package.json";
 import { testOptions } from "./commands/test-options";
 import { start, stop, toggle, watch } from "./commands/watch";
