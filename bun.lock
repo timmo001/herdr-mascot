@@ -7,7 +7,7 @@
       "dependencies": {
         "@effect/platform-node": "4.0.0-rc.118",
         "@resvg/resvg-js": "2.6.2",
-        "@timmo001/effect-herdr": "0.8.2-timmo001.1",
+        "@timmo001/effect-herdr": "0.8.2-timmo001.2",
         "effect": "4.0.0-rc.118",
         "proper-lockfile": "4.1.2",
         "saxes": "6.0.0",
@@ -141,7 +141,7 @@
 
     "@resvg/resvg-js-win32-x64-msvc": ["@resvg/resvg-js-win32-x64-msvc@2.6.2", "", { "os": "win32", "cpu": "x64" }, "sha512-ZXtYhtUr5SSaBrUDq7DiyjOFJqBVL/dOBN7N/qmi/pO0IgiWW/f/ue3nbvu9joWE5aAKDoIzy/CxsY0suwGosQ=="],
 
-    "@timmo001/effect-herdr": ["@timmo001/effect-herdr@0.8.2-timmo001.1", "", { "dependencies": { "@effect/platform-node-shared": "4.0.0-rc.117", "ajv": "^8.20.0", "effect": "4.0.0-rc.117" } }, "sha512-GENgs0sbhHt1YEpIKsYzCxuycaniQ13oW1j9TLS7FtWmOG08D35B4f4b/rV2EOgAYnUpoJl67LfBfoR5R0acOw=="],
+    "@timmo001/effect-herdr": ["@timmo001/effect-herdr@0.8.2-timmo001.2", "", { "dependencies": { "@effect/platform-node-shared": "4.0.0-rc.118", "ajv": "^8.20.0", "effect": "4.0.0-rc.118" } }, "sha512-2mTplAybeXaUnctITNtmK3GRYtPUfZTMaJEVsTnSDOFjcgz/zoyQe5UEhEzIi0Rxzu13rA1bDMgiBBiJI09bTg=="],
 
     "@timmo001/oxlint-rules": ["@timmo001/oxlint-rules@0.4.0", "", { "peerDependencies": { "@oxlint/plugins": "1.86.0", "oxlint": "1.86.0" }, "bin": { "oxlint-rules": "dist/cli.js" } }, "sha512-R6qwr/D+vGcJT7039BGJ/sPsag8Aft/B4fDYPxEFkc+ZBNShcKYZ1vXgbIWdfXoVKPlzdTrD24TVUhcRJ6E5TA=="],
 
