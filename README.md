@@ -4,9 +4,10 @@ An animated mascot that follows your active Herdr pane. Choose a cat, dog or rob
 in pixel-art or illustrated style. Each has idle animations and hops when you
 switch panes, tabs or workspaces.
 
-The mascot lives in its own small plugin pane, split below the pane that was
-focused when it started. It draws there with standard Kitty graphics and does not
-take focus. SVG frames are rasterised once when the renderer starts.
+The mascot floats over Herdr's UI. It takes no keyboard focus, opens no panes
+and leaves the layout alone. SVG frames are rasterised once when the renderer
+starts, then drawn with the Kitty graphics protocol straight onto the terminal of
+each attached Herdr client, positioned from Herdr's pane layout.
 
 The plugin code and bundled artwork were generated with AI. Contributions are
 welcome, especially from artists who'd like to refine the existing mascots or
@@ -14,14 +15,15 @@ create new ones.
 
 ## Requirements
 
-- Linux or macOS
+- Linux with glibc and `ss` from iproute2
 - Herdr 0.9.2 or later
-- A terminal with Kitty graphics support and cell-pixel size reporting
+- A terminal with Kitty graphics support that reports its pixel size
 - mise, using the Bun and Node versions pinned in `mise.toml`
 
-The mascot waits until Herdr reports its pane's cell-pixel size. Once sized, it
-shrinks its pane to fit `sizePixels`. You can move or resize the pane like any
-other.
+Herdr doesn't know about the mascot, so it stays on top of Herdr's menus and
+popups. Herdr's full redraws, such as when attaching or resizing, wipe it until
+the renderer redraws it, at most a second later. The mascot waits while no
+client is attached or the terminal doesn't report its pixel size.
 
 ## Local setup
 
@@ -35,7 +37,7 @@ herdr plugin action invoke timmo.mascot.start
 ```
 
 The startup hook also starts the mascot on the next Herdr server start. Showing
-it repeatedly keeps one mascot pane per session. Each session has its own lease and
+it repeatedly keeps one renderer per session. Each session has its own lease and
 log directory under `HERDR_PLUGIN_STATE_DIR`.
 
 ```sh
@@ -63,10 +65,9 @@ description = "toggle mascot"
 Press your Herdr prefix, then `t`. After updating an existing local link, run
 `herdr plugin link "$PWD"` again to register the new action.
 
-`stop` asks the renderer to hop out and waits for its lease to be released. Its
-pane closes when it exits. Showing the mascot again, or starting a new server,
-clears the stopped state. After a cold server restart, `start` closes the
-leftover shell pane Herdr restores in the mascot's place.
+`stop` asks the renderer to hop out and waits for its lease to be released. It
+deletes only the mascot's own images from each client's terminal. Showing the mascot
+again, or starting a new server, clears the stopped state.
 
 ## Configuration
 
@@ -83,7 +84,7 @@ Create `config.json` in the directory printed by `herdr plugin config-dir`:
 
 | Setting            | Default           | Meaning                                                                                                                                                                                            |
 | ------------------ | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sizePixels`       | `64`              | Width and height in pixels, from 16 to 256. The mascot pane is sized to fit; smaller panes reduce it.                                                                                              |
+| `sizePixels`       | `64`              | Width and height in pixels, from 16 to 256. Small panes reduce it to fit.                                                                                                                          |
 | `opacity`          | `100`             | Opacity percentage, from 0 (invisible) to 100 (fully opaque). Use 90 for slight transparency.                                                                                                      |
 | `animationDelayMs` | `0`               | Delay before each entry or exit hop, from 0 to 5,000 milliseconds. Zero starts immediately.                                                                                                        |
 | `position`         | `"bottom-right"`  | `bottom-right`, `bottom-left`, `top-right`, `top-left`, `center-bottom`, `center-top`, `random`, `bottom-random`, `top-random`, `random-corners`, `bottom-random-corners` or `top-random-corners`. |
@@ -121,8 +122,9 @@ bundled `assets/` directory. Absolute paths are accepted only inside those roots
 All configured packs are loaded once per renderer, so switching panes does not
 read images from the pane's repository or reload artwork.
 
-There is one mascot, in its own pane. `position` places it within that pane.
-Focusing the mascot's pane keeps the previous pane's pack.
+There is one mascot, attached to the active pane. Positioning leaves room for
+pane borders and the scrollbar. Workspace-wide and session-wide drawing are not
+configuration modes.
 
 Valid config changes and rebuilt `dist/index.js` are picked up after roughly
 four seconds. An invalid config is logged and the current renderer keeps
@@ -137,7 +139,8 @@ config. A replacement pack must be valid when the new renderer starts.
   `top-right`. `random-corners` chooses among all four corners;
   `bottom-random-corners` uses only `bottom-left` and `bottom-right`, while
   `top-random-corners` uses only `top-left` and `top-right`.
-  Switching panes, tabs or workspaces picks again. Repeated choices are possible.
+  Switching panes, tabs or workspaces picks again, as does
+  invoking `start`, even while the mascot is shown. Repeated choices are possible.
   The mascot exits from its current position before entering at the new one, using
   the same hop animations and left-side mirroring. Resizing keeps the chosen position.
 - Entries and exits independently choose the corner's horizontal or vertical
@@ -150,13 +153,14 @@ config. A replacement pack must be valid when the new renderer starts.
   duration; exits take 200-300ms. Random choices stay fixed throughout each hop.
 - Focus and stop notifications wake the renderer immediately. `animationDelayMs`
   adds an optional pause before each hop without changing its speed.
-- The mascot's pane stays in the tab it opened in, so it is only visible there.
+- Herdr hides inactive tabs and workspaces immediately, so the outgoing hop is
+  only visible while the old pane remains on screen.
 - Fast switches interrupt the entry hop, exit from its current position and
   follow the latest focused pane without queuing intermediate switches.
 - Resizing adjusts the mascot's position and size without queuing another hop.
 
-Herdr clips drawing to the mascot's pane, so a hop entering from an edge is
-clipped there.
+Drawing stays inside the active pane. The mascot does not draw across dividers or
+the sidebar, and a hop entering from an edge is clipped there.
 
 ## Mascot packs
 
@@ -250,11 +254,12 @@ mise run build
 bun dist/index.js --help
 ```
 
-`watch` is the renderer that runs inside the mascot's pane, which `start` opens.
-It logs to the session's `watch.log` under `HERDR_PLUGIN_STATE_DIR`. Plugin
-action and startup failures also appear in Herdr's plugin command logs.
+`watch` runs the renderer in the foreground with Herdr's plugin environment.
 `mise run check` includes the directory-selection and asset-boundary regression
 checks in `scripts/mascot.test.ts`.
+The normal `start` action detaches it and sends output to the session's
+`watch.log` under `HERDR_PLUGIN_STATE_DIR`. Plugin action and startup failures
+also appear in Herdr's plugin command logs.
 
 This project started as a copy of `herdr-workflow-watch`. It keeps its Effect v4
 CLI, Bun/mise tooling, singleton lease, config reload and CI. GitHub polling,
@@ -293,15 +298,15 @@ herdr plugin log list --plugin timmo.mascot --limit 1
 
 After linking and showing the plugin:
 
-1. Confirm the mascot pane opens below the focused pane without taking focus,
-   shrinks to fit, and shows the mascot at the configured size and corner with a
-   transparent background, playing its idle animations.
+1. Confirm the mascot appears at the configured size and corner with a transparent
+   background, playing its idle animations while the terminal remains usable.
 2. Switch between differently placed panes, then between tabs or workspaces.
    Check that entries use either adjacent edge of the configured corner.
    Centre positions should enter and exit vertically through their matching edge.
-3. Switch rapidly and resize the mascot pane. Confirm there is only one mascot
-   and it fits a small pane.
-4. Focus the mascot pane and type. Confirm the input is ignored.
+3. Switch rapidly, resize and zoom. Confirm there is only one mascot, it stays
+   within the active pane and fits a small pane.
+4. Select text and open a Herdr menu. Confirm normal input still works; the
+   mascot stays drawn over menus.
 5. Change the size, corner or pack in `config.json` and confirm it reloads.
 6. Hide or toggle off the mascot and confirm it hops out before the image clears.
    Try each corner and check that exits use its two adjacent edges, with varied

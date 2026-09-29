@@ -1,4 +1,4 @@
-import { HerdrSdk, PaneId } from "@timmo001/effect-herdr";
+import { HerdrSdk } from "@timmo001/effect-herdr";
 import {
   Clock,
   Deferred,
@@ -16,11 +16,10 @@ import { check, lock } from "proper-lockfile";
 import {
   exitPosition,
   frameAt,
-  frameImage,
+  graphicsFrame,
   jumpPosition,
   restingPosition,
   sameTarget,
-  type Target,
 } from "../animation";
 import {
   Preferences,
@@ -28,34 +27,17 @@ import {
   bottomCorners,
   bottomPositions,
   corners,
+  loadSettings,
   positions,
   topCorners,
   topPositions,
   type Position,
 } from "../config";
-import { ProcessError } from "../errors";
-import {
-  currentFocus,
-  enabled,
-  fitPane,
-  openPane,
-  type Focus,
-} from "../services/herdr";
+import { currentTarget, enabled, type Target } from "../services/herdr";
+import { Host, type Image } from "../services/host";
 import { Mascot, type Frame } from "../services/mascot";
+import { Process, ProcessError } from "../services/process";
 import { waitForUpdate } from "../services/reload";
-import { Terminal } from "../services/terminal";
-
-const running = Effect.gen(function* () {
-  const config = yield* RuntimeConfig;
-  const path = yield* Path.Path;
-
-  return yield* Effect.tryPromise(() =>
-    check(path.join(config.state, "watcher"), {
-      realpath: false,
-      stale: 15_000,
-    }),
-  );
-});
 
 export const start = Effect.gen(function* () {
   const config = yield* RuntimeConfig;
@@ -65,7 +47,22 @@ export const start = Effect.gen(function* () {
   if (!(yield* enabled)) return;
   yield* fs.remove(path.join(config.state, "stopped"), { force: true });
 
-  if (!(yield* running)) yield* openPane;
+  const held = yield* Effect.tryPromise(() =>
+    check(path.join(config.state, "watcher"), {
+      realpath: false,
+      stale: 15_000,
+    }),
+  );
+
+  if (held) {
+    const { settings } = yield* loadSettings(config.settingsFile);
+
+    if (!settings.position?.includes("random")) return;
+    yield* stop;
+    yield* fs.remove(path.join(config.state, "stopped"), { force: true });
+  }
+
+  yield* (yield* Process).detach;
 });
 
 export const stop = Effect.gen(function* () {
@@ -76,12 +73,30 @@ export const stop = Effect.gen(function* () {
     mode: 0o600,
   });
   yield* Effect.gen(function* () {
-    while (yield* running) yield* Effect.sleep(50);
+    while (
+      yield* Effect.tryPromise(() =>
+        check(path.join(config.state, "watcher"), {
+          realpath: false,
+          stale: 15_000,
+        }),
+      )
+    )
+      yield* Effect.sleep(50);
   }).pipe(Effect.timeout(20_000));
 });
 
 export const toggle = Effect.gen(function* () {
-  yield* (yield* running) ? stop : start;
+  const config = yield* RuntimeConfig;
+  const path = yield* Path.Path;
+
+  const held = yield* Effect.tryPromise(() =>
+    check(path.join(config.state, "watcher"), {
+      realpath: false,
+      stale: 15_000,
+    }),
+  );
+
+  yield* held ? stop : start;
 });
 
 const waitUntilStopped = Effect.gen(function* () {
@@ -105,64 +120,35 @@ const waitUntilStopped = Effect.gen(function* () {
   );
 });
 
-const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
+const render = Effect.gen(function* () {
   const herdr = yield* HerdrSdk;
+  const host = yield* Host;
   const config = yield* Preferences;
   const mascots = yield* Mascot;
-  const terminal = yield* Terminal;
-  const focus = yield* Ref.make<Focus | null>(null);
-  const target = yield* Ref.make<Target | null>(null);
+  const target = yield* Ref.make<Target | null>(yield* currentTarget);
   const stopping = yield* Ref.make(false);
   const changed = yield* Queue.sliding<void>(1);
 
-  // Focusing the mascot's own pane keeps the previous pane's mascot.
-  const refresh = Effect.gen(function* () {
-    const next = yield* currentFocus(ownPaneId);
+  const track = Stream.merge(
+    herdr.events
+      .subscribe([
+        { type: "pane.focused" },
+        { type: "workspace.focused" },
+        { type: "tab.focused" },
+        { type: "layout.updated" },
+        { type: "pane.closed" },
+      ])
+      .pipe(Stream.map(() => undefined)),
+    Stream.tick(1_000),
+  ).pipe(
+    Stream.runForEach(
+      Effect.fn("Mascot.trackTarget")(function* () {
+        const value = yield* currentTarget;
 
-    if (next) yield* Ref.set(focus, next);
-    const selected = yield* Ref.get(focus);
-    const geometry = yield* terminal.geometry;
-    const value = selected && geometry ? { ...selected, ...geometry } : null;
-
-    if (sameTarget(value, yield* Ref.get(target))) return;
-    yield* Ref.set(target, value);
-    yield* Queue.offer(changed, undefined);
-  });
-
-  yield* refresh;
-
-  const track = Stream.mergeAll(
-    [
-      herdr.events
-        .subscribe([
-          { type: "pane.focused" },
-          { type: "workspace.focused" },
-          { type: "tab.focused" },
-          { type: "layout.updated" },
-          { type: "pane.closed" },
-        ])
-        .pipe(Stream.map(() => undefined)),
-      terminal.resized,
-      Stream.tick(1_000),
-    ],
-    { concurrency: "unbounded" },
-  ).pipe(Stream.runForEach(() => refresh));
-
-  // Shrink the new pane to the mascot's height once Herdr has sized it.
-  const fit = Effect.gen(function* () {
-    while (!(yield* terminal.geometry)) yield* Effect.sleep(50);
-    yield* Effect.sleep(250);
-    const geometry = yield* terminal.geometry;
-
-    if (!geometry) return;
-    yield* fitPane(
-      ownPaneId,
-      geometry.rows,
-      Math.ceil(config.sizePixels / geometry.cellHeight) + 1,
-    );
-  }).pipe(
-    Effect.catch((cause) =>
-      Effect.logWarning("Could not resize the mascot pane", cause),
+        if (sameTarget(value, yield* Ref.get(target))) return;
+        yield* Ref.set(target, value);
+        yield* Queue.offer(changed, undefined);
+      }),
     ),
   );
 
@@ -174,6 +160,7 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
       const selected = yield* Ref.get(target);
 
       if (!selected) {
+        if (previous) yield* host.clear;
         previous = null;
         yield* Queue.take(changed);
         continue;
@@ -241,17 +228,31 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
           continue;
       }
 
+      const show = (image: Image) =>
+        Effect.forEach(
+          selected.placements,
+          (placement) =>
+            host.draw(placement.tty, {
+              ...image,
+              column: placement.column + image.column,
+              row: placement.row + image.row,
+            }),
+          { discard: true },
+        );
+
       const exited = yield* Effect.gen(function* () {
         const started = yield* Clock.currentTimeMillis;
         let lastFrame: Frame | undefined;
         let lastX = Number.NaN;
         let lastY = Number.NaN;
+        let drawnAt = 0;
 
         while (
           !(yield* Ref.get(stopping)) &&
           sameTarget(selected, yield* Ref.get(target))
         ) {
-          const elapsed = (yield* Clock.currentTimeMillis) - started;
+          const now = yield* Clock.currentTimeMillis;
+          const elapsed = now - started;
           const jumping = elapsed < entryDuration;
 
           const point = jumping
@@ -275,9 +276,15 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
           const x = Math.round(point.x);
           const y = Math.round(point.y);
 
-          if (frame !== lastFrame || x !== lastX || y !== lastY) {
-            yield* terminal.draw(
-              frameImage(
+          // Herdr's full redraws erase host images, so redraw a still mascot every second.
+          if (
+            frame !== lastFrame ||
+            x !== lastX ||
+            y !== lastY ||
+            now - drawnAt >= 1_000
+          ) {
+            yield* show(
+              graphicsFrame(
                 frame,
                 selected,
                 x,
@@ -289,6 +296,7 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
             lastFrame = frame;
             lastX = x;
             lastY = y;
+            drawnAt = now;
           }
 
           yield* Queue.take(changed).pipe(
@@ -332,8 +340,15 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
 
         while (true) {
           const elapsed = (yield* Clock.currentTimeMillis) - exitStarted;
+          const latest = yield* Ref.get(target);
 
-          if (elapsed >= exitDuration) break;
+          if (
+            elapsed >= exitDuration ||
+            !latest ||
+            latest.tabId !== selected.tabId ||
+            latest.workspaceId !== selected.workspaceId
+          )
+            break;
 
           const point = exitPosition(
             selected,
@@ -344,8 +359,8 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
             exitLift,
           );
 
-          yield* terminal.draw(
-            frameImage(
+          yield* show(
+            graphicsFrame(
               frameAt(mascot.jump, (elapsed / exitDuration) * jumpDuration),
               selected,
               point.x,
@@ -357,7 +372,7 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
           yield* Effect.sleep(33);
         }
 
-        yield* terminal.clear;
+        yield* host.clear;
 
         return true;
       });
@@ -368,7 +383,6 @@ const render = Effect.fn("Mascot.render")(function* (ownPaneId: PaneId) {
 
   yield* draw.pipe(
     Effect.raceFirst(track),
-    Effect.raceFirst(fit.pipe(Effect.andThen(Effect.never))),
     Effect.raceFirst(
       waitUntilStopped.pipe(
         Effect.andThen(Ref.set(stopping, true)),
@@ -420,36 +434,21 @@ const runWatcher = Effect.gen(function* () {
   );
 
   if (!lease) return false;
-
-  const paneId = yield* Schema.decodeUnknownEffect(PaneId)(
-    process.env.HERDR_PANE_ID,
-  ).pipe(
-    Effect.mapError(
-      () =>
-        new ProcessError({
-          command: "watch",
-          message: "The mascot renderer must run inside its Herdr pane.",
-        }),
-    ),
-  );
-
   yield* Effect.logInfo("Herdr Mascot started");
 
-  return yield* render(paneId).pipe(
+  return yield* render.pipe(
     Effect.retry({ times: 5, schedule: Schedule.spaced(1_000) }),
     Effect.as(false),
     Effect.raceFirst(waitForUpdate.pipe(Effect.as(true))),
     Effect.raceFirst(Deferred.await(compromised)),
-    Effect.provide(Terminal.layer),
   );
 }).pipe(Effect.scoped);
 
 export const watch = Effect.gen(function* () {
   const restart = yield* runWatcher;
 
-  // Replace this process so the pane keeps its place in the layout.
-  if (restart && (yield* enabled))
-    yield* Effect.sync(() =>
-      process.execve?.(process.execPath, process.argv, process.env),
-    );
+  if (restart && (yield* enabled)) {
+    yield* Effect.logInfo("Herdr Mascot changed; starting a new renderer");
+    yield* (yield* Process).detach;
+  }
 });

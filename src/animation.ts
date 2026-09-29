@@ -1,9 +1,7 @@
 import type { Position } from "./config";
-import type { Focus } from "./services/herdr";
+import type { Target } from "./services/herdr";
+import type { Image } from "./services/host";
 import type { Frame } from "./services/mascot";
-import type { Geometry, Image } from "./services/terminal";
-
-export type Target = Focus & Geometry;
 
 export function frameAt(frames: readonly [Frame, ...Frame[]], elapsed: number) {
   const duration = frames.reduce((total, frame) => total + frame.durationMs, 0);
@@ -18,7 +16,7 @@ export function frameAt(frames: readonly [Frame, ...Frame[]], elapsed: number) {
 }
 
 export function restingPosition(
-  target: Geometry,
+  target: Target,
   size: number,
   position: Position,
 ) {
@@ -38,7 +36,7 @@ export function restingPosition(
 }
 
 export function jumpPosition(
-  target: Geometry,
+  target: Target,
   destination: {
     readonly x: number;
     readonly y: number;
@@ -60,7 +58,7 @@ export function jumpPosition(
 }
 
 export function exitPosition(
-  target: Geometry,
+  target: Target,
   origin: { readonly x: number; readonly y: number; readonly size: number },
   progress: number,
   position: Position,
@@ -105,6 +103,16 @@ export function sameTarget(left: Target | null, right: Target | null) {
       left.mascotFile === right.mascotFile &&
       left.tabId === right.tabId &&
       left.workspaceId === right.workspaceId &&
+      left.placements.length === right.placements.length &&
+      left.placements.every((item, index) => {
+        const other = right.placements[index];
+
+        return (
+          other?.tty === item.tty &&
+          other.column === item.column &&
+          other.row === item.row
+        );
+      }) &&
       left.columns === right.columns &&
       left.rows === right.rows &&
       left.cellWidth === right.cellWidth &&
@@ -112,9 +120,9 @@ export function sameTarget(left: Target | null, right: Target | null) {
   );
 }
 
-export function frameImage(
+export function graphicsFrame(
   frame: Frame,
-  target: Geometry,
+  target: Target,
   x: number,
   y: number,
   size: number,

@@ -1,9 +1,4 @@
-import {
-  HerdrSdk,
-  PaneId,
-  PluginId,
-  herdrSdkLayerFromOptions,
-} from "@timmo001/effect-herdr";
+import { HerdrSdk, herdrSdkLayerFromOptions } from "@timmo001/effect-herdr";
 import { Duration, Effect, Layer, Option } from "effect";
 import {
   Preferences,
@@ -11,10 +6,7 @@ import {
   mascotForDirectory,
   pluginId,
 } from "../config";
-
-export const paneEntrypoint = "mascot";
-
-const paneTitle = "Mascot";
+import { Host } from "./host";
 
 export const herdrLayer = Layer.unwrap(
   Effect.gen(function* () {
@@ -33,96 +25,75 @@ export const enabled = Effect.gen(function* () {
   return plugins.some((plugin) => plugin.id === pluginId && plugin.enabled);
 });
 
-// Opens the renderer's pane in a strip below the focused pane.
-export const openPane = Effect.gen(function* () {
+export const currentTarget = Effect.gen(function* () {
   const herdr = yield* HerdrSdk;
-  const config = yield* RuntimeConfig;
-  const snapshot = yield* herdr.session.snapshot();
-
-  if (Option.isNone(snapshot.focusedPaneId))
-    return yield* Effect.logInfo("No focused pane to show the mascot beside");
-
-  // A cold server restart brings the pane back as a plain shell.
-  for (const pane of snapshot.panes)
-    if (
-      Option.getOrUndefined(pane.label) === paneTitle &&
-      Option.getOrUndefined(pane.cwd) === config.root
-    )
-      yield* herdr.panes.close(pane.id);
-
-  yield* herdr.plugins.panes.open(PluginId.make(pluginId), {
-    entrypoint: paneEntrypoint,
-    placement: "split",
-    direction: "down",
-    focus: false,
-  });
-});
-
-// Shrinks the split holding the mascot's pane so it gets `rows` usable rows.
-export const fitPane = Effect.fn("Herdr.fitPane")(function* (
-  paneId: PaneId,
-  currentRows: number,
-  rows: number,
-) {
-  const herdr = yield* HerdrSdk;
-  const layout = yield* herdr.panes.layout(paneId);
-  const pane = layout.panes.find((item) => item.paneId === paneId);
-
-  if (!pane || rows === currentRows) return;
-  const bottom = pane.rect.y + pane.rect.height;
-
-  const split = layout.splits
-    .filter(
-      (item) =>
-        item.direction === "down" &&
-        item.rect.y < pane.rect.y &&
-        item.rect.y + item.rect.height === bottom &&
-        item.rect.x <= pane.rect.x &&
-        item.rect.x + item.rect.width >= pane.rect.x + pane.rect.width,
-    )
-    .toSorted((left, right) => left.rect.height - right.rect.height)[0];
-
-  const path = split?.id.match(/^split_\d+_(root|[01]+)$/)?.[1];
-
-  if (!split || path === undefined || split.rect.height <= 0) return;
-
-  yield* herdr.layouts.setSplitRatio(
-    { paneId },
-    {
-      path: path === "root" ? [] : path.split("").map((bit) => bit === "1"),
-      ratio: Math.min(
-        0.9,
-        Math.max(0.1, split.ratio + (currentRows - rows) / split.rect.height),
-      ),
-    },
-  );
-});
-
-export const currentFocus = Effect.fn("Herdr.currentFocus")(function* (
-  ownPaneId: PaneId,
-) {
-  const herdr = yield* HerdrSdk;
+  const host = yield* Host;
   const preferences = yield* Preferences;
   const snapshot = yield* herdr.session.snapshot();
   const paneId = Option.getOrUndefined(snapshot.focusedPaneId);
 
-  if (!paneId || paneId === ownPaneId) return null;
-  const pane = snapshot.panes.find((item) => item.id === paneId);
+  if (!paneId) return null;
 
-  if (!pane) return null;
+  const layout = snapshot.layouts.find(
+    (item) => item.tabId === Option.getOrUndefined(snapshot.focusedTabId),
+  );
 
-  const cwd =
-    Option.getOrUndefined(pane.foregroundCwd) ??
-    Option.getOrUndefined(pane.cwd);
+  const pane = layout?.panes.find((item) => item.paneId === paneId);
+
+  if (!layout || !pane) return null;
+  // Remove the two border cells and the right-hand scrollbar lane.
+  const columns = Math.max(0, Math.floor(pane.rect.width) - 3);
+  const rows = Math.max(0, Math.floor(pane.rect.height) - 2);
+
+  if (columns < 1 || rows < 1) return null;
+  const chrome = yield* host.chrome;
+
+  // Herdr's sidebar sits left of the pane surface, and its tab bar or mobile header above or below it.
+  const placements = (yield* host.clients).flatMap((client) => {
+    const left = client.columns - layout.area.width;
+
+    const top =
+      chrome.tabBarBottom && client.columns > chrome.mobileWidthThreshold
+        ? 0
+        : client.rows - layout.area.height;
+
+    return left < 0 || top < 0
+      ? []
+      : [
+          {
+            client,
+            column: left + Math.floor(pane.rect.x) + 1,
+            row: top + Math.floor(pane.rect.y) + 1,
+          },
+        ];
+  });
+
+  const [primary] = placements;
+
+  if (!primary) return null;
+  const focusedPane = snapshot.panes.find((item) => item.id === paneId);
+
+  const cwd = focusedPane
+    ? (Option.getOrUndefined(focusedPane.foregroundCwd) ??
+      Option.getOrUndefined(focusedPane.cwd))
+    : undefined;
 
   return {
     paneId,
     mascotFile: mascotForDirectory(cwd, preferences),
-    workspaceId: pane.workspaceId,
-    tabId: pane.tabId,
+    workspaceId: layout.workspaceId,
+    tabId: layout.tabId,
+    columns,
+    rows,
+    cellWidth: primary.client.cellWidth,
+    cellHeight: primary.client.cellHeight,
+    // Other clients scale the primary client's pixels to the same cells.
+    placements: placements.map((item) => ({
+      tty: item.client.tty,
+      column: item.column,
+      row: item.row,
+    })),
   };
 });
 
-export type Focus = NonNullable<
-  Effect.Success<ReturnType<typeof currentFocus>>
->;
+export type Target = NonNullable<Effect.Success<typeof currentTarget>>;

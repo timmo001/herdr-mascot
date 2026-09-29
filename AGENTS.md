@@ -10,8 +10,8 @@
 - `assets/` contains cat, dog and robot packs in `pixel` and `illustrated` styles.
 - Name pack directories `<character>-<style>`; `assets/cat-pixel/` is the default.
 - Use the installed `@timmo001/effect-herdr` for Herdr requests.
-- The renderer runs in its own plugin pane and draws with Kitty graphics on that
-  pane's terminal; `src/services/terminal.ts` owns that terminal.
+- `src/services/host.ts` finds attached Herdr clients' terminals and draws the
+  mascot on them with Kitty graphics; Herdr has no API for this.
 - `dist/` is generated Bun-targeted module output and stays untracked.
 - The package is private; distribution is through the GitHub repository.
 

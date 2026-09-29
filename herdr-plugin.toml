@@ -3,7 +3,7 @@ name = "Herdr Mascot"
 version = "0.1.0"
 min_herdr_version = "0.9.2"
 description = "A greyscale cat that follows the active pane"
-platforms = ["linux", "macos"]
+platforms = ["linux"]
 
 [[build]]
 command = ["mise", "exec", "--", "bun", "install", "--frozen-lockfile"]
@@ -13,12 +13,6 @@ command = ["mise", "run", "build"]
 
 [[startup]]
 command = ["mise", "exec", "--", "bun", "dist/index.js", "start"]
-
-[[panes]]
-id = "mascot"
-title = "Mascot"
-placement = "split"
-command = ["mise", "exec", "--", "bun", "dist/index.js", "watch"]
 
 [[actions]]
 id = "start"
