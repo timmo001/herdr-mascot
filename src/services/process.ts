@@ -1,6 +1,5 @@
-import { spawn } from "node:child_process";
-import { closeSync, openSync } from "node:fs";
 import { Context, Effect, Layer, Path, Schema } from "effect";
+import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import { RuntimeConfig } from "../config";
 
 export class ProcessError extends Schema.TaggedError<ProcessError>()(
@@ -18,34 +17,33 @@ export class Process extends Context.Service<
       const config = yield* RuntimeConfig;
       const path = yield* Path.Path;
 
+      const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
+
       // The detached renderer owns its lease and graphics scopes.
       const detach = Effect.gen(function* () {
-        const fd = yield* Effect.acquireRelease(
-          Effect.try(() =>
-            openSync(path.join(config.state, "watch.log"), "a", 0o600),
+        const child = yield* spawner.spawn(
+          ChildProcess.make(
+            "sh",
+            [
+              "-c",
+              'umask 077; log=$1; shift; exec "$@" >>"$log" 2>&1',
+              "sh",
+              path.join(config.state, "watch.log"),
+              process.execPath,
+              path.join(config.root, "dist/index.js"),
+              "watch",
+            ],
+            {
+              cwd: config.root,
+              detached: true,
+              stdin: "ignore",
+              stdout: "ignore",
+              stderr: "ignore",
+            },
           ),
-          (file) => Effect.sync(() => closeSync(file)),
         );
 
-        yield* Effect.callback<void, ProcessError>((resume) => {
-          const child = spawn(
-            process.execPath,
-            [path.join(config.root, "dist/index.js"), "watch"],
-            { cwd: config.root, detached: true, stdio: ["ignore", fd, fd] },
-          );
-
-          child.once("error", (cause) =>
-            resume(
-              Effect.fail(
-                new ProcessError({ command: "watch", message: String(cause) }),
-              ),
-            ),
-          );
-          child.once("spawn", () => {
-            child.unref();
-            resume(Effect.void);
-          });
-        });
+        yield* Effect.asVoid(child.unref);
       }).pipe(
         Effect.scoped,
         Effect.mapError(

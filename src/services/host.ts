@@ -1,5 +1,5 @@
 import { dlopen, FFIType, ptr } from "bun:ffi";
-import { execFile } from "node:child_process";
+// oxlint-disable-next-line timmo-effect/prefer-platform-services -- Effect FileSystem cannot pass O_NOCTTY when opening a client tty
 import { closeSync, constants, openSync, write } from "node:fs";
 import { homedir } from "node:os";
 import { deflateSync } from "node:zlib";
@@ -11,7 +11,9 @@ import {
   Layer,
   Path,
   Schema,
+  Stream,
 } from "effect";
+import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import { RuntimeConfig } from "../config";
 
 export class HostError extends Schema.TaggedError<HostError>()("HostError", {
@@ -110,6 +112,7 @@ export class Host extends Context.Service<
       const config = yield* RuntimeConfig;
       const fs = yield* FileSystem.FileSystem;
       const path = yield* Path.Path;
+      const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
 
       const clientSocket = path.join(
         path.dirname(config.socket),
@@ -172,23 +175,35 @@ export class Host extends Context.Service<
 
       // Clients are the peers of Herdr's client socket; each draws on its own tty.
       const discover = Effect.gen(function* () {
-        const output = yield* Effect.callback<string, HostError>((resume) => {
-          execFile(
-            "ss",
-            ["-xpn"],
-            { maxBuffer: 8 * 1024 * 1024 },
-            (error, stdout) =>
-              resume(
-                error
-                  ? Effect.fail(
-                      new HostError({
-                        message: `Could not list Herdr clients: ${error.message}`,
-                      }),
-                    )
-                  : Effect.succeed(stdout),
-              ),
+        const output = yield* Effect.gen(function* () {
+          const child = yield* spawner.spawn(
+            ChildProcess.make("ss", ["-xpn"], { stdin: "ignore" }),
           );
-        });
+
+          const [stdout, code] = yield* Effect.all(
+            [
+              child.stdout.pipe(Stream.decodeText(), Stream.mkString),
+              child.exitCode,
+            ],
+            { concurrency: "unbounded" },
+          );
+
+          if (code !== 0)
+            return yield* new HostError({
+              message: `Could not list Herdr clients: ss exited ${code}`,
+            });
+
+          return stdout;
+        }).pipe(
+          Effect.scoped,
+          Effect.mapError((cause) =>
+            cause instanceof HostError
+              ? cause
+              : new HostError({
+                  message: `Could not list Herdr clients: ${String(cause)}`,
+                }),
+          ),
+        );
 
         // Columns: netid, state, queues, local address and inode, peer address and inode, users.
         const sockets = output
