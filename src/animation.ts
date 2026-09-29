@@ -1,7 +1,9 @@
-import type { PaneGraphicsFrameEncoded } from "@timmo001/effect-herdr";
 import type { Position } from "./config";
-import type { Target } from "./services/herdr";
+import type { Focus } from "./services/herdr";
 import type { Frame } from "./services/mascot";
+import type { Geometry, Image } from "./services/terminal";
+
+export type Target = Focus & Geometry;
 
 export function frameAt(frames: readonly [Frame, ...Frame[]], elapsed: number) {
   const duration = frames.reduce((total, frame) => total + frame.durationMs, 0);
@@ -16,7 +18,7 @@ export function frameAt(frames: readonly [Frame, ...Frame[]], elapsed: number) {
 }
 
 export function restingPosition(
-  target: Target,
+  target: Geometry,
   size: number,
   position: Position,
 ) {
@@ -36,7 +38,7 @@ export function restingPosition(
 }
 
 export function jumpPosition(
-  target: Target,
+  target: Geometry,
   destination: {
     readonly x: number;
     readonly y: number;
@@ -58,7 +60,7 @@ export function jumpPosition(
 }
 
 export function exitPosition(
-  target: Target,
+  target: Geometry,
   origin: { readonly x: number; readonly y: number; readonly size: number },
   progress: number,
   position: Position,
@@ -103,8 +105,6 @@ export function sameTarget(left: Target | null, right: Target | null) {
       left.mascotFile === right.mascotFile &&
       left.tabId === right.tabId &&
       left.workspaceId === right.workspaceId &&
-      left.x === right.x &&
-      left.y === right.y &&
       left.columns === right.columns &&
       left.rows === right.rows &&
       left.cellWidth === right.cellWidth &&
@@ -112,14 +112,14 @@ export function sameTarget(left: Target | null, right: Target | null) {
   );
 }
 
-export function graphicsFrame(
+export function frameImage(
   frame: Frame,
-  target: Target,
+  target: Geometry,
   x: number,
   y: number,
   size: number,
   flipHorizontal: boolean,
-): PaneGraphicsFrameEncoded {
+): Image {
   const left = Math.round(x);
   const top = Math.round(y);
   const cellWidth = target.cellWidth;
@@ -168,10 +168,12 @@ export function graphicsFrame(
   }
 
   return {
-    format: "rgba",
-    imageWidth: width,
-    imageHeight: height,
+    width,
+    height,
     data,
-    placement: { viewportCol: col, viewportRow: row, gridCols, gridRows },
+    column: col,
+    row,
+    columns: gridCols,
+    rows: gridRows,
   };
 }

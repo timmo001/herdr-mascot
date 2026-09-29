@@ -7,7 +7,7 @@ import {
   loadSettings,
   type Position,
 } from "../config";
-import { currentTarget, enabled } from "../services/herdr";
+import { enabled } from "../services/herdr";
 
 const positions = [
   "bottom-left",
@@ -23,11 +23,8 @@ export const testOptions = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
 
-  if (!(yield* enabled) || !(yield* currentTarget))
-    return yield* new ConfigError({
-      message:
-        "Enable the mascot and focus a pane with graphics support first.",
-    });
+  if (!(yield* enabled))
+    return yield* new ConfigError({ message: "Enable the mascot first." });
 
   yield* Effect.acquireRelease(
     Effect.tryPromise(() =>

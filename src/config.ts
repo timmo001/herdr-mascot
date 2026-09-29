@@ -5,8 +5,6 @@ import { containsPath } from "./paths";
 
 export const pluginId = "timmo.mascot";
 
-export const layerId = "timmo-mascot";
-
 export const bottomCorners = ["bottom-right", "bottom-left"] as const;
 
 export const topCorners = ["top-right", "top-left"] as const;
