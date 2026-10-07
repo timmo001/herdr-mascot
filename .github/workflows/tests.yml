@@ -26,11 +26,8 @@ jobs:
       - name: Set up mise
         uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build
-        run: mise run build
+      - name: Test and build
+        run: "mise run test ::: build"
 
       - name: Check CLI help
         run: bun dist/index.js --help
