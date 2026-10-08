@@ -7,5 +7,5 @@ export default {
     typeCheck: true,
     maxWarnings: 0,
   },
-  ignorePatterns: ["dist/**"],
+  ignorePatterns: ["dist/**", ".agents/skills/**"],
 };
