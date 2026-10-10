@@ -18,14 +18,14 @@
     "@effect/platform-node": "4.0.2",
     "@resvg/resvg-js": "2.6.2",
     "@timmo001/effect-herdr": "0.9.0-timmo001.0",
-    "effect": "4.0.1",
+    "effect": "4.0.2",
     "proper-lockfile": "4.1.2",
     "saxes": "6.0.0"
   },
   "devDependencies": {
     "@effect/tsgo": "0.51.1",
     "@oxlint/plugins": "1.87.0",
-    "@timmo001/oxlint-rules": "0.5.0",
+    "@timmo001/oxlint-rules": "0.6.2",
     "@types/bun": "1.4.2",
     "@types/proper-lockfile": "4.1.4",
     "oxlint": "1.87.0",
