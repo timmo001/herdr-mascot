@@ -1,0 +1,14 @@
+---
+# Tool releases Herdr Mascot was last reviewed against. The tooling-drift tool
+# (mise run tooling:status / tooling:publish) compares each with the latest
+# release and opens a pull request for review when it moves; its README
+# documents this file.
+assignee: timmo001
+dispatch:
+  - ci.yml
+  - lint-general.yml
+  - tests.yml
+tools:
+  - repo: herdrdev/herdr
+    reviewed: v0.9.5
+    review: Check herdr-plugin.toml (min_herdr_version, build and startup commands), the effect-herdr plugin and session snapshot calls in src/services/herdr.ts, and the client socket, config keys and Kitty image ids src/services/host.ts relies on.
