@@ -14,9 +14,10 @@
   mascot on them with Kitty graphics; Herdr has no API for this.
 - `dist/` is generated Bun-targeted module output and stays untracked.
 - The package is private; distribution is through the GitHub repository.
-- `tooling.yml` records the Herdr release last reviewed. After reading a new
-  release's notes against the areas it names, record it with
-  `mise run tooling:update herdrdev/herdr <tag>`, never by hand.
+- `tooling.yml` records the Herdr release last reviewed. Upkeep's
+  [`drift` job](https://upkeep.timmo.dev/running#drift) checks it. After
+  reading a new release's notes against the areas it names, record the review
+  by setting `reviewed` in `tooling.yml` and pushing.
 
 ## Commands
 
