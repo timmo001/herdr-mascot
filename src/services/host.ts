@@ -54,8 +54,8 @@ const HerdrConfig = Schema.Struct({
   ),
 });
 
-// Well above Herdr's own host image ids (10000 to 910000).
-const imageIds = [1_835_103_075, 1_835_103_076] as const;
+// Between Herdr's host image ids (10000 to 910000) and its pane image ids (0x40000000 to 0x7fffffff).
+const imageIds = [761_361_251, 761_361_252] as const;
 
 const TIOCGWINSZ = 0x5413;
 
