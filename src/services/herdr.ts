@@ -6,7 +6,7 @@ import {
   mascotForDirectory,
   pluginId,
 } from "../config";
-import { Host } from "./host";
+import { Host, type Chrome } from "./host";
 
 export const herdrLayer = Layer.unwrap(
   Effect.gen(function* () {
@@ -25,6 +25,94 @@ export const enabled = Effect.gen(function* () {
   return plugins.some((plugin) => plugin.id === pluginId && plugin.enabled);
 });
 
+type Rect = { x: number; y: number; width: number; height: number };
+
+type Layout = {
+  readonly zoomed: boolean;
+  readonly area: Rect;
+  readonly panes: ReadonlyArray<{
+    readonly paneId: string;
+    readonly rect: Rect;
+  }>;
+};
+
+const overlaps = (
+  start: number,
+  length: number,
+  otherStart: number,
+  otherLength: number,
+) => start < otherStart + otherLength && otherStart < start + length;
+
+// The cells of a pane its terminal draws in, after Herdr's borders and scrollbar lane.
+const paneSurface = (layout: Layout, paneId: string, chrome: Chrome) => {
+  const pane = layout.panes.find((item) => item.paneId === paneId);
+
+  if (!pane) return null;
+  const multiPane = layout.panes.length > 1;
+
+  const bordered =
+    chrome.paneBorders !== "off" &&
+    (multiPane || chrome.paneBorders === "always");
+
+  // A zoomed pane covers the whole tab, framed only while outer borders are on.
+  const rect = layout.zoomed ? layout.area : pane.rect;
+  const framed = layout.zoomed ? bordered && chrome.paneOuterBorders : bordered;
+  const rects = layout.zoomed ? [rect] : layout.panes.map((item) => item.rect);
+  const right = rect.x + rect.width;
+  const bottom = rect.y + rect.height;
+
+  // Without gaps, a pane shares the divider of its right and lower neighbours.
+  const sharesRight =
+    !chrome.paneGaps &&
+    rects.some(
+      (item) =>
+        item.x === right && overlaps(rect.y, rect.height, item.y, item.height),
+    );
+
+  const sharesBottom =
+    !chrome.paneGaps &&
+    rects.some(
+      (item) =>
+        item.y === bottom && overlaps(rect.x, rect.width, item.x, item.width),
+    );
+
+  // Without outer borders, edges along the outside of the pane area go.
+  const outer = (edge: boolean) => !chrome.paneOuterBorders && edge;
+
+  const borders = {
+    left: framed && !outer(rect.x === Math.min(...rects.map((item) => item.x))),
+    top: framed && !outer(rect.y === Math.min(...rects.map((item) => item.y))),
+    right:
+      framed &&
+      !sharesRight &&
+      !outer(right === Math.max(...rects.map((item) => item.x + item.width))),
+    bottom:
+      framed &&
+      !sharesBottom &&
+      !outer(bottom === Math.max(...rects.map((item) => item.y + item.height))),
+  };
+
+  const inset = (on: boolean) => (on ? 1 : 0);
+
+  const width = Math.max(
+    0,
+    Math.floor(rect.width) - inset(borders.left) - inset(borders.right),
+  );
+
+  const height = Math.max(
+    0,
+    Math.floor(rect.height) - inset(borders.top) - inset(borders.bottom),
+  );
+
+  return {
+    x: Math.floor(rect.x) + inset(borders.left),
+    y: Math.floor(rect.y) + inset(borders.top),
+    // Herdr keeps the scrollbar lane on panes wider than four cells.
+    columns: chrome.paneScrollbars && width > 4 ? width - 1 : width,
+    rows: height,
+  };
+};
+
 export const currentTarget = Effect.gen(function* () {
   const herdr = yield* HerdrSdk;
   const host = yield* Host;
@@ -38,15 +126,12 @@ export const currentTarget = Effect.gen(function* () {
     (item) => item.tabId === Option.getOrUndefined(snapshot.focusedTabId),
   );
 
-  const pane = layout?.panes.find((item) => item.paneId === paneId);
-
-  if (!layout || !pane) return null;
-  // Remove the two border cells and the right-hand scrollbar lane.
-  const columns = Math.max(0, Math.floor(pane.rect.width) - 3);
-  const rows = Math.max(0, Math.floor(pane.rect.height) - 2);
-
-  if (columns < 1 || rows < 1) return null;
+  if (!layout) return null;
   const chrome = yield* host.chrome;
+  const surface = paneSurface(layout, paneId, chrome);
+
+  if (!surface || surface.columns < 1 || surface.rows < 1) return null;
+  const { columns, rows } = surface;
 
   // Herdr's sidebar sits left of the pane surface, and its tab bar or mobile header above or below it.
   const placements = (yield* host.clients).flatMap((client) => {
@@ -62,8 +147,8 @@ export const currentTarget = Effect.gen(function* () {
       : [
           {
             client,
-            column: left + Math.floor(pane.rect.x) + 1,
-            row: top + Math.floor(pane.rect.y) + 1,
+            column: left + surface.x,
+            row: top + surface.y,
           },
         ];
   });

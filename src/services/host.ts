@@ -43,6 +43,19 @@ export type Image = {
 export type Chrome = {
   readonly tabBarBottom: boolean;
   readonly mobileWidthThreshold: number;
+  readonly paneBorders: "auto" | "always" | "off";
+  readonly paneOuterBorders: boolean;
+  readonly paneGaps: boolean;
+  readonly paneScrollbars: boolean;
+};
+
+const defaultChrome: Chrome = {
+  tabBarBottom: false,
+  mobileWidthThreshold: 64,
+  paneBorders: "auto",
+  paneOuterBorders: true,
+  paneGaps: true,
+  paneScrollbars: true,
 };
 
 const HerdrConfig = Schema.Struct({
@@ -50,6 +63,16 @@ const HerdrConfig = Schema.Struct({
     Schema.Struct({
       tab_bar_position: Schema.optionalKey(Schema.Literals(["top", "bottom"])),
       mobile_width_threshold: Schema.optionalKey(Schema.Int),
+      // Booleans are Herdr's legacy form: true is "auto", false is "off".
+      pane_borders: Schema.optionalKey(
+        Schema.Union([
+          Schema.Literals(["auto", "always", "off"]),
+          Schema.Boolean,
+        ]),
+      ),
+      pane_outer_borders: Schema.optionalKey(Schema.Boolean),
+      pane_gaps: Schema.optionalKey(Schema.Boolean),
+      pane_scrollbars: Schema.optionalKey(Schema.Boolean),
     }),
   ),
 });
@@ -143,7 +166,7 @@ export class Host extends Context.Service<
       );
 
       const terminals = new Map<string, { fd: number; image?: number }>();
-      let chrome: Chrome = { tabBarBottom: false, mobileWidthThreshold: 64 };
+      let chrome = defaultChrome;
       let discoveredAt = Number.NEGATIVE_INFINITY;
 
       const forget = (tty: string) =>
@@ -163,9 +186,24 @@ export class Host extends Context.Service<
           Effect.flatMap(Schema.decodeUnknownEffect(HerdrConfig)),
         );
 
+        const paneBorders = parsed.ui?.pane_borders;
+
         chrome = {
           tabBarBottom: parsed.ui?.tab_bar_position === "bottom",
-          mobileWidthThreshold: parsed.ui?.mobile_width_threshold ?? 64,
+          mobileWidthThreshold:
+            parsed.ui?.mobile_width_threshold ??
+            defaultChrome.mobileWidthThreshold,
+          paneBorders:
+            paneBorders === undefined || paneBorders === true
+              ? "auto"
+              : paneBorders === false
+                ? "off"
+                : paneBorders,
+          paneOuterBorders:
+            parsed.ui?.pane_outer_borders ?? defaultChrome.paneOuterBorders,
+          paneGaps: parsed.ui?.pane_gaps ?? defaultChrome.paneGaps,
+          paneScrollbars:
+            parsed.ui?.pane_scrollbars ?? defaultChrome.paneScrollbars,
         };
       }).pipe(
         Effect.catch((cause) =>

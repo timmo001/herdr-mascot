@@ -122,9 +122,11 @@ bundled `assets/` directory. Absolute paths are accepted only inside those roots
 All configured packs are loaded once per renderer, so switching panes does not
 read images from the pane's repository or reload artwork.
 
-There is one mascot, attached to the active pane. Positioning leaves room for
-pane borders and the scrollbar. Workspace-wide and session-wide drawing are not
-configuration modes.
+There is one mascot, attached to the active pane. Positioning follows Herdr's
+`ui.pane_borders`, `ui.pane_outer_borders`, `ui.pane_gaps` and
+`ui.pane_scrollbars` settings, leaving room for the borders and scrollbar the
+pane actually has, and covers the whole tab while the pane is zoomed.
+Workspace-wide and session-wide drawing are not configuration modes.
 
 Valid config changes and rebuilt `dist/index.js` are picked up after roughly
 four seconds. An invalid config is logged and the current renderer keeps
