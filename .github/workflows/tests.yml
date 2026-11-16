@@ -17,17 +17,9 @@ permissions:
 
 jobs:
   smoke:
-    name: CLI smoke check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
-      - name: Set up mise
-        uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566
-
-      - name: Test and build
-        run: "mise run test ::: build"
-
-      - name: Check CLI help
-        run: bun dist/index.js --help
+    uses: timmo001/workflows/.github/workflows/run-mise-task.yml@5451f6867a5cb2b9b6318a82e00f7dd9f9fc279a # 20261116.0
+    with:
+      name: CLI smoke check
+      task: "test ::: build"
+      smoke-test: bun dist/index.js --help
+      install-args: node bun
